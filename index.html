@@ -1,296 +1,1085 @@
 <!doctype html>
-<html lang="en">
+<html lang="th">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Apipath Santasnachok — Embedded systems engineering</title>
-<meta name="description" content="Embedded systems engineering student at Burapha University, Thailand. Co-founder and CTO of MIONEX, a myoelectric prosthetic arm. Control boards, firmware, robots.">
+<meta name="description" content="อภิภัทร สันทัสนะโชค (คิว) วิศวกรรมระบบสมองกลฝังตัว ม.บูรพา: เฟิร์มแวร์ หุ่นยนต์แข่ง แขนเทียม MIONEX และระบบเว็บสำหรับร้านค้า">
+<meta name="theme-color" content="#07090c">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://qil159753.github.io/">
+<meta property="og:title" content="Apipath Santasnachok · firmware, robots and web">
+<meta property="og:description" content="Embedded systems engineering, Burapha University. Firmware, competition robots, the MIONEX myoelectric arm, and web systems for shops.">
+<meta property="og:image" content="https://qil159753.github.io/img/mionex-render.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23ec9a5a'/%3E%3Ctext x='32' y='43' font-family='Arial,sans-serif' font-weight='700' font-size='32' text-anchor='middle' fill='%231b1009'%3EQ%3C/text%3E%3C/svg%3E">
+<title>Apipath Santasnachok</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
-  :root {
-    --ink:        #0D1B2E;
-    --ink-soft:   #33455C;
-    --muted:      #5E7186;
-    --rule:       #D5DFE7;
-    --rule-soft:  #E7EDF2;
-    --ground:     #FBFCFD;
-    --panel:      #F1F5F8;
-    --accent:     #00778A;
-    --accent-br:  #009EB4;
-    --amber:      #B06E00;
+/* Layout: the page is a circuit board. Matte black solder mask, copper traces,
+   silkscreen-white type. A live routed board behind the hero, a sticky stack
+   of project cards, a spotlight bento for services, a copper-trace timeline.
+   Shape rule: interactive = full pill, containers = 28px, inner media = 16px.
+   Deliberately single-theme (dark), so no light-mode block. */
+:root {
+  color-scheme: dark;
+  --bg: #07090c;
+  --bg-2: #0b0e13;
+  --panel: #10141a;
+  --panel-2: #161b23;
+  --line: rgba(255, 255, 255, .08);
+  --line-2: rgba(255, 255, 255, .16);
+  --ink: #f2f4f7;
+  --text: #c4cbd5;
+  --muted: #808a99;
+  --copper: #ec9a5a;
+  --copper-hi: #ffb47c;
+  --copper-ink: #1b1009;
+  --copper-soft: rgba(236, 154, 90, .12);
 
-    --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --display: 'Chakra Petch', 'IBM Plex Sans Thai', system-ui, sans-serif;
+  --body: 'IBM Plex Sans Thai', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', 'IBM Plex Sans Thai', ui-monospace, Menlo, monospace;
+  --r-lg: 28px;
+  --r-md: 16px;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+}
 
-    --measure: 68ch;
-    --pad: clamp(1.25rem, 5vw, 3rem);
-    --gap-sec: clamp(3.5rem, 7vw, 6rem);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --ink: #E8EFF4; --ink-soft: #B9C8D6; --muted: #8598AA;
-      --rule: #24374B; --rule-soft: #1A2938; --ground: #0A131D;
-      --panel: #101E2C; --accent: #35C6D8; --accent-br: #35C6D8; --amber: #E8A33C;
-    }
-  }
-  :root[data-theme="dark"] {
-    --ink: #E8EFF4; --ink-soft: #B9C8D6; --muted: #8598AA;
-    --rule: #24374B; --rule-soft: #1A2938; --ground: #0A131D;
-    --panel: #101E2C; --accent: #35C6D8; --accent-br: #35C6D8; --amber: #E8A33C;
-  }
-  :root[data-theme="light"] {
-    --ink: #0D1B2E; --ink-soft: #33455C; --muted: #5E7186;
-    --rule: #D5DFE7; --rule-soft: #E7EDF2; --ground: #FBFCFD;
-    --panel: #F1F5F8; --accent: #00778A; --accent-br: #009EB4; --amber: #B06E00;
-  }
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  background: var(--bg); color: var(--text);
+  font: 400 16px/1.75 var(--body);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 30; pointer-events: none; opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.en { display: none !important; }
+:root[data-lang="en"] .th { display: none !important; }
+:root[data-lang="en"] .en { display: revert !important; }
 
-  *, *::before, *::after { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    background: var(--ground);
-    color: var(--ink);
-    font-family: var(--sans);
-    font-size: clamp(1rem, 0.97rem + 0.14vw, 1.0625rem);
-    line-height: 1.62;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
-  a:hover { color: var(--accent-br); }
-  h1, h2, h3 { text-wrap: balance; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+p { margin: 0; }
+::selection { background: var(--copper); color: var(--copper-ink); }
+:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); margin: 0; font-weight: 600; text-wrap: balance; }
+.page { max-width: 1280px; margin-inline: auto; padding-inline: clamp(16px, 4vw, 48px); }
+.sec { padding-block: clamp(96px, 12vw, 168px) 0; }
+.kicker { font: 500 13px/1.5 var(--mono); color: var(--copper); letter-spacing: .04em; }
+.mega { font-size: clamp(3rem, 10vw, 8.6rem); line-height: 1.02; font-weight: 700; letter-spacing: -.02em; }
+.h2 { font-size: clamp(2.2rem, 5vw, 4.2rem); line-height: 1.1; font-weight: 700; letter-spacing: -.015em; }
 
-  .wrap { max-width: 74rem; margin: 0 auto; padding: 0 var(--pad); }
-  .col  { max-width: var(--measure); }
+/* ---------- floating nav ---------- */
+.nav-wrap {
+  position: fixed; left: 0; right: 0; z-index: 40; pointer-events: none;
+  top: calc(env(safe-area-inset-top, 0px) + 14px);
+  display: flex; justify-content: center; padding-inline: 12px;
+}
+.nav {
+  pointer-events: auto; display: flex; align-items: center; gap: 22px;
+  padding: 6px 6px 6px 8px; border-radius: 999px; max-width: 100%;
+  background: rgba(16, 20, 26, .86); border: 1px solid var(--line-2);
+  backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 18px 40px -20px rgba(0, 0, 0, .8);
+}
+.mark { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font: 600 15px/1 var(--display); min-width: 0; }
+.mark-q { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--copper); color: var(--copper-ink); font-weight: 700; }
+.nav-links { display: flex; gap: 22px; }
+.nav-links a { text-decoration: none; font-size: 14.5px; color: var(--muted); transition: color .4s var(--ease); white-space: nowrap; }
+.nav-links a:hover { color: var(--ink); }
+.lang {
+  flex: none; font: 500 12.5px/1 var(--mono); height: 34px; padding: 0 14px; border-radius: 999px; cursor: pointer;
+  color: var(--ink); background: rgba(255, 255, 255, .06); border: 1px solid var(--line-2);
+  transition: background .4s var(--ease);
+}
+.lang:hover { background: rgba(255, 255, 255, .12); }
 
-  /* ── masthead ─────────────────────────────────────────── */
-  .mast {
-    display: flex; flex-wrap: wrap; gap: 1rem 2rem;
-    align-items: baseline; justify-content: space-between;
-    padding: 1.75rem 0 1.5rem;
-    border-bottom: 1px solid var(--rule);
-  }
-  .word { font-size: 1.375rem; font-weight: 700; letter-spacing: 0.16em; margin: 0; }
-  .mast-meta { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.04em; }
-  .themer {
-    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em;
-    background: none; border: 1px solid var(--rule); color: var(--muted);
-    padding: 0.3rem 0.6rem; border-radius: 2px; cursor: pointer;
-  }
-  .themer:hover { color: var(--ink); border-color: var(--muted); }
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 12px; min-height: 54px; padding: 0 8px 0 26px;
+  border-radius: 999px; border: 1px solid transparent; font: 600 15.5px/1 var(--body);
+  text-decoration: none; white-space: nowrap; cursor: pointer; background: transparent;
+  transition: transform .5s var(--ease), background .4s var(--ease), border-color .4s var(--ease);
+}
+.btn:active { transform: scale(.97); }
+.btn-copper { background: var(--copper); color: var(--copper-ink); box-shadow: 0 10px 30px -10px rgba(236, 154, 90, .55); }
+.btn-copper:hover { background: var(--copper-hi); }
+.btn-ghost { padding: 0 26px; color: var(--ink); border-color: var(--line-2); background: rgba(255, 255, 255, .03); }
+.btn-ghost:hover { border-color: var(--ink); }
+.btn-ico { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: rgba(0, 0, 0, .16); font-family: var(--mono); transition: transform .5s var(--ease); }
+.btn:hover .btn-ico { transform: translate(2px, 1px) scale(1.06); }
 
-  /* ── hero ─────────────────────────────────────────────── */
-  .hero { padding: var(--gap-sec) 0 0; }
-  .hero h1 {
-    font-size: clamp(2rem, 1.2rem + 3.4vw, 3.75rem);
-    line-height: 1.08; letter-spacing: -0.02em;
-    font-weight: 700; margin: 0 0 1.25rem; max-width: 22ch;
-  }
-  .lede { color: var(--ink-soft); font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); }
+/* ---------- hero ---------- */
+.hero { position: relative; isolation: isolate; overflow: hidden; }
+.board { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; }
+.hero::before {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(90deg, var(--bg) 6%, rgba(7, 9, 12, .84) 38%, rgba(7, 9, 12, .3) 68%, rgba(7, 9, 12, .12)),
+    linear-gradient(0deg, var(--bg) 0%, transparent 26%);
+}
+.hero-in {
+  position: relative; z-index: 2; display: grid; align-items: center;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(32px, 5vw, 72px);
+  padding-block: clamp(128px, 15vw, 176px) clamp(72px, 9vw, 120px);
+}
+.hero .kicker { margin-bottom: 26px; }
+h1 { font-size: clamp(2.8rem, 6.6vw, 6.3rem); line-height: 1.08; font-weight: 700; letter-spacing: -.02em; }
+:root[data-lang="en"] h1 { font-size: clamp(2.6rem, 5.6vw, 5.3rem); }
+h1 .line { display: block; overflow: hidden; padding-top: .16em; margin-top: -.16em; padding-bottom: .08em; }
+h1 .line > span { display: inline-block; }
+h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236, 154, 90, .35); }
+.lead { font-size: clamp(1.05rem, 1.4vw, 1.22rem); color: var(--text); max-width: 40ch; margin-top: 28px; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
 
-  /* ── sections ─────────────────────────────────────────── */
-  section { padding: var(--gap-sec) 0 0; }
-  .kicker {
-    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.18em;
-    text-transform: uppercase; color: var(--muted);
-    margin: 0 0 0.75rem; padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--rule-soft);
-  }
-  section h2 {
-    font-size: clamp(1.375rem, 1.1rem + 1.1vw, 2rem);
-    line-height: 1.2; letter-spacing: -0.015em; margin: 0 0 1.25rem; max-width: 26ch;
-  }
-  p { margin: 0 0 1.1rem; }
+/* The real arm, lifted off its photo, floats over the routed board. */
+.hero-art { margin: 0; position: relative; perspective: 1100px; }
+.hero-art::before {
+  content: ''; position: absolute; left: 50%; top: 46%; width: 92%; aspect-ratio: 1; z-index: -1;
+  transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(236, 154, 90, .3), rgba(236, 154, 90, .08) 55%, transparent);
+  filter: blur(8px);
+}
+.arm { position: relative; transition: transform .8s var(--ease); will-change: transform; }
+/* Procedural 3D model (js/mionex-hero.js). The photo cut-out stays as the first frame and the
+   fallback; the canvas fades in over it once the model has built. */
+.arm-3d {
+  position: absolute; left: -8%; top: -22%; width: 116%; height: 144%; display: block;
+  opacity: 0; transition: opacity 1s var(--ease); cursor: grab; touch-action: pan-y;
+}
+.arm-3d:active { cursor: grabbing; }
+.arm img { transition: opacity 1s var(--ease); }
+.arm.is-3d img { opacity: 0; }
+.arm.is-3d .arm-3d { opacity: 1; }
+.arm-hint {
+  position: absolute; right: 0; bottom: -6px; font: 400 11.5px/1 var(--mono); color: var(--muted);
+  padding: 7px 10px; border-radius: 999px; border: 1px solid var(--line); background: rgba(16, 20, 26, .7);
+}
+.arm img {
+  width: 100%;
+  filter: drop-shadow(0 0 28px rgba(236, 154, 90, .28)) drop-shadow(0 46px 40px rgba(0, 0, 0, .85));
+}
+.hero-art figcaption {
+  display: flex; align-items: center; gap: 12px; margin-top: 18px;
+  font: 400 12.5px/1.6 var(--mono); color: var(--muted);
+}
+.hero-art figcaption::before { content: ''; flex: none; width: 28px; height: 1px; background: var(--copper); }
 
-  /* ── feature panel ────────────────────────────────────── */
-  .panel {
-    background: var(--panel); border: 1px solid var(--rule-soft);
-    border-radius: 3px; padding: clamp(1.25rem, 3vw, 2rem);
-  }
-  .specs { list-style: none; margin: 0; padding: 0; }
-  .specs li {
-    display: flex; justify-content: space-between; gap: 1rem;
-    padding: 0.6rem 0; border-bottom: 1px solid var(--rule-soft);
-    font-size: 0.9375rem;
-  }
-  .specs li:last-child { border-bottom: 0; }
-  .specs .k { color: var(--muted); }
-  .specs .v { font-family: var(--mono); font-size: 0.85rem; text-align: right; }
+/* ---------- marquee ---------- */
+.marquee { border-block: 1px solid var(--line); overflow: hidden; padding-block: 22px; }
+.mq-track { display: flex; width: max-content; }
+.mq-track ul { display: flex; align-items: center; gap: 44px; padding: 0 44px 0 0; margin: 0; list-style: none; }
+.mq-track li { display: flex; align-items: center; gap: 44px; font: 600 clamp(1.1rem, 2vw, 1.5rem)/1 var(--display); color: var(--ink); white-space: nowrap; }
+.mq-track li::after { content: ''; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--copper); }
 
-  /* ── grid ─────────────────────────────────────────────── */
-  .grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
-  .card {
-    border: 1px solid var(--rule); border-radius: 3px;
-    padding: clamp(1.1rem, 2.5vw, 1.5rem);
-    display: flex; flex-direction: column; gap: 0.5rem;
+/* ---------- stats ---------- */
+.stats { list-style: none; margin: 0; padding: clamp(64px, 8vw, 104px) 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
+.stats li { border-top: 1px solid var(--line-2); padding-top: 22px; min-width: 0; }
+.stat-v { display: block; font: 700 clamp(2.6rem, 5.2vw, 4.6rem)/1 var(--display); color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.stat-v i { font-style: normal; color: var(--copper); }
+.stat-l { display: block; margin-top: 14px; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+
+/* ---------- work: sticky stack ---------- */
+.work-head { margin-bottom: clamp(48px, 7vw, 88px); }
+.work-head p { margin-top: 20px; color: var(--muted); max-width: 52ch; font-size: 1.05rem; }
+.stack { display: grid; gap: 28px; }
+.card { position: relative; }
+.card-in {
+  position: relative; display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  border-radius: var(--r-lg); overflow: hidden; background: var(--panel); border: 1px solid var(--line-2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05), 0 -30px 70px -30px rgba(0, 0, 0, .95);
+  transform-origin: 50% 0; min-height: 580px;
+}
+.card-dim { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; z-index: 3; }
+.card-copy { padding: clamp(26px, 3.4vw, 46px); display: flex; flex-direction: column; justify-content: space-between; gap: 26px; min-width: 0; }
+.card h3 { font-size: clamp(1.7rem, 2.6vw, 2.5rem); line-height: 1.15; font-weight: 700; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 14px; font: 400 12.5px/1.6 var(--mono); color: var(--muted); }
+.meta > span + span { padding-left: 14px; border-left: 1px solid var(--line-2); }
+.card-body { margin-top: 18px; font-size: 15.5px; line-height: 1.72; max-width: 54ch; }
+.card-link { display: inline-block; margin-top: 14px; font: 500 13.5px/1.6 var(--mono); color: var(--copper); text-decoration: none; border-bottom: 1px solid currentColor; }
+.card-link:hover { color: var(--copper-hi); }
+.card-link:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
+.card-media { position: relative; overflow: hidden; background: var(--bg-2); min-height: 280px; }
+.card-media > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+.card:hover .card-media > img { transform: scale(1.04); }
+.card-media > img.stage { object-position: 56% 66%; transform: scale(1.18); transform-origin: 56% 70%; }
+.card:hover .card-media > img.stage { transform: scale(1.22); }
+.card-media::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(16, 20, 26, .55), transparent 30%); }
+.inset {
+  position: absolute; z-index: 2; width: 38%; margin: 0; border-radius: var(--r-md); overflow: hidden;
+  border: 1px solid var(--line-2); box-shadow: 0 24px 48px -16px rgba(0, 0, 0, .9);
+}
+.inset img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.inset-bl { left: 22px; bottom: 22px; }
+.inset-br { right: 22px; bottom: 22px; }
+
+.bytes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; }
+.bytes li { --i: 0; text-align: center; padding: 9px 2px 8px; border-radius: 8px; background: var(--panel-2); border: 1px solid var(--line); font-family: var(--mono); min-width: 0; }
+.bytes i { display: block; font-style: normal; font-size: 10.5px; line-height: 1.4; color: var(--muted); }
+.bytes b { display: block; margin-top: 2px; font-size: 11.5px; font-weight: 500; line-height: 1.4; color: var(--ink); overflow-wrap: anywhere; }
+.bytes .crc { border-color: rgba(236, 154, 90, .6); background: var(--copper-soft); }
+.bytes .crc b { color: var(--copper); }
+.cap { margin-top: 10px; font: 400 12px/1.6 var(--mono); color: var(--muted); }
+.minis { display: flex; gap: 28px; margin-top: 18px; }
+.mini b { display: block; font: 700 2rem/1 var(--display); color: var(--copper); }
+.mini span { display: block; margin-top: 6px; font-size: 13px; color: var(--muted); }
+
+.awards { margin: 0; border-top: 1px solid var(--line-2); }
+.awards div { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.awards dt { color: var(--text); font-size: 15px; min-width: 0; }
+.awards dd { margin: 0; font: 600 1.05rem/1.4 var(--display); color: var(--copper); text-align: right; white-space: nowrap; }
+.chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.chips li { font: 400 12.5px/1 var(--mono); padding: 9px 13px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text); background: rgba(255, 255, 255, .025); }
+.feats { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.feats li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 6px; font-size: 15px; }
+.feats li::before { content: ''; width: 9px; height: 9px; margin-top: 9px; border-radius: 50%; border: 2px solid var(--copper); }
+
+.render-media { background: #000; }
+.render-media > img { object-fit: contain; padding-block: 4%; }
+.render-media::after { display: none; }
+.card:hover .render-media > img { transform: scale(1.02); }
+.web-media { background: radial-gradient(120% 90% at 75% 15%, rgba(236, 154, 90, .2), transparent 60%), var(--bg-2); }
+.web-media::after { display: none; }
+.screens { position: absolute; inset: 9% 7% 10%; }
+.shot { position: absolute; margin: 0; overflow: hidden; border-radius: 12px; border: 1px solid var(--line-2); background: var(--panel); box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .9); transition: transform 1s var(--ease); }
+.shot img { width: 100%; height: auto; }
+.shot-admin { left: 0; top: 0; width: 78%; }
+.shot-store { right: 0; top: 30%; width: 70%; }
+.shot-phone { left: 6%; bottom: 0; width: 22%; }
+.card:hover .shot-store { transform: translate(8px, -6px); }
+.card:hover .shot-phone { transform: translateY(-8px); }
+
+/* ---------- services: spotlight bento ---------- */
+.svc-head { margin-bottom: clamp(40px, 6vw, 72px); }
+.svc { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; }
+.spot {
+  --mx: 50%; --my: 50%;
+  position: relative; border-radius: var(--r-lg); padding: clamp(26px, 3.4vw, 44px);
+  background: var(--panel); border: 1px solid var(--line); overflow: hidden; isolation: isolate;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.spot::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; z-index: 1; pointer-events: none;
+  background: radial-gradient(340px circle at var(--mx) var(--my), rgba(236, 154, 90, .75), transparent 60%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0; transition: opacity .5s var(--ease);
+}
+.spot::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(520px circle at var(--mx) var(--my), rgba(236, 154, 90, .08), transparent 55%);
+  opacity: 0; transition: opacity .5s var(--ease);
+}
+.spot:hover::before, .spot:hover::after { opacity: 1; }
+.svc-a { grid-row: span 2; background: radial-gradient(110% 80% at 100% 0%, rgba(236, 154, 90, .14), transparent 55%), var(--panel); }
+.spot h3 { font-size: clamp(1.45rem, 2.3vw, 2rem); line-height: 1.2; font-weight: 700; }
+.spot p { color: var(--text); max-width: 46ch; }
+.spot .chips { margin-top: auto; padding-top: 6px; }
+.get { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 10px; }
+.get li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 6px; }
+.get li::before { content: ''; width: 9px; height: 9px; margin-top: 9px; border-radius: 50%; border: 2px solid var(--copper); }
+.get-title { font: 500 12.5px/1.5 var(--mono); color: var(--muted); }
+.svc-note { margin-top: 26px; color: var(--muted); }
+
+/* ---------- about ---------- */
+.about-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 80px); align-items: center; margin-top: clamp(40px, 6vw, 72px); }
+.duo { position: relative; margin: 0; border-radius: var(--r-lg); overflow: hidden; aspect-ratio: 4 / 3; background: var(--panel); }
+.duo img { width: 100%; height: 100%; object-fit: cover; object-position: 55% 30%; filter: grayscale(1) contrast(1.08) brightness(.92); transition: filter 1s var(--ease); }
+.duo::after { content: ''; position: absolute; inset: 0; background: var(--copper); mix-blend-mode: color; opacity: .55; transition: opacity 1s var(--ease); pointer-events: none; }
+.duo:hover img { filter: none; }
+.duo:hover::after { opacity: 0; }
+.about-copy .lead { margin-top: 0; max-width: 46ch; color: var(--ink); }
+.about-copy p + p { margin-top: 16px; color: var(--text); max-width: 52ch; }
+.tools { margin: 32px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 28px; }
+.tools dt { font: 500 12.5px/1.4 var(--mono); color: var(--copper); margin-bottom: 6px; }
+.tools dd { margin: 0; color: var(--ink); font-size: 15px; }
+
+.trace { list-style: none; margin: clamp(64px, 8vw, 104px) 0 0; padding: 30px 0 0; position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+.trace::before { content: ''; position: absolute; left: 0; right: 0; top: 7px; height: 2px; background: linear-gradient(90deg, var(--copper), rgba(236, 154, 90, .12)); box-shadow: 0 0 16px rgba(236, 154, 90, .35); }
+.trace li { position: relative; min-width: 0; }
+.trace li::before { content: ''; position: absolute; top: -30px; left: 0; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--copper); background: var(--bg); box-shadow: 0 0 0 5px var(--bg), 0 0 18px rgba(236, 154, 90, .55); }
+.trace time { display: block; font: 500 13px/1.5 var(--mono); color: var(--copper); }
+.trace p { margin-top: 8px; color: var(--ink); font-size: 15.5px; line-height: 1.6; }
+
+/* ---------- contact ---------- */
+.contact { position: relative; isolation: isolate; overflow: hidden; margin-top: clamp(96px, 12vw, 168px); border-top: 1px solid var(--line); }
+.contact::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(90% 70% at 30% 50%, rgba(7, 9, 12, .92), rgba(7, 9, 12, .45) 70%, rgba(7, 9, 12, .2)); }
+.contact-in { position: relative; z-index: 2; padding-block: clamp(96px, 13vw, 176px); }
+.contact .lead { max-width: 50ch; }
+.mail {
+  display: inline-block; max-width: 100%; margin-top: 40px; padding-bottom: 8px; text-decoration: none;
+  font: 700 clamp(1.5rem, 5.6vw, 4.4rem)/1.1 var(--display); color: var(--ink); overflow-wrap: anywhere;
+  background: linear-gradient(var(--copper), var(--copper)) 0 100% / 100% 3px no-repeat;
+  transition: color .4s var(--ease), background-size .6s var(--ease);
+}
+.mail:hover { color: var(--copper); }
+.contact-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 36px; }
+.note { font: 400 13px/1.4 var(--mono); color: var(--copper); }
+
+.foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-block: 28px 44px; border-top: 1px solid var(--line); font: 400 12.5px/1.5 var(--mono); color: var(--muted); }
+.foot a { text-decoration: none; }
+.foot a:hover { color: var(--ink); }
+
+/* ---------- motion ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  h1 .line > span { animation: lineUp 1.15s var(--ease) both; }
+  h1 .line + .line > span { animation-delay: .1s; }
+  .hero .kicker, .lead, .cta { animation: fadeUp 1s var(--ease) both; }
+  .hero .kicker { animation-delay: .05s; }
+  .lead { animation-delay: .3s; }
+  .cta { animation-delay: .4s; }
+  .hero-art { animation: fadeUp 1.2s var(--ease) .25s both; }
+  .arm img { animation: hover 7s ease-in-out 1.4s infinite; }
+  @keyframes hover { 50% { transform: translateY(-14px) rotate(-1deg); } }
+  @keyframes lineUp { from { transform: translateY(110%); } }
+  @keyframes fadeUp { from { opacity: .001; transform: translateY(24px); } }
+  .mq-track { animation: mq 42s linear infinite; }
+  .marquee:hover .mq-track { animation-play-state: paused; }
+  @keyframes mq { to { transform: translateX(-50%); } }
+  /* Bytes light up in order, over and over: a frame on the wire. */
+  .bytes li { animation: pkt 2.6s var(--ease) infinite; animation-delay: calc(var(--i) * 110ms); }
+  @keyframes pkt { 0%, 8% { background: var(--copper); border-color: var(--copper); } 26%, 100% { } }
+  @supports (animation-timeline: view()) {
+    .rise { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+    @keyframes rise { from { transform: translateY(48px); } }
   }
-  .card h3 { margin: 0; font-size: 1.0625rem; letter-spacing: -0.01em; }
-  .card p { margin: 0; color: var(--ink-soft); font-size: 0.9375rem; }
-  .tag {
-    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em;
-    color: var(--amber); text-transform: uppercase;
-  }
+}
 
-  /* ── record table ─────────────────────────────────────── */
-  .rec { width: 100%; border-collapse: collapse; }
-  .rec th, .rec td { text-align: left; padding: 0.85rem 0; border-bottom: 1px solid var(--rule-soft); vertical-align: baseline; }
-  .rec th { font-weight: 400; color: var(--ink); }
-  .rec td { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
-  .rec .place { color: var(--accent); }
-  .scroll-x { overflow-x: auto; }
-
-  /* ── stack ────────────────────────────────────────────── */
-  .stack dt { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: 1.1rem; }
-  .stack dd { margin: 0.3rem 0 0; }
-
-  /* ── footer ───────────────────────────────────────────── */
-  footer { margin-top: var(--gap-sec); padding: 2rem 0 3rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.875rem; }
-  .fine { font-size: 0.8125rem; color: var(--muted); }
+/* ---------- layout switches ---------- */
+@media (min-width: 961px) and (min-height: 760px) {
+  .card { position: sticky; top: calc(96px + var(--i) * 14px); }
+  .card-in { height: min(660px, calc(100svh - 180px)); min-height: 0; }
+}
+@media (max-width: 960px) {
+  .hero::before { background: linear-gradient(180deg, rgba(7, 9, 12, .55), rgba(7, 9, 12, .9) 45%, var(--bg)); }
+  .hero-in { grid-template-columns: minmax(0, 1fr); padding-block: 120px 72px; }
+  .hero-art { max-width: 560px; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card-in { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .card-media { order: -1; aspect-ratio: 4 / 3; min-height: 0; }
+  .card-media::after { background: linear-gradient(0deg, rgba(16, 20, 26, .6), transparent 35%); }
+  .svc { grid-template-columns: minmax(0, 1fr); }
+  .svc-a { grid-row: auto; }
+  .about-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .nav { gap: 12px; }
+  .nav-links a:not(.nav-contact) { display: none; }
+  .mark-name { display: none; }
+  .trace { grid-template-columns: minmax(0, 1fr); gap: 26px; padding: 0 0 0 34px; }
+  .trace::before { top: 0; bottom: 0; left: 7px; right: auto; width: 2px; height: auto; background: linear-gradient(180deg, var(--copper), rgba(236, 154, 90, .12)); }
+  .trace li::before { top: 4px; left: -34px; }
+  .tools { grid-template-columns: minmax(0, 1fr); }
+  .inset { width: 44%; }
+  .inset-bl { left: 12px; bottom: 12px; }
+  .inset-br { right: 12px; bottom: 12px; }
+  .bytes { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .minis { gap: 22px; }
+}
 </style>
 </head>
 <body>
 
-<div class="wrap">
-
-  <header class="mast">
-    <p class="word">APIPATH SANTASNACHOK</p>
-    <span class="mast-meta">EMBEDDED SYSTEMS · BURAPHA UNIVERSITY · THAILAND</span>
-    <button class="themer" id="themer" type="button">THEME</button>
-  </header>
-
-  <div class="hero col">
-    <h1>I design the board, write the firmware, and build the machine around it.</h1>
-    <p class="lede">
-      Third-year embedded systems engineering student at Burapha University, Thailand.
-      Co-founder and CTO of MIONEX, where six myoelectric arms are on six people.
-      The rest of my time goes to robots that have to work on a competition floor.
-    </p>
-  </div>
-
-  <section>
-    <p class="kicker">Principal work</p>
-    <div class="col">
-      <h2>MIONEX — a myoelectric arm for below-elbow amputees.</h2>
-      <p>
-        I designed the control board, the firmware, and the single-channel surface EMG front end,
-        and I fitted the arms to their users. Six arms were delivered under a government contract
-        that is now complete. Thai PBS put the arm on national television.
-      </p>
-      <p>
-        A single EMG channel, done carefully, is enough to give someone a grip they can rely on —
-        that is the result our users scored highest. They also score the weight lowest, and we
-        do not argue with them. It is what sets the research agenda.
-      </p>
-      <p><a href="mionex/">Read the full MIONEX page →</a></p>
+<header class="nav-wrap">
+  <nav class="nav" aria-label="Main">
+    <a class="mark" href="#top"><span class="mark-q" aria-hidden="true">Q</span><span class="mark-name"><span class="th">อภิภัทร</span><span class="en">Apipath</span></span></a>
+    <div class="nav-links">
+      <a href="#work"><span class="th">ผลงาน</span><span class="en">Work</span></a>
+      <a href="#services"><span class="th">บริการ</span><span class="en">Services</span></a>
+      <a href="#about"><span class="th">เกี่ยวกับ</span><span class="en">About</span></a>
+      <a class="nav-contact" href="#contact"><span class="th">ติดต่อ</span><span class="en">Contact</span></a>
     </div>
+    <button class="lang" id="lang" type="button" aria-label="Switch to English">EN</button>
+  </nav>
+</header>
 
-    <div class="panel col" style="margin-top:1.75rem">
-      <ul class="specs">
-        <li><span class="k">Role</span><span class="v">Co-founder &amp; CTO</span></li>
-        <li><span class="k">Entity</span><span class="v">IntelliHand LP, Thailand</span></li>
-        <li><span class="k">Funding</span><span class="v">TED Fund YP004/2566</span></li>
-        <li><span class="k">Arms fitted</span><span class="v">6</span></li>
-        <li><span class="k">Shell</span><span class="v">SLS PA12 · 0.65 kg</span></li>
-        <li><span class="k">Control</span><span class="v">Single-channel sEMG</span></li>
-      </ul>
+<main>
+  <section class="hero" id="top">
+    <canvas class="board" id="board-hero" aria-hidden="true"></canvas>
+    <div class="page hero-in">
+      <div class="hero-copy">
+        <p class="kicker"><span class="th">อภิภัทร (คิว) · วิศวกรรมระบบสมองกลฝังตัว ม.บูรพา</span><span class="en">Apipath (Q) · Embedded Systems Engineering, Burapha University</span></p>
+        <h1>
+          <span class="th"><span class="line"><span>จากแผงวงจร</span></span><span class="line"><span>ถึง<em>หน้าเว็บ</em></span></span></span>
+          <span class="en"><span class="line"><span>Circuit board</span></span><span class="line"><span>to <em>browser</em>.</span></span></span>
+        </h1>
+        <p class="lead"><span class="th">ผมเขียนเฟิร์มแวร์ สร้างหุ่นยนต์แข่ง และทำระบบเว็บให้ร้านค้า รับได้ทั้งงานฮาร์ดแวร์และซอฟต์แวร์ในคนเดียว</span><span class="en">I write firmware, build competition robots, and make web systems for shops. Hardware and software, handled by one person.</span></p>
+        <div class="cta">
+          <a class="btn btn-copper" href="#work" data-magnet><span class="th">ดูผลงาน</span><span class="en">See the work</span><span class="btn-ico" aria-hidden="true">↓</span></a>
+          <a class="btn btn-ghost" href="#contact" data-magnet><span class="th">ติดต่อ</span><span class="en">Contact</span></a>
+        </div>
+      </div>
+      <figure class="hero-art">
+        <div class="arm" id="tilt-in">
+          <img src="img/mionex-arm-cut.webp" width="1600" height="941" fetchpriority="high"
+               alt="แขนเทียม MIONEX สีขาว นิ้วกลไกห้านิ้ว ลอยอยู่เหนือลายวงจร"
+               data-alt-en="The white MIONEX prosthetic arm with five mechanical fingers, floating over the circuit board">
+          <canvas class="arm-3d" id="arm-3d" aria-hidden="true"></canvas>
+          <span class="arm-hint" id="arm-hint" hidden><span class="th">ลากเพื่อหมุนโมเดล 3D</span><span class="en">Drag to turn the 3D model</span></span>
+        </div>
+        <figcaption>
+          <span class="cap-photo"><span class="th">แขนเทียม MIONEX ตัวจริง ตอนนี้มีคนใส่อยู่ 6 คน</span><span class="en">The MIONEX arm. Six people wear it today.</span></span>
+          <span class="cap-3d" hidden><span class="th">แขน MIONEX ออกแบบเป็นโมเดล 3D ด้วยโค้ด อิงสัดส่วนจากแขนจริง · ลากเพื่อหมุน</span><span class="en">The MIONEX arm, designed in code as a live 3D model on the real arm's proportions · drag to turn</span></span>
+        </figcaption>
+      </figure>
     </div>
   </section>
 
-  <section>
-    <p class="kicker">Competition record</p>
-    <div class="col">
-      <h2>Robots that have to work in front of a judge.</h2>
-      <div class="scroll-x">
-        <table class="rec">
-          <tbody>
-            <tr>
-              <th>ABU Robocon Thailand</th>
-              <td>2026</td>
-              <td class="place">Top 8</td>
-            </tr>
-            <tr>
-              <th>TMIRC — Lunghwa University, Taiwan</th>
-              <td>2026</td>
-              <td class="place">Robotracer</td>
-            </tr>
-          </tbody>
-        </table>
+  <div class="marquee" aria-label="Tools and techniques">
+    <div class="mq-track">
+      <ul><li>ESP32</li><li>STM32</li><li>Teensy 4.1</li><li>C / C++</li><li>Python</li><li>PID</li><li>IMU</li><li>Mecanum</li><li>ROS2</li><li>XBee</li><li>CRC8</li><li>Node.js</li><li>SQLite</li><li>YOLOv8</li><li>OAK-D</li></ul>
+      <ul aria-hidden="true"><li>ESP32</li><li>STM32</li><li>Teensy 4.1</li><li>C / C++</li><li>Python</li><li>PID</li><li>IMU</li><li>Mecanum</li><li>ROS2</li><li>XBee</li><li>CRC8</li><li>Node.js</li><li>SQLite</li><li>YOLOv8</li><li>OAK-D</li></ul>
+    </div>
+  </div>
+
+  <div class="page">
+    <ul class="stats">
+      <li class="rise"><span class="stat-v"><i>#</i><span data-count="8">8</span></span><span class="stat-l"><span class="th">กลุ่มมหาวิทยาลัย ABU Robocon 2026 และอันดับ 13 ของประเทศ</span><span class="en">among universities at ABU Robocon 2026, 13th nationally</span></span></li>
+      <li class="rise"><span class="stat-v"><span data-count="15">15</span><i>/51</i></span><span class="stat-l"><span class="th">ทีมที่ผ่าน ELP4 ได้ไปดูงานที่ SKKU เกาหลี</span><span class="en">teams picked by ELP4 for a placement at SKKU, Korea</span></span></li>
+      <li class="rise"><span class="stat-v"><span data-count="6">6</span></span><span class="stat-l"><span class="th">คนใส่แขนเทียม MIONEX อยู่จริงในตอนนี้</span><span class="en">people wear the MIONEX arm today</span></span></li>
+      <li class="rise"><span class="stat-v"><span data-count="1.3" data-dec="1">1.3</span><i>M</i></span><span class="stat-l"><span class="th">บาท ทุน TED Fund สำหรับพัฒนา MIONEX</span><span class="en">baht from the TED Fund to develop MIONEX</span></span></li>
+    </ul>
+
+    <section id="work" class="sec">
+      <div class="work-head rise">
+        <h2 class="mega"><span class="th">ผลงาน</span><span class="en">Work</span></h2>
+        <p><span class="th">สี่งานที่บอกได้ดีที่สุดว่าผมทำอะไรได้ ทุกรูปถ่ายจากงานจริง</span><span class="en">Four projects that show what I do best. Every photo comes from the real build.</span></p>
+      </div>
+
+      <div class="stack">
+        <article class="card" style="--i:0" aria-labelledby="c-abu">
+          <div class="card-in">
+            <div class="card-copy">
+              <div>
+                <h3 id="c-abu"><span class="th">เฟิร์มแวร์หุ่นแข่ง ABU Robocon 2026</span><span class="en">Firmware for an ABU Robocon 2026 robot</span></h3>
+                <p class="meta"><span>2026</span><span><span class="th">หุ่นและคอนโทรลเลอร์</span><span class="en">Robot and controller</span></span><span>Teensy 4.1 + 4.0</span></p>
+                <p class="card-body"><span class="th">หุ่นกับคอนโทรลเลอร์มือถือคุยกันผ่านวิทยุด้วยโปรโตคอลที่ผมออกแบบเอง ทุกเฟรมมี CRC ตรวจ ถ้าสัญญาณเงียบเกิน 1.5 วินาที หุ่นจะตัดสเต็ปเปอร์ ลดความเร็วล้อจนหยุด แล้วกลับไปจับคู่ใหม่เอง</span><span class="en">The robot and a handheld controller talk over radio with a protocol I designed. Every frame is CRC-checked. If the link goes quiet for 1.5 s, the robot cuts its steppers, ramps the wheels to a stop and re-pairs on its own.</span></p>
+              </div>
+              <div>
+                <ol class="bytes" aria-label="Drive frame layout">
+                  <li style="--i:0"><i>0</i><b>SOF</b></li><li style="--i:1"><i>1</i><b>VER</b></li><li style="--i:2"><i>2</i><b>BTN</b></li><li style="--i:3"><i>3</i><b>AUX</b></li><li style="--i:4"><i>4</i><b>VX</b></li><li style="--i:5"><i>5</i><b>VY</b></li><li style="--i:6"><i>6</i><b>VT</b></li><li style="--i:7"><i>7</i><b>SPD</b></li><li style="--i:8"><i>8</i><b>MODE</b></li><li style="--i:9" class="crc"><i>9</i><b>CRC8</b></li>
+                </ol>
+                <p class="cap"><span class="th">เฟรมคำสั่งขับ 10 ไบต์ ผ่าน XBee ที่ 115200 baud</span><span class="en">The 10-byte drive frame, over XBee at 115200 baud</span></p>
+                <div class="minis">
+                  <div class="mini"><b>#8</b><span><span class="th">กลุ่มมหาวิทยาลัย</span><span class="en">Universities</span></span></div>
+                  <div class="mini"><b>#13</b><span><span class="th">ทั้งประเทศ</span><span class="en">Nationwide</span></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="card-media">
+              <img src="img/abu-pit.jpg" width="1600" height="900" loading="lazy" decoding="async"
+                   alt="ทีม ABU Robocon ช่วยกันประกอบหุ่นในพื้นที่เตรียมหุ่นก่อนลงแข่ง"
+                   data-alt-en="The ABU Robocon team assembling robots in the pit before a match">
+              <figure class="inset inset-bl">
+                <img src="img/abu-operator.jpg" width="1214" height="1300" loading="lazy" decoding="async"
+                     alt="ผู้ควบคุมถือคอนโทรลเลอร์มือถือของทีมระหว่างการแข่งขัน"
+                     data-alt-en="An operator holding the team's handheld controller during a match">
+              </figure>
+            </div>
+            <div class="card-dim"></div>
+          </div>
+        </article>
+
+        <article class="card" style="--i:1" aria-labelledby="c-mio">
+          <div class="card-in">
+            <div class="card-copy">
+              <div>
+                <h3 id="c-mio"><span class="th">MIONEX แขนเทียมควบคุมด้วยกล้ามเนื้อ</span><span class="en">MIONEX, a myoelectric arm</span></h3>
+                <p class="meta"><span><span class="th">ทำต่อเนื่องถึงปัจจุบัน</span><span class="en">Ongoing</span></span><span><span class="th">โครงการของผม</span><span class="en">My own project</span></span><span><span class="th">อุปกรณ์การแพทย์</span><span class="en">Medical device</span></span></p>
+                <p class="card-body"><span class="th">แขนเทียมสำหรับผู้พิการแขนท่อนล่าง อ่านสัญญาณไฟฟ้าจากกล้ามเนื้อแขนที่เหลืออยู่ แล้วสั่งให้มือกำและแบ ตอนนี้มีผู้ใช้จริง 6 คน และพาผมขึ้นเวทีนำเสนอมาแล้วหลายเวที</span><span class="en">A prosthetic arm for below-elbow amputees. It reads electrical signals from the remaining forearm muscles and drives the hand to open and close. Six people wear it today, and it has taken me to several pitch stages.</span></p>
+                <a class="card-link" href="https://qil159753.github.io/mionex/" target="_blank" rel="noopener"><span class="th">ดูหน้าโปรเจกต์ MIONEX ↗</span><span class="en">MIONEX project page ↗</span></a>
+              </div>
+              <dl class="awards">
+                <div><dt>TED Fund</dt><dd><span class="th">ทุน 1.3 ล้านบาท</span><span class="en">THB 1.3M grant</span></dd></div>
+                <div><dt>Pitch Your IP, Power Your Future</dt><dd><span class="th">รางวัล 100,000 บาท</span><span class="en">THB 100,000 prize</span></dd></div>
+                <div><dt>Startup Thailand League</dt><dd><span class="th">รอบ Regional</span><span class="en">Regional stage</span></dd></div>
+                <div><dt>ELP4, STeP CMU</dt><dd><span class="th">15 จาก 51 ทีม</span><span class="en">15 of 51 teams</span></dd></div>
+              </dl>
+            </div>
+            <div class="card-media render-media">
+              <img src="img/mionex-render.jpg" width="767" height="1025" loading="lazy" decoding="async"
+                   alt="ภาพเรนเดอร์แขนเทียม MIONEX สองข้าง ตั้งบนขาตั้งบนพื้นหลังสีดำ"
+                   data-alt-en="Render of two MIONEX prosthetic arms on display stands against black">
+            </div>
+            <div class="card-dim"></div>
+          </div>
+        </article>
+
+        <article class="card" style="--i:2" aria-labelledby="c-lt">
+          <div class="card-in">
+            <div class="card-copy">
+              <div>
+                <h3 id="c-lt"><span class="th">หุ่น line tracer ตัวแทนประเทศไทย</span><span class="en">A line tracer that raced for Thailand</span></h3>
+                <p class="meta"><span>2025</span><span><span class="th">ออกแบบหุ่นและโค้ดควบคุม</span><span class="en">Robot design and control code</span></span><span>TMIRC, Taiwan</span></p>
+                <p class="card-body"><span class="th">เซนเซอร์ IR 16 ช่องผ่าน MUX หาตำแหน่งเส้นด้วย weighted centroid คุมมอเตอร์ด้วย PID และมีโหมด pivot สำหรับโค้งหักศอก ผมเขียนคู่มือกับใบแลปไว้สอนรุ่นน้องสร้างหุ่นแบบนี้ด้วย รุ่นถัดไปกำลังย้ายไป Teensy 4.0 พร้อมพัดลมดูดให้เกาะพื้น</span><span class="en">A 16-channel IR array, read through a multiplexer, finds the line by weighted centroid. PID drives the motors and a pivot mode takes the hairpins. I also wrote the guide and lab sheets used to teach juniors to build one. The next version moves to a Teensy 4.0 with a suction fan for grip.</span></p>
+              </div>
+              <ul class="chips" aria-label="Stack">
+                <li>ESP32</li><li>TB6612FNG</li><li><span class="th">IR 16 ช่อง</span><span class="en">16-ch IR</span></li><li>PID</li><li>Weighted centroid</li>
+              </ul>
+            </div>
+            <div class="card-media">
+              <img class="stage" src="img/tmirc-2025.jpg" width="1400" height="1050" loading="lazy" decoding="async"
+                   alt="ทีมไทยสี่คนยืนบนเวทีหน้าป้ายงาน TMIRC 2025 ที่ไต้หวัน"
+                   data-alt-en="Team Thailand, four people, on stage in front of the TMIRC 2025 banner in Taiwan">
+            </div>
+            <div class="card-dim"></div>
+          </div>
+        </article>
+
+        <article class="card" style="--i:3" aria-labelledby="c-web">
+          <div class="card-in">
+            <div class="card-copy">
+              <div>
+                <h3 id="c-web"><span class="th">ระบบร้านรับซื้อและขายฝาก</span><span class="en">A trade-in and redemption shop system</span></h3>
+                <p class="meta"><span>2026</span><span><span class="th">ต้นแบบให้ลูกค้า</span><span class="en">Client prototype</span></span><span>Node.js + SQLite</span></p>
+                <p class="card-body"><span class="th">ลูกค้าเช็กราคามือถือและโน้ตบุ๊กตามรุ่นและสภาพ แล้วนัดเข้าร้านได้เอง หลังบ้านเปลี่ยนคำขอเป็นสัญญาขายฝาก ขยายเวลา ไถ่คืน และสรุปยอดคงค้างให้เจ้าของร้านในหน้าเดียว</span><span class="en">Customers price their phone or laptop by model and condition and book a visit. Behind the counter, requests become redemption contracts the owner can extend, close and total up on one screen.</span></p>
+              </div>
+              <ul class="feats">
+                <li><span><span class="th">ใช้ได้ทั้งบนมือถือและคอมพิวเตอร์</span><span class="en">Works on phone and desktop</span></span></li>
+                <li><span><span class="th">เข้าสู่ระบบด้วย LINE หรือเบอร์โทร</span><span class="en">Sign in with LINE or a phone number</span></span></li>
+                <li><span><span class="th">คิดค่าตอบแทนรายเดือนให้อัตโนมัติ</span><span class="en">Monthly fees calculated automatically</span></span></li>
+              </ul>
+            </div>
+            <div class="card-media web-media">
+              <div class="screens">
+                <figure class="shot shot-admin"><img src="img/pawn-admin.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="หน้าภาพรวมหลังบ้าน แสดงจำนวนคำขอ สัญญา และยอดเงินคงค้าง" data-alt-en="Admin overview with request counts, contracts and outstanding balance"></figure>
+                <figure class="shot shot-store"><img src="img/pawn-desktop.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="หน้าแรกของร้าน พร้อมปุ่มเช็กราคา" data-alt-en="Shop home page with the price-check button"></figure>
+                <figure class="shot shot-phone"><img src="img/pawn-mobile.jpg" width="402" height="681" loading="lazy" decoding="async" alt="หน้าร้านบนมือถือ" data-alt-en="The shop on a phone"></figure>
+              </div>
+            </div>
+            <div class="card-dim"></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="services" class="sec">
+      <div class="svc-head rise">
+        <h2 class="h2"><span class="th">รับงานอะไรได้บ้าง</span><span class="en">What I build for clients</span></h2>
+      </div>
+      <div class="svc">
+        <div class="spot svc-a rise">
+          <h3><span class="th">เฟิร์มแวร์และอุปกรณ์ IoT</span><span class="en">Firmware and IoT devices</span></h3>
+          <p><span class="th">อ่านเซนเซอร์ คุมมอเตอร์ สื่อสารไร้สาย และเขียนโค้ด interrupt ให้ปลอดภัย ตั้งแต่บอร์ดเปล่าจนเป็นอุปกรณ์ที่ใช้งานได้</span><span class="en">Sensors, motors, wireless links and interrupt code that stays safe, from a bare board to a device that works.</span></p>
+          <p class="get-title"><span class="th">สิ่งที่ได้รับ</span><span class="en">What you get</span></p>
+          <ul class="get">
+            <li><span><span class="th">โค้ดที่อ่านต่อได้ มีคำอธิบายตรงจุดที่สำคัญ</span><span class="en">Readable code, commented where it matters</span></span></li>
+            <li><span><span class="th">ผัง pinout และรายการอุปกรณ์</span><span class="en">A pinout sheet and parts list</span></span></li>
+            <li><span><span class="th">วิธีแฟลชและทดสอบทีละขั้น</span><span class="en">Step-by-step flashing and test notes</span></span></li>
+          </ul>
+          <ul class="chips"><li>ESP32</li><li>STM32</li><li>Teensy</li><li>C / C++</li></ul>
+        </div>
+        <div class="spot rise">
+          <h3><span class="th">หุ่นยนต์และระบบควบคุม</span><span class="en">Robots and control</span></h3>
+          <p><span class="th">ขับเคลื่อน mecanum และสองล้อ สเต็ปเปอร์ IMU คอนโทรลเลอร์ไร้สาย จูน PID จนวิ่งได้จริงบนสนาม</span><span class="en">Mecanum and two-wheel drives, steppers, IMUs and wireless controllers, tuned with PID until they run on the real field.</span></p>
+          <ul class="chips"><li>PID</li><li>IMU</li><li>Mecanum</li><li>ROS2</li></ul>
+        </div>
+        <div class="spot rise">
+          <h3><span class="th">เว็บและระบบหลังร้าน</span><span class="en">Web apps and back offices</span></h3>
+          <p><span class="th">หน้าร้าน ระบบจอง สัญญา และหลังบ้านสำหรับธุรกิจขนาดเล็ก ใช้บนมือถือได้ และดูแลต่อได้ง่าย</span><span class="en">Storefronts, bookings, contracts and admin panels for small businesses. Built for phones and easy to keep running.</span></p>
+          <ul class="chips"><li>Node.js</li><li>SQLite</li><li>HTML / CSS / JS</li></ul>
+        </div>
+      </div>
+      <p class="svc-note"><span class="th">ไม่แน่ใจว่างานของคุณเข้าหมวดไหน ส่งรายละเอียดมาคุยกันก่อนได้</span><span class="en">Not sure where your project fits? Send the details and we can work it out.</span></p>
+    </section>
+
+    <section id="about" class="sec">
+      <h2 class="h2 rise"><span class="th">เกี่ยวกับผม</span><span class="en">About me</span></h2>
+      <div class="about-grid">
+        <figure class="duo rise">
+          <img src="img/mionex-pitch.jpg" width="1600" height="1067" loading="lazy" decoding="async"
+               alt="อภิภัทรถือไมโครโฟนนำเสนอโครงการ MIONEX บนเวที"
+               data-alt-en="Apipath holding a microphone, presenting MIONEX on stage">
+        </figure>
+        <div class="about-copy rise">
+          <p class="lead"><span class="th">ผมชื่ออภิภัทร สันทัสนะโชค เรียกคิวก็ได้ นักศึกษาปี 3 วิศวกรรมระบบสมองกลฝังตัว มหาวิทยาลัยบูรพา</span><span class="en">I'm Apipath Santasnachok. Call me Q. I'm a third-year Embedded Systems Engineering student at Burapha University.</span></p>
+          <p><span class="th">ผมชอบงานที่ฮาร์ดแวร์กับซอฟต์แวร์ต้องทำงานด้วยกัน และชอบเห็นของที่ทำออกไปถูกใช้จริง เคยเทรน ROS2 กับ MARA แข่งหุ่นยนต์ทั้งในไทยและต่างประเทศ และกำลังพัฒนาแขนเทียมที่มีคนใส่อยู่จริง</span><span class="en">I like work where hardware and software have to cooperate, and I like seeing what I build get used. I trained in ROS2 with MARA, have raced robots in Thailand and abroad, and I'm developing a prosthetic arm that people already wear.</span></p>
+          <dl class="tools">
+            <div><dt><span class="th">ไมโครคอนโทรลเลอร์</span><span class="en">Microcontrollers</span></dt><dd>Teensy 4.x, ESP32, STM32, Arduino</dd></div>
+            <div><dt><span class="th">ภาษา</span><span class="en">Languages</span></dt><dd>C, C++, Python, JavaScript</dd></div>
+            <div><dt><span class="th">เครื่องมือ</span><span class="en">Tools</span></dt><dd>STM32CubeIDE, arduino-cli, Node.js, SQLite, Git</dd></div>
+            <div><dt><span class="th">กล้องและ AI</span><span class="en">Vision</span></dt><dd>YOLOv8, OAK-D (DepthAI), OpenCV</dd></div>
+          </dl>
+        </div>
+      </div>
+      <ol class="trace" aria-label="Timeline">
+        <li class="rise"><time><span class="th">ส.ค. 2025</span><span class="en">Aug 2025</span></time><p><span class="th">แข่ง TMIRC ที่ไต้หวัน ในนามประเทศไทย</span><span class="en">TMIRC in Taiwan, racing for Thailand</span></p></li>
+        <li class="rise"><time><span class="th">พ.ค.-มิ.ย. 2026</span><span class="en">May-Jun 2026</span></time><p><span class="th">ABU Robocon 2026 อันดับ 8 กลุ่มมหาวิทยาลัย</span><span class="en">ABU Robocon 2026, 8th among universities</span></p></li>
+        <li class="rise"><time><span class="th">ก.ค. 2026</span><span class="en">Jul 2026</span></time><p><span class="th">ELP4 รอบประเทศ ผ่าน 15 จาก 51 ทีม</span><span class="en">ELP4 national stage, 15 of 51 teams through</span></p></li>
+        <li class="rise"><time><span class="th">ต.ค. 2026</span><span class="en">Oct 2026</span></time><p><span class="th">ดูงานที่ SKKU เกาหลี กับโครงการ MIONEX</span><span class="en">MIONEX placement at SKKU, Korea</span></p></li>
+      </ol>
+    </section>
+  </div>
+
+  <section id="contact" class="contact">
+    <canvas class="board" id="board-contact" aria-hidden="true"></canvas>
+    <div class="page contact-in">
+      <h2 class="h2 rise"><span class="th">มีงานอยากให้ช่วย<br>ทักมาคุยกันได้เลย</span><span class="en">Got something to build?<br>Let's talk.</span></h2>
+      <p class="lead rise"><span class="th">เล่าสั้น ๆ ว่าอยากได้อะไร งบเท่าไร และต้องเสร็จเมื่อไร ผมจะตอบกลับพร้อมแนวทางและราคา</span><span class="en">Tell me what you need, your budget and your deadline. I'll reply with an approach and a price.</span></p>
+      <a class="mail" id="mail" href="mailto:apipath.san@gmail.com">apipath.san@gmail.com</a>
+      <div class="contact-actions">
+        <button class="btn btn-copper" id="copy" type="button" data-magnet><span class="th">คัดลอกอีเมล</span><span class="en">Copy email</span><span class="btn-ico" aria-hidden="true">⧉</span></button>
+        <a class="btn btn-ghost" href="https://github.com/Qil159753" target="_blank" rel="noopener" data-magnet>GitHub ↗</a>
+        <span class="note" id="copied" role="status" hidden><span class="th">คัดลอกแล้ว</span><span class="en">Copied</span></span>
+        <span class="note" id="selected" role="status" hidden><span class="th">เลือกอีเมลไว้แล้ว กดคัดลอกได้เลย</span><span class="en">Email selected, copy it from here</span></span>
       </div>
     </div>
   </section>
+</main>
 
-  <section>
-    <p class="kicker">Selected repositories</p>
-    <div class="grid">
-      <article class="card">
-        <span class="tag">Teensy 4.0 · C++</span>
-        <h3><a href="https://github.com/Qil159753/Linetracer_Taiwan">Linetracer_Taiwan</a></h3>
-        <p>Line-following robot built for TMIRC 2026 in Taiwan. PID control, encoder odometry, and a state machine for course sections.</p>
-      </article>
-      <article class="card">
-        <span class="tag">PlatformIO · C++</span>
-        <h3><a href="https://github.com/Qil159753/arduino-digital-io-workshop-new">arduino-digital-io-workshop</a></h3>
-        <p>Digital I/O teaching material rebuilt on PlatformIO — pinout analysis through to switch-driven LED control.</p>
-      </article>
-      <article class="card">
-        <span class="tag">Private</span>
-        <h3>Abu_robocon_2026</h3>
-        <p>Competition firmware for the ABU Robocon machine. Private while the rulebook cycle is live.</p>
-      </article>
-    </div>
-  </section>
-
-  <section>
-    <p class="kicker">What I work with</p>
-    <dl class="stack col">
-      <dt>Languages</dt>
-      <dd>C · C++ · Python</dd>
-      <dt>Silicon</dt>
-      <dd>STM32 · Teensy 4.0 · ESP32 · AVR / Arduino</dd>
-      <dt>Toolchain</dt>
-      <dd>PlatformIO · STM32CubeIDE · Linux · Git</dd>
-      <dt>Beyond code</dt>
-      <dd>Analog EMG front-end design · PID control · 3D printing, FDM and SLS PA12</dd>
-    </dl>
-  </section>
-
-  <section>
-    <p class="kicker">Contact</p>
-    <div class="col">
-      <h2>Write to me.</h2>
-      <p>
-        <a href="mailto:apipath.san@gmail.com">apipath.san@gmail.com</a> ·
-        <a href="https://github.com/Qil159753">github.com/Qil159753</a>
-      </p>
-      <p class="fine">
-        MIONEX is actively looking for a clinical research partner to run a controlled outcome
-        study on the six arms already fitted. If you are a prosthetist, rehabilitation clinician,
-        or researcher working with upper-limb amputees, that is the message I most want to get.
-      </p>
-    </div>
-  </section>
-
-  <footer>
-    <p>Apipath Santasnachok · Thailand</p>
-  </footer>
-
-</div>
+<footer class="page foot">
+  <span><span class="th">© 2026 อภิภัทร สันทัสนะโชค</span><span class="en">© 2026 Apipath Santasnachok</span></span>
+  <a href="#top"><span class="th">กลับขึ้นด้านบน ↑</span><span class="en">Back to top ↑</span></a>
+</footer>
 
 <script>
-  (function () {
-    var root = document.documentElement;
-    var btn  = document.getElementById('themer');
-    var kept = null;
-    try { kept = localStorage.getItem('theme'); } catch (e) {}
-    if (kept) root.setAttribute('data-theme', kept);
-    btn.addEventListener('click', function () {
-      var dark = root.getAttribute('data-theme') === 'dark' ||
-                 (!root.hasAttribute('data-theme') &&
-                  window.matchMedia('(prefers-color-scheme: dark)').matches);
-      var next = dark ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      try { localStorage.setItem('theme', next); } catch (e) {}
+(function () {
+  var root = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var finePointer = window.matchMedia('(pointer: fine)').matches;
+
+  /* ---------- language ---------- */
+  var btn = document.getElementById('lang');
+  function load() { try { return localStorage.getItem('pf-lang'); } catch (e) { return null; } }
+  function save(v) { try { localStorage.setItem('pf-lang', v); } catch (e) {} }
+  function apply(l) {
+    root.setAttribute('data-lang', l);
+    root.lang = l;
+    btn.textContent = l === 'th' ? 'EN' : 'TH';
+    btn.setAttribute('aria-label', l === 'th' ? 'Switch to English' : 'เปลี่ยนเป็นภาษาไทย');
+    document.querySelectorAll('[data-alt-en]').forEach(function (img) {
+      if (!img.dataset.altTh) img.dataset.altTh = img.getAttribute('alt');
+      img.setAttribute('alt', l === 'en' ? img.dataset.altEn : img.dataset.altTh);
     });
-  })();
+    if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+  }
+  var lang = location.hash === '#en' || load() === 'en' ? 'en' : 'th';
+  apply(lang);
+  btn.addEventListener('click', function () { lang = lang === 'th' ? 'en' : 'th'; apply(lang); save(lang); });
+
+  /* ---------- copy email ---------- */
+  var mail = document.getElementById('mail');
+  var copied = document.getElementById('copied');
+  var selected = document.getElementById('selected');
+  var timer;
+  function flash(el) {
+    copied.hidden = true; selected.hidden = true; el.hidden = false;
+    clearTimeout(timer);
+    timer = setTimeout(function () { el.hidden = true; }, 2600);
+  }
+  function selectMail() {
+    var range = document.createRange();
+    range.selectNodeContents(mail);
+    var sel = window.getSelection();
+    sel.removeAllRanges(); sel.addRange(range);
+    flash(selected);
+  }
+  document.getElementById('copy').addEventListener('click', function () {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText('apipath.san@gmail.com').then(function () { flash(copied); }, selectMail);
+    } else { selectMail(); }
+  });
+
+  /* ---------- routed circuit board ---------- */
+  function Board(canvas, o) {
+    var ctx = canvas.getContext('2d');
+    var base = document.createElement('canvas');
+    var hi = document.createElement('canvas');
+    var tmp = document.createElement('canvas');
+    var G = o.grid, off = o.grid / 2, W = 0, H = 0, dpr = 1;
+    var traces = [], chips = [], pulses = [], flashes = [];
+    var mouse = { x: 0, y: 0, on: false };
+    var visible = false, raf = 0, last = 0;
+    var DIRS = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+    var LABELS = ['R12', 'C7', 'TP4', 'J2', 'D1', 'R4', 'C21', 'L2', 'Q5', 'R33'];
+    var CU = '236,154,90';
+
+    function rng(seed) {
+      var s = seed % 2147483647; if (s <= 0) s += 2147483646;
+      return function () { s = s * 16807 % 2147483647; return (s - 1) / 2147483646; };
+    }
+
+    function build() {
+      var r = canvas.getBoundingClientRect();
+      W = Math.max(1, Math.round(r.width)); H = Math.max(1, Math.round(r.height));
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      [canvas, base, hi].forEach(function (c) { c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); });
+      var rr = Math.ceil(o.radius * dpr * 2);
+      tmp.width = rr; tmp.height = rr;
+
+      var cols = Math.floor(W / G) + 1, rows = Math.floor(H / G) + 1;
+      var occ = new Uint8Array(cols * rows);
+      var rand = rng(o.seed);
+      traces = []; chips = [];
+      function free(x, y) { return x >= 0 && y >= 0 && x < cols && y < rows && !occ[y * cols + x]; }
+      function mark(x, y) { occ[y * cols + x] = 1; }
+      function grow(x, y, d, len, straight) {
+        if (!free(x, y)) return;
+        var pts = [[x, y]]; mark(x, y);
+        for (var s = 0; s < len; s++) {
+          if (s >= straight) {
+            var turn = d % 2 === 0 ? rand() < 0.16 : rand() < 0.45;
+            if (turn) d = (d + (rand() < 0.5 ? 1 : 7)) % 8;
+          }
+          var nx = x + DIRS[d][0], ny = y + DIRS[d][1];
+          if (!free(nx, ny)) break;
+          x = nx; y = ny; mark(x, y); pts.push([x, y]);
+        }
+        if (pts.length < 4) return;
+        var keep = [pts[0]];
+        for (var i = 1; i < pts.length - 1; i++) {
+          var a = pts[i - 1], b = pts[i], c = pts[i + 1];
+          if (b[0] - a[0] !== c[0] - b[0] || b[1] - a[1] !== c[1] - b[1]) keep.push(b);
+        }
+        keep.push(pts[pts.length - 1]);
+        var p = keep.map(function (q) { return [q[0] * G + off, q[1] * G + off]; });
+        var segs = [], L = 0;
+        for (var k = 1; k < p.length; k++) { var l = Math.hypot(p[k][0] - p[k - 1][0], p[k][1] - p[k - 1][1]); segs.push(l); L += l; }
+        traces.push({ p: p, segs: segs, len: L, w: rand() < 0.22 ? 2.4 : 1.3, via: rand() < 0.65, label: rand() < 0.14 ? LABELS[Math.floor(rand() * LABELS.length)] : null });
+      }
+
+      for (var c = 0; c < o.chips; c++) {
+        for (var tries = 0; tries < 40; tries++) {
+          var w = 4 + Math.floor(rand() * 3), h = 4 + Math.floor(rand() * 3);
+          if (cols - w - 6 <= 0 || rows - h - 4 <= 0) break;
+          var x0 = 3 + Math.floor(rand() * (cols - w - 6)), y0 = 2 + Math.floor(rand() * (rows - h - 4));
+          var ok = true;
+          for (var yy = y0 - 1; yy <= y0 + h + 1 && ok; yy++) for (var xx = x0 - 2; xx <= x0 + w + 2; xx++) if (!free(xx, yy)) { ok = false; break; }
+          if (!ok) continue;
+          for (yy = y0; yy <= y0 + h; yy++) for (xx = x0; xx <= x0 + w; xx++) mark(xx, yy);
+          var chip = { x: x0 * G + off, y: y0 * G + off, w: w * G, h: h * G, pins: [], name: 'U' + (c + 1) };
+          for (var py = y0 + 1; py < y0 + h; py++) {
+            chip.pins.push([x0 * G + off, py * G + off, -1]);
+            chip.pins.push([(x0 + w) * G + off, py * G + off, 1]);
+            if (rand() < 0.8) grow(x0 - 1, py, 4, 6 + Math.floor(rand() * 22), 2);
+            if (rand() < 0.8) grow(x0 + w + 1, py, 0, 6 + Math.floor(rand() * 22), 2);
+          }
+          chips.push(chip); break;
+        }
+      }
+      var n = Math.round(cols * rows * o.density);
+      for (var t = 0; t < n; t++) grow(Math.floor(rand() * cols), Math.floor(rand() * rows), [0, 2, 4, 6][Math.floor(rand() * 4)], 5 + Math.floor(rand() * 28), 1);
+
+      paint(base, false); paint(hi, true);
+      var count = Math.min(o.maxPulses, Math.round(traces.length * 0.4));
+      pulses = []; flashes = [];
+      for (var q = 0; q < count; q++) { var pl = spawn({}); pl.d = Math.random() * pl.t.len; pulses.push(pl); }
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(base, 0, 0);
+    }
+
+    function paint(c, bright) {
+      var g = c.getContext('2d');
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      g.clearRect(0, 0, W, H);
+      g.lineCap = 'round'; g.lineJoin = 'round';
+      if (bright) { g.shadowColor = 'rgba(' + CU + ',.9)'; g.shadowBlur = 10; }
+      chips.forEach(function (ch) {
+        g.fillStyle = bright ? 'rgba(255,255,255,.06)' : 'rgba(255,255,255,.02)';
+        g.fillRect(ch.x, ch.y, ch.w, ch.h);
+        g.strokeStyle = bright ? 'rgba(242,244,247,.7)' : 'rgba(242,244,247,.14)';
+        g.lineWidth = 1; g.strokeRect(ch.x + .5, ch.y + .5, ch.w, ch.h);
+        g.fillStyle = 'rgba(' + CU + ',' + (bright ? .95 : .3) + ')';
+        ch.pins.forEach(function (pn) { g.fillRect(pn[2] < 0 ? pn[0] - G : pn[0], pn[1] - 2, G, 4); });
+        g.beginPath(); g.arc(ch.x + 9, ch.y + 9, 2.5, 0, Math.PI * 2);
+        g.fillStyle = bright ? 'rgba(242,244,247,.8)' : 'rgba(242,244,247,.22)'; g.fill();
+        if (!bright) { g.font = '11px "JetBrains Mono", monospace'; g.fillText(ch.name, ch.x + 4, ch.y - 8); }
+      });
+      traces.forEach(function (t) {
+        g.strokeStyle = 'rgba(' + CU + ',' + (bright ? .95 : .16) + ')';
+        g.fillStyle = 'rgba(' + CU + ',' + (bright ? .95 : .3) + ')';
+        g.lineWidth = t.w;
+        g.beginPath(); g.moveTo(t.p[0][0], t.p[0][1]);
+        for (var i = 1; i < t.p.length; i++) g.lineTo(t.p[i][0], t.p[i][1]);
+        g.stroke();
+        var e = t.p[t.p.length - 1];
+        g.beginPath();
+        if (t.via) { g.arc(e[0], e[1], 4.2, 0, Math.PI * 2); g.lineWidth = 1.6; g.stroke(); }
+        else { g.arc(e[0], e[1], 2.8, 0, Math.PI * 2); g.fill(); }
+        if (t.label && !bright) {
+          g.fillStyle = 'rgba(242,244,247,.2)'; g.font = '10px "JetBrains Mono", monospace';
+          g.fillText(t.label, t.p[0][0] + 7, t.p[0][1] - 7);
+        }
+      });
+    }
+
+    function spawn(p) {
+      p.t = traces[Math.floor(Math.random() * traces.length)];
+      p.d = 0; p.v = 70 + Math.random() * 130; p.tail = 30 + Math.random() * 34;
+      return p;
+    }
+    function at(t, d) {
+      var acc = 0;
+      for (var i = 0; i < t.segs.length; i++) {
+        if (d <= acc + t.segs[i]) {
+          var k = (d - acc) / t.segs[i], a = t.p[i], b = t.p[i + 1];
+          return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k];
+        }
+        acc += t.segs[i];
+      }
+      return t.p[t.p.length - 1];
+    }
+
+    function spot() {
+      var R = o.radius * dpr, x = mouse.x * dpr, y = mouse.y * dpr;
+      var sx = Math.max(0, Math.floor(x - R)), sy = Math.max(0, Math.floor(y - R));
+      var ex = Math.min(canvas.width, Math.ceil(x + R)), ey = Math.min(canvas.height, Math.ceil(y + R));
+      var sw = ex - sx, sh = ey - sy;
+      if (sw <= 0 || sh <= 0) return;
+      var g = tmp.getContext('2d');
+      g.globalCompositeOperation = 'source-over';
+      g.clearRect(0, 0, tmp.width, tmp.height);
+      g.drawImage(hi, sx, sy, sw, sh, 0, 0, sw, sh);
+      g.globalCompositeOperation = 'destination-in';
+      var grad = g.createRadialGradient(x - sx, y - sy, 0, x - sx, y - sy, R);
+      grad.addColorStop(0, 'rgba(0,0,0,1)'); grad.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = grad; g.fillRect(0, 0, sw, sh);
+      ctx.drawImage(tmp, 0, 0, sw, sh, sx, sy, sw, sh);
+    }
+
+    function frame(now) {
+      raf = 0;
+      if (!visible || document.hidden || !traces.length) return;
+      var dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016); last = now;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(base, 0, 0);
+      if (mouse.on) spot();
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.lineCap = 'round';
+      for (var i = 0; i < pulses.length; i++) {
+        var p = pulses[i];
+        p.d += p.v * dt;
+        if (p.d - p.tail > p.t.len) {
+          var e = p.t.p[p.t.p.length - 1];
+          flashes.push({ x: e[0], y: e[1], life: 1 });
+          spawn(p); continue;
+        }
+        var a = Math.max(0, p.d - p.tail), b = Math.min(p.d, p.t.len);
+        if (b <= a) continue;
+        var tail = at(p.t, a), head = at(p.t, b);
+        var grad = ctx.createLinearGradient(tail[0], tail[1], head[0], head[1]);
+        grad.addColorStop(0, 'rgba(255,190,130,0)'); grad.addColorStop(1, 'rgba(255,214,170,1)');
+        ctx.beginPath();
+        for (var s = 0; s <= 6; s++) { var pt = at(p.t, a + (b - a) * s / 6); if (s) ctx.lineTo(pt[0], pt[1]); else ctx.moveTo(pt[0], pt[1]); }
+        ctx.strokeStyle = grad; ctx.lineWidth = p.t.w + 1.2;
+        ctx.shadowColor = 'rgba(' + CU + ',1)'; ctx.shadowBlur = 12;
+        ctx.stroke();
+        ctx.beginPath(); ctx.arc(head[0], head[1], 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffe6cc'; ctx.fill();
+      }
+      ctx.shadowBlur = 0;
+      for (var f = flashes.length - 1; f >= 0; f--) {
+        var fl = flashes[f];
+        fl.life -= dt * 2.2;
+        if (fl.life <= 0) { flashes.splice(f, 1); continue; }
+        ctx.beginPath(); ctx.arc(fl.x, fl.y, 4 + (1 - fl.life) * 14, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255,200,150,' + fl.life * 0.8 + ')'; ctx.lineWidth = 1.5; ctx.stroke();
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    function kick() { if (!reduce && visible && !document.hidden && !raf) { last = 0; raf = requestAnimationFrame(frame); } }
+
+    build();
+    if (!reduce) {
+      var host = canvas.parentElement;
+      host.addEventListener('pointermove', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        var r = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.on = true;
+      });
+      host.addEventListener('pointerleave', function () { mouse.on = false; });
+      new IntersectionObserver(function (es) { visible = es[0].isIntersecting; kick(); }).observe(canvas);
+      document.addEventListener('visibilitychange', kick);
+    }
+    var rt, lastW = 0, lastH = 0;
+    new ResizeObserver(function () {
+      var r = canvas.getBoundingClientRect();
+      if (Math.abs(r.width - lastW) < 2 && Math.abs(r.height - lastH) < 2) return;
+      lastW = r.width; lastH = r.height;
+      clearTimeout(rt); rt = setTimeout(build, 160);
+    }).observe(canvas);
+  }
+
+  var hb = document.getElementById('board-hero');
+  if (hb && hb.getContext) Board(hb, { grid: 26, density: 0.028, chips: 3, seed: 1907, radius: 200, maxPulses: 38 });
+  var cb = document.getElementById('board-contact');
+  if (cb && cb.getContext) Board(cb, { grid: 26, density: 0.02, chips: 2, seed: 4421, radius: 180, maxPulses: 24 });
+
+  /* ---------- hero tilt + magnetic buttons ---------- */
+  if (!reduce && finePointer) {
+    var hero = document.querySelector('.hero'), tilt = document.getElementById('tilt-in');
+    hero.addEventListener('pointermove', function (e) {
+      if (tilt.classList.contains('is-3d')) { tilt.style.transform = ''; return; }
+      var px = e.clientX / window.innerWidth - 0.5, py = e.clientY / window.innerHeight - 0.5;
+      tilt.style.transform = 'rotateY(' + (px * 14).toFixed(2) + 'deg) rotateX(' + (-py * 10).toFixed(2) + 'deg)';
+    });
+    hero.addEventListener('pointerleave', function () { tilt.style.transform = ''; });
+    document.querySelectorAll('[data-magnet]').forEach(function (el) {
+      el.addEventListener('pointermove', function (e) {
+        var r = el.getBoundingClientRect();
+        el.style.transform = 'translate(' + ((e.clientX - r.left - r.width / 2) * 0.2).toFixed(1) + 'px,' + ((e.clientY - r.top - r.height / 2) * 0.3).toFixed(1) + 'px)';
+      });
+      el.addEventListener('pointerleave', function () { el.style.transform = ''; });
+    });
+  }
+
+  /* ---------- spotlight borders ---------- */
+  document.querySelectorAll('.spot').forEach(function (el) {
+    el.addEventListener('pointermove', function (e) {
+      var r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  /* ---------- count-up ---------- */
+  if (!reduce && 'IntersectionObserver' in window) {
+    var cio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        cio.unobserve(e.target);
+        var el = e.target, to = parseFloat(el.dataset.count), dec = +(el.dataset.dec || 0), t0 = performance.now();
+        (function tick(now) {
+          var k = Math.min(1, (now - t0) / 1500), v = to * (1 - Math.pow(1 - k, 4));
+          el.textContent = v.toFixed(dec);
+          if (k < 1) requestAnimationFrame(tick);
+        })(t0);
+      });
+    }, { threshold: 0.7 });
+    document.querySelectorAll('[data-count]').forEach(function (c) { cio.observe(c); });
+  }
+
+  /* ---------- sticky stack: earlier cards shrink and dim as the next one lands ---------- */
+  if (!reduce && window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.matchMedia().add('(min-width: 961px) and (min-height: 760px)', function () {
+      var cards = gsap.utils.toArray('.card');
+      cards.forEach(function (card, i) {
+        if (i === cards.length - 1) return;
+        gsap.timeline({
+          scrollTrigger: { trigger: cards[i + 1], start: 'top bottom', end: 'top ' + (96 + (i + 1) * 14) + 'px', scrub: true }
+        })
+          .to(card.querySelector('.card-in'), { scale: 0.93, ease: 'none' }, 0)
+          .to(card.querySelector('.card-dim'), { opacity: 0.6, ease: 'none' }, 0);
+      });
+    });
+  }
+})();
 </script>
 
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js","three/examples/jsm/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<script type="module">
+/* Hero 3D: a designed procedural MIONEX arm (js/mionex-hero.js). Proportions come from the
+   img2threejs reconstruction of the real arm; finishes and extra hardware are design. The cut-out
+   photo stays underneath as the first frame and the fallback if anything here fails. */
+const arm = document.getElementById('tilt-in');
+const canvas = document.getElementById('arm-3d');
+const hint = document.getElementById('arm-hint');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine = matchMedia('(pointer: fine)').matches;
+
+try {
+  const THREE = await import('three');
+  const { RoomEnvironment } = await import('three/examples/jsm/environments/RoomEnvironment.js');
+  const { createMionexArm } = await import('./js/mionex-hero.js');
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setClearColor(0x000000, 0);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environmentIntensity = 0.35;
+  const key = new THREE.DirectionalLight(0xfff4e8, 2.4); key.position.set(-1.5, 5, 3.5); scene.add(key);
+  scene.add(new THREE.HemisphereLight(0xdde6f0, 0x1a1d22, 0.6));
+  const rim = new THREE.DirectionalLight(0xec9a5a, 2.2); rim.position.set(3, 1, -4); scene.add(rim);
+  const rimLow = new THREE.DirectionalLight(0xec9a5a, 1.1); rimLow.position.set(-3, -1.5, -3); scene.add(rimLow);
+
+  const A = createMionexArm(), model = A.group;
+  const center = new THREE.Box3().setFromObject(model).getCenter(new THREE.Vector3());
+  model.position.sub(center);
+  const tiltGroup = new THREE.Group();   // matches the photo's diagonal: fingers up-left
+  tiltGroup.rotation.z = -0.4;
+  const spin = new THREE.Group();        // drag / hover rotation
+  const roll = new THREE.Group();        // slow roll about the arm's long axis: palm, top, dorsal plate, underside
+  roll.add(model); spin.add(roll); tiltGroup.add(spin); scene.add(tiltGroup);
+
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.05, 50);
+  camera.position.set(0, 0, 5.5);
+  const resize = () => {
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.position.z = Math.max(5.5, 7.4 / camera.aspect);   // keep fingertips and brim inside narrow (phone) canvases
+    camera.updateProjectionMatrix();
+  };
+  resize();
+  new ResizeObserver(() => { resize(); if (!running) draw(performance.now()); }).observe(canvas);
+
+  // Drag to turn (horizontal), with a little inertia; vertical drags keep scrolling the page on touch.
+  let yaw = 0, pitch = 0, vYaw = 0, dragging = false, lastX = 0, lastY = 0, hoverYaw = 0, hoverPitch = 0;
+  canvas.addEventListener('pointerdown', (e) => { dragging = true; lastX = e.clientX; lastY = e.clientY; canvas.setPointerCapture(e.pointerId); hint.hidden = true; });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX, dy = e.clientY - lastY; lastX = e.clientX; lastY = e.clientY;
+    vYaw = dx * 0.012; yaw += vYaw; pitch = Math.max(-0.5, Math.min(0.5, pitch + dy * 0.006));
+    if (!running) draw(performance.now());
+  });
+  const release = () => { dragging = false; };
+  canvas.addEventListener('pointerup', release); canvas.addEventListener('pointercancel', release);
+  if (fine) document.querySelector('.hero').addEventListener('pointermove', (e) => {
+    hoverYaw = (e.clientX / innerWidth - 0.5) * 0.5; hoverPitch = (e.clientY / innerHeight - 0.5) * 0.25;
+  });
+
+  const draw = (now) => {
+    const t = now / 1000;
+    if (!dragging) { yaw += vYaw; vYaw *= 0.92; }
+    // Roll about the long axis instead of a turntable spin: the arm never goes end-on, and the dorsal
+    // MIONEX plate still comes round every ~25 s.
+    roll.rotation.x = reduce ? 0 : t * 0.25;
+    spin.rotation.y = yaw + hoverYaw + (reduce ? 0 : Math.sin(t * 0.21) * 0.32);
+    spin.rotation.x = pitch + hoverPitch * 0.6 + (reduce ? 0 : Math.sin(t * 0.33) * 0.06);
+    tiltGroup.position.y = reduce ? 0 : Math.sin(t * 0.8) * 0.05;
+    // Grip cycle: open, close to a soft fist, open -- what a myoelectric hand does.
+    const g = reduce ? 0.3 : 0.12 + Math.pow(Math.max(0, Math.sin(t * 0.9)), 1.6) * 0.75;
+    A.setPose(g, reduce ? 0 : Math.sin(t * 0.5) * 0.18);
+    A.update(t);
+    renderer.render(scene, camera);
+  };
+
+  let running = false, visible = true, raf = 0;
+  const loop = (now) => { raf = 0; if (!running) return; draw(now); raf = requestAnimationFrame(loop); };
+  const sync = () => {
+    const should = !reduce && visible && !document.hidden;
+    if (should && !running) { running = true; raf = requestAnimationFrame(loop); }
+    if (!should) running = false;
+  };
+  new IntersectionObserver((es) => { visible = es[0].isIntersecting; sync(); }).observe(canvas);
+  document.addEventListener('visibilitychange', sync);
+
+  draw(performance.now());
+  arm.classList.add('is-3d');
+  arm.style.transform = '';
+  document.querySelector('.cap-photo').hidden = true;
+  document.querySelector('.cap-3d').hidden = false;
+  if (fine) { hint.hidden = false; setTimeout(() => { hint.hidden = true; }, 5000); }
+  sync();
+} catch (err) {
+  console.warn('3D model unavailable, keeping the photo:', err);
+}
+</script>
 </body>
 </html>
