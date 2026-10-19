@@ -94,7 +94,7 @@ export function initBackhoe(root) {
 
   scene.add(box(20, 0.6, 13, M.board, 0, 0.3, 0));
   const pile = new THREE.Mesh(new THREE.SphereGeometry(2.6, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), M.soil);
-  pile.scale.set(1.3, 0.45, 1.1); pile.position.set(9.6, 0.6, 1.5); scene.add(pile);
+  pile.scale.set(1.2, 0.5, 1.1); pile.position.set(8.2, 0.6, 0); scene.add(pile);
 
   // Swing: turntable, the two side plates of the mast, the shoulder pin.
   const swing = new THREE.Group(); swing.position.set(-1.5, 0.6, 0); scene.add(swing);
@@ -179,7 +179,7 @@ export function initBackhoe(root) {
 
   // "Dig" plays a full cycle: reach, curl into the pile, lift, swing, dump, return.
   const KEYS = [
-    [0.5, 0.45, 0.4, 0.4], [0.5, 0.12, 0.8, 0.15], [0.5, 0.1, 0.6, 0.95, 'grab'], [0.5, 0.75, 0.3, 1.0],
+    [0.5, 0.45, 0.4, 0.4], [0.5, 0.3, 0.72, 0.15], [0.5, 0.28, 0.55, 0.95, 'grab'], [0.5, 0.75, 0.3, 1.0],
     [0.95, 0.75, 0.3, 1.0], [0.95, 0.6, 0.45, 0.1, 'drop'], [0.5, 0.5, 0.4, 0.4],
   ];
   digBtn?.addEventListener('click', () => { seq = { k: 0, t: 0 }; });
