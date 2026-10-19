@@ -1,7 +1,6 @@
 /* Two interactive models for the Journey timeline, built in code (no mesh files):
-   - blackhole: the Y1 hydraulic project. A master syringe moves water through a tube to a
-     slave syringe whose rod pulls the centre of a stretched sheet down; the deeper the well,
-     the faster the marbles spiral in.
+   - backhoe: the Y1 hydraulic digger. Three master syringes on the board push water through
+     tubes into slave syringes that work the boom, stick and bucket; a fourth input swings it.
    - truck: the Engineering Drawing toy truck (TRUCK SERIES D917), split into the same 11 parts
      the group modelled in SolidWorks, with an explode slider and a tipping dump bed.
    Shapes are hand-built from photos, so proportions are close, not measured. */
@@ -61,142 +60,176 @@ function loop(canvas, step) {
   })(last);
 }
 
-/* ------------------------------------------------------------------ black hole */
-export function initBlackhole(root) {
+/* ------------------------------------------------------------------ backhoe */
+export function initBackhoe(root) {
   const canvas = root.querySelector('canvas');
-  const slider = root.querySelector('input[type=range]');
-  const drop = root.querySelector('[data-drop]');
+  const sliders = [...root.querySelectorAll('input[type=range]')];
+  const digBtn = root.querySelector('[data-dig]');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const { renderer, scene, camera, controls } = makeStage(canvas, { pos: [0, 11, 19], target: [0, 2, 0.6], min: 10, max: 34 });
-  controls.autoRotate = !reduce;
+  const { renderer, scene, camera, controls } = makeStage(canvas, { pos: [13, 11, 19], target: [2.5, 4, 0], min: 12, max: 40 });
 
   const M = {
-    wood: new THREE.MeshStandardMaterial({ color: 0x6b4a2f, roughness: 0.75 }),
-    frame: new THREE.MeshStandardMaterial({ color: 0x2a2f37, roughness: 0.4, metalness: 0.6 }),
-    sheet: new THREE.MeshStandardMaterial({ color: 0x0d1016, roughness: 0.6, side: THREE.DoubleSide }),
-    grid: new THREE.LineBasicMaterial({ color: COPPER, transparent: true, opacity: 0.6 }),
-    glass: new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.08, transparent: true, opacity: 0.28, depthWrite: false }),
-    water: new THREE.MeshStandardMaterial({ color: 0x3aa0ff, roughness: 0.2, emissive: 0x0b3d75, emissiveIntensity: 0.6 }),
-    plunger: new THREE.MeshStandardMaterial({ color: 0xe8e8e8, roughness: 0.4 }),
+    board: new THREE.MeshStandardMaterial({ color: 0x6b4a2f, roughness: 0.75 }),
+    wood: new THREE.MeshStandardMaterial({ color: 0xc89a62, roughness: 0.7 }),
+    steel: new THREE.MeshStandardMaterial({ color: 0x9aa3ad, roughness: 0.35, metalness: 0.8 }),
+    glass: new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.08, transparent: true, opacity: 0.3, depthWrite: false }),
+    plunger: new THREE.MeshStandardMaterial({ color: 0xeeeeee, roughness: 0.4 }),
     rubber: new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.9 }),
-    tube: new THREE.MeshStandardMaterial({ color: 0x5fb4ff, roughness: 0.2, emissive: 0x0b3d75, emissiveIntensity: 0.4, transparent: true, opacity: 0.75 }),
-    hole: new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 1 }),
-    glow: new THREE.MeshBasicMaterial({ color: COPPER, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false }),
+    bucket: new THREE.MeshStandardMaterial({ color: 0xf2ad1c, roughness: 0.5, side: THREE.DoubleSide }),
+    soil: new THREE.MeshStandardMaterial({ color: 0x5a3d26, roughness: 1 }),
+  };
+  // One water colour per circuit, matched to the slider dots in the HTML.
+  const WATER = [0x3aa0ff, 0xff5a4e, 0x4fd18b];
+  const waterMat = WATER.map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.25, emissive: c, emissiveIntensity: 0.25 }));
+  const tubeMat = WATER.map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.2, transparent: true, opacity: 0.8, emissive: c, emissiveIntensity: 0.2 }));
+
+  const box = (w, h, d, mat, x = 0, y = 0, z = 0) => {
+    const m = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 2, Math.min(0.12, Math.min(w, h, d) * 0.3)), mat);
+    m.position.set(x, y, z); return m;
+  };
+  const pin = (parent, x, y) => {
+    const p = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 1.5, 12), M.steel);
+    p.rotation.x = Math.PI / 2; p.position.set(x, y, 0); parent.add(p);
   };
 
-  const R = 5, SEG_R = 36, SEG_T = 72, Y0 = 4.2, K = 2.2;
-  const base = new THREE.Mesh(new THREE.BoxGeometry(17, 0.5, 12), M.wood); base.position.y = 0.25; scene.add(base);
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(R, 0.18, 12, 96), M.frame);
-  ring.rotation.x = Math.PI / 2; ring.position.y = Y0; scene.add(ring);
+  scene.add(box(20, 0.6, 13, M.board, 0, 0.3, 0));
+  const pile = new THREE.Mesh(new THREE.SphereGeometry(2.6, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), M.soil);
+  pile.scale.set(1.3, 0.45, 1.1); pile.position.set(9.6, 0.6, 1.5); scene.add(pile);
+
+  // Swing: turntable, the two side plates of the mast, the shoulder pin.
+  const swing = new THREE.Group(); swing.position.set(-1.5, 0.6, 0); scene.add(swing);
+  const table = new THREE.Mesh(new THREE.CylinderGeometry(2.3, 2.3, 0.5, 40), M.wood); table.position.y = 0.25; swing.add(table);
+  for (const z of [-0.55, 0.55]) swing.add(box(2.6, 4.8, 0.3, M.wood, 0.4, 2.9, z));
+  pin(swing, 1.0, 4.8);
+
+  // Boom, stick and bucket: each link is a group rotating about its own pin.
+  const boom = new THREE.Group(); boom.position.set(1.0, 4.8, 0); swing.add(boom);
+  for (const z of [-0.35, 0.35]) boom.add(box(7.6, 0.75, 0.25, M.wood, 3.4, 0, z));
+  pin(boom, 7.0, 0);
+  const stick = new THREE.Group(); stick.position.set(7.0, 0, 0); boom.add(stick);
+  stick.add(box(6.4, 0.6, 0.3, M.wood, 2.2, 0, 0));
+  stick.add(box(1.4, 0.35, 0.25, M.wood, -0.6, 0.2, 0)); // stub the stick cylinder pushes on
+  pin(stick, 5.2, 0);
+  const bucketG = new THREE.Group(); bucketG.position.set(5.2, 0, 0); stick.add(bucketG);
+  const prof = new THREE.Shape();
+  prof.moveTo(0, 0.3); prof.lineTo(-0.2, -1.2); prof.quadraticCurveTo(0.2, -2.2, 1.6, -2.0);
+  prof.lineTo(1.4, -1.6); prof.quadraticCurveTo(0.6, -1.7, 0.45, -1.1); prof.lineTo(0.6, 0.2);
+  const bucketGeo = new THREE.ExtrudeGeometry(prof, { depth: 1.6, bevelEnabled: true, bevelSize: 0.05, bevelThickness: 0.05, bevelSegments: 1 });
+  bucketGeo.translate(0, 0, -0.8);
+  bucketG.add(new THREE.Mesh(bucketGeo, M.bucket));
+  for (const z of [-0.82, 0.82]) {
+    const side = new THREE.Mesh(new THREE.CircleGeometry(1.0, 20), M.bucket);
+    side.position.set(0.55, -1.25, z); bucketG.add(side);
+  }
   for (let i = 0; i < 4; i++) {
-    const a = i / 4 * Math.PI * 2 + Math.PI / 4;
-    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, Y0 - 0.5, 10), M.frame);
-    leg.position.set(Math.cos(a) * R, (Y0 + 0.5) / 2, Math.sin(a) * R); scene.add(leg);
+    const tooth = new THREE.Mesh(new THREE.ConeGeometry(0.13, 0.5, 8), M.steel);
+    tooth.rotation.z = -1.35; tooth.position.set(1.75, -1.95, -0.6 + i * 0.4); bucketG.add(tooth);
+  }
+  const load = new THREE.Mesh(new THREE.SphereGeometry(0.75, 16, 10), M.soil);
+  load.scale.set(1, 0.6, 0.9); load.position.set(0.7, -1.35, 0); load.visible = false; bucketG.add(load);
+
+  // Slave syringes mounted between two links: barrel pinned on the parent, rod on the child.
+  const up = new THREE.Vector3(0, 1, 0);
+  function slave(i, parent, a, child, b) {
+    const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b);
+    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 1, 20, 1, true), M.glass);
+    const water = new THREE.Mesh(new THREE.CylinderGeometry(0.29, 0.29, 1, 20), waterMat[i]);
+    const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 1, 10), M.plunger);
+    scene.add(barrel, water, rod);
+    const wa = new THREE.Vector3(), wb = new THREE.Vector3(), dir = new THREE.Vector3(), q = new THREE.Quaternion();
+    let len = 0;
+    return function update() {
+      parent.localToWorld(wa.copy(A)); child.localToWorld(wb.copy(B));
+      dir.subVectors(wb, wa); const d = dir.length(); dir.normalize();
+      if (!len) len = d * 0.62; // barrel length fixed from the starting pose
+      q.setFromUnitVectors(up, dir);
+      const bl = Math.min(len, d - 0.2);
+      barrel.quaternion.copy(q); barrel.scale.y = bl; barrel.position.copy(wa).addScaledVector(dir, bl / 2);
+      const wl = Math.max(0.05, bl - 0.15);
+      water.quaternion.copy(q); water.scale.y = wl; water.position.copy(wa).addScaledVector(dir, wl / 2);
+      const rl = d - bl + 0.3;
+      rod.quaternion.copy(q); rod.scale.y = rl; rod.position.copy(wb).addScaledVector(dir, -rl / 2);
+      return wa;
+    };
+  }
+  const slaves = [
+    slave(0, swing, [2.6, 1.8, 0], boom, [2.6, -0.45, 0]),
+    slave(1, boom, [4.0, 0.55, 0], stick, [-0.9, 0.35, 0]),
+    slave(2, stick, [2.0, 0.45, 0], bucketG, [0.15, 0.3, 0]),
+  ];
+
+  // Master syringes on the control strip at the front: nozzle toward the arm, thumb toward you.
+  const masters = WATER.map((_, i) => {
+    const g = new THREE.Group(); g.position.set(-4.4 + i * 1.6, 1.0, 3.6); g.rotation.x = -Math.PI / 2; scene.add(g);
+    g.add(new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 3, 20, 1, true), M.glass));
+    const nozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.2, 0.3, 12), M.glass); nozzle.position.y = 1.65; g.add(nozzle);
+    const water = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.38, 1, 20), waterMat[i]); g.add(water);
+    const plunger = new THREE.Group(); g.add(plunger);
+    const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 3, 10), M.plunger); rod.position.y = -1.5; plunger.add(rod);
+    plunger.add(new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.38, 0.16, 20), M.rubber));
+    const thumb = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.1, 20), M.plunger); thumb.position.y = -3; plunger.add(thumb);
+    return { g, water, plunger, tube: null };
+  });
+
+  // Inputs: swing angle plus one value per hydraulic circuit, all 0..1.
+  const RANGE = [[-1.2, 1.2], [-0.35, 0.75], [-2.3, -0.75], [-2.4, 0.4]];
+  const cur = sliders.map(s => Number(s.value) / 100), tgt = cur.slice();
+  let seq = null;
+  sliders.forEach((s, i) => s.addEventListener('input', () => { tgt[i] = Number(s.value) / 100; seq = null; }));
+
+  // "Dig" plays a full cycle: reach, curl into the pile, lift, swing, dump, return.
+  const KEYS = [
+    [0.5, 0.45, 0.4, 0.4], [0.5, 0.12, 0.8, 0.15], [0.5, 0.1, 0.6, 0.95, 'grab'], [0.5, 0.75, 0.3, 1.0],
+    [0.95, 0.75, 0.3, 1.0], [0.95, 0.6, 0.45, 0.1, 'drop'], [0.5, 0.5, 0.4, 0.4],
+  ];
+  digBtn?.addEventListener('click', () => { seq = { k: 0, t: 0 }; });
+
+  const mid = new THREE.Vector3();
+  function plumb() {
+    masters.forEach((m, i) => {
+      const from = m.g.localToWorld(new THREE.Vector3(0, 1.8, 0));
+      const to = slaves[i]().clone();
+      mid.lerpVectors(from, to, 0.5); mid.y = 1.2;
+      const curve = new THREE.CatmullRomCurve3([from, new THREE.Vector3(from.x, 0.9, from.z - 1.4), mid, to]);
+      if (m.tube) { m.tube.geometry.dispose(); scene.remove(m.tube); }
+      m.tube = new THREE.Mesh(new THREE.TubeGeometry(curve, 40, 0.09, 8, false), tubeMat[i]);
+      scene.add(m.tube);
+    });
   }
 
-  // The stretched sheet: a polar grid whose depth follows a softened 1/r well.
-  const pos = new Float32Array((SEG_R + 1) * (SEG_T + 1) * 3), idx = [];
-  for (let i = 0; i < SEG_R; i++) for (let j = 0; j < SEG_T; j++) {
-    const k = i * (SEG_T + 1) + j, n = k + SEG_T + 1;
-    idx.push(k, n, k + 1, k + 1, n, n + 1);
-  }
-  const sheetGeo = new THREE.BufferGeometry();
-  sheetGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  sheetGeo.setIndex(idx);
-  scene.add(new THREE.Mesh(sheetGeo, M.sheet));
-  const RINGS = Math.floor(SEG_R / 3) + 1, SPOKES = SEG_T / 4;
-  const gridPos = new Float32Array((RINGS * SEG_T + SPOKES * SEG_R) * 6);
-  const gridGeo = new THREE.BufferGeometry(); gridGeo.setAttribute('position', new THREE.BufferAttribute(gridPos, 3));
-  scene.add(new THREE.LineSegments(gridGeo, M.grid));
-
-  const rAt = i => 0.35 + (R - 0.35) * Math.pow(i / SEG_R, 1.35);
-  const yAt = (r, D) => Y0 - K * D * (1 - r / R) / (1 + 2.2 * r);
-  function shapeSheet(D) {
-    for (let i = 0; i <= SEG_R; i++) {
-      const r = rAt(i), y = yAt(r, D);
-      for (let j = 0; j <= SEG_T; j++) {
-        const t = j / SEG_T * Math.PI * 2, k = (i * (SEG_T + 1) + j) * 3;
-        pos[k] = Math.cos(t) * r; pos[k + 1] = y; pos[k + 2] = Math.sin(t) * r;
+  let first = true;
+  loop(canvas, (dt) => {
+    if (seq) {
+      const key = KEYS[seq.k];
+      for (let i = 0; i < 4; i++) tgt[i] = key[i];
+      seq.t += dt;
+      if (seq.t > (reduce ? 0.2 : 1.1)) {
+        if (key[4] === 'grab') load.visible = true;
+        if (key[4] === 'drop') load.visible = false;
+        seq.t = 0; seq.k++;
+        if (seq.k >= KEYS.length) seq = null;
       }
     }
-    sheetGeo.attributes.position.needsUpdate = true;
-    sheetGeo.computeVertexNormals();
-    let g = 0;
-    const at = (i, j) => (i * (SEG_T + 1) + j) * 3;
-    const put = k => { gridPos[g++] = pos[k]; gridPos[g++] = pos[k + 1] + 0.012; gridPos[g++] = pos[k + 2]; };
-    for (let i = 0; i <= SEG_R; i += 3) for (let j = 0; j < SEG_T; j++) { put(at(i, j)); put(at(i, j + 1)); }
-    for (let j = 0; j < SEG_T; j += 4) for (let i = 0; i < SEG_R; i++) { put(at(i, j)); put(at(i + 1, j)); }
-    gridGeo.attributes.position.needsUpdate = true;
-  }
-
-  // Centre mass and accretion glow.
-  const mass = new THREE.Mesh(new THREE.SphereGeometry(0.42, 32, 16), M.hole); scene.add(mass);
-  const halo = new THREE.Mesh(new THREE.TorusGeometry(0.72, 0.06, 8, 64), M.glow); halo.rotation.x = Math.PI / 2; scene.add(halo);
-
-  // Slave syringe under the sheet (vertical): its rod is tied to the sheet's centre.
-  const sBarrel = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 1.5, 24, 1, true), M.glass); sBarrel.position.y = 0.5 + 0.75; scene.add(sBarrel);
-  const sWater = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.46, 1, 24), M.water); scene.add(sWater);
-  const sSeal = new THREE.Mesh(new THREE.CylinderGeometry(0.47, 0.47, 0.14, 24), M.rubber); scene.add(sSeal);
-  const sRod = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 1, 10), M.plunger); scene.add(sRod);
-
-  // Master syringe lying on the base: the part a visitor would pull.
-  const master = new THREE.Group(); master.position.set(1.4, 1.15, 4.6); master.rotation.y = Math.PI / 2; scene.add(master);
-  const mBarrel = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 3.4, 24, 1, true), M.glass); mBarrel.rotation.x = Math.PI / 2; master.add(mBarrel);
-  const mWater = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 1, 24), M.water); mWater.rotation.x = Math.PI / 2; master.add(mWater);
-  const mPlunger = new THREE.Group(); master.add(mPlunger);
-  const mRod = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 3.4, 10), M.plunger); mRod.rotation.x = Math.PI / 2; mRod.position.z = 1.7; mPlunger.add(mRod);
-  const mSeal = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.18, 24), M.rubber); mSeal.rotation.x = Math.PI / 2; mPlunger.add(mSeal);
-  const mThumb = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.75, 0.12, 24), M.plunger); mThumb.rotation.x = Math.PI / 2; mThumb.position.z = 3.4; mPlunger.add(mThumb);
-  const nozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.2, 0.4, 12), M.glass); nozzle.rotation.x = Math.PI / 2; nozzle.position.z = -1.9; master.add(nozzle);
-  const tubeCurve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(-0.5, 1.15, 4.6), new THREE.Vector3(-1.6, 0.8, 4.3), new THREE.Vector3(-1.9, 0.65, 2.6),
-    new THREE.Vector3(-1.0, 0.62, 0.9), new THREE.Vector3(-0.3, 0.58, 0.15), new THREE.Vector3(0, 0.55, 0),
-  ]);
-  scene.add(new THREE.Mesh(new THREE.TubeGeometry(tubeCurve, 64, 0.12, 10, false), M.tube));
-
-  // Marbles orbit the well; a deeper well means a faster orbit and a faster fall inward.
-  const marbleMats = [0xe8edf5, COPPER, 0x7fc4ff, 0xf2b31b].map(c => new THREE.MeshPhysicalMaterial({ color: c, roughness: 0.12, clearcoat: 1 }));
-  const marbleGeo = new THREE.SphereGeometry(0.22, 20, 12);
-  const marbles = [];
-  let colour = 0;
-  function addMarble() {
-    const m = new THREE.Mesh(marbleGeo, marbleMats[colour++ % marbleMats.length]);
-    m.userData = { r: R - 0.4 - Math.random() * 0.8, t: Math.random() * Math.PI * 2 };
-    scene.add(m); marbles.push(m);
-    if (marbles.length > 8) scene.remove(marbles.shift());
-  }
-  for (let i = 0; i < 4; i++) addMarble();
-  drop?.addEventListener('click', addMarble);
-
-  let depth = Number(slider.value) / 100, target = depth;
-  slider.addEventListener('input', () => { target = Number(slider.value) / 100; controls.autoRotate = false; });
-  controls.addEventListener('start', () => { controls.autoRotate = false; });
-
-  loop(canvas, (dt) => {
-    depth += (target - depth) * Math.min(1, dt * 4);
-    const D = 0.2 + depth * 1.65;
-    shapeSheet(D);
-    const bottom = yAt(0.35, D);
-    mass.position.y = bottom + 0.22; halo.position.y = bottom + 0.3;
-    halo.material.opacity = 0.2 + depth * 0.7;
-
-    // Pulling the master plunger draws water out of the slave, so its rod drops with the sheet.
-    const sealZ = -1.2 + depth * 2.5;
-    mPlunger.position.z = sealZ;
-    const mLen = sealZ + 1.7;
-    mWater.scale.y = Math.max(0.02, mLen); mWater.position.z = -1.7 + mWater.scale.y / 2;
-    const sLen = 1.25 - depth * 0.95, sTop = 0.5 + sLen;
-    sWater.scale.y = sLen; sWater.position.y = 0.5 + sLen / 2;
-    sSeal.position.y = sTop + 0.07;
-    const rodLen = Math.max(0.05, bottom - (sTop + 0.14));
-    sRod.scale.y = rodLen; sRod.position.y = sTop + 0.14 + rodLen / 2;
-
-    for (const m of marbles) {
-      const u = m.userData;
-      u.t += (0.35 + D * 1.2) / Math.pow(Math.max(u.r, 0.5), 1.5) * dt * 2.2;
-      u.r -= dt * (0.04 + D * 0.12) / Math.max(u.r, 0.6);
-      if (u.r < 0.55) { u.r = R - 0.4; u.t = Math.random() * Math.PI * 2; }
-      m.position.set(Math.cos(u.t) * u.r, yAt(u.r, D) + 0.24, Math.sin(u.t) * u.r);
+    let moved = first;
+    for (let i = 0; i < 4; i++) {
+      const n = cur[i] + (tgt[i] - cur[i]) * Math.min(1, dt * 3.5);
+      if (Math.abs(n - cur[i]) > 1e-4) moved = true;
+      cur[i] = n;
+      if (seq) sliders[i].value = Math.round(n * 100);
+    }
+    if (moved) {
+      const at = i => RANGE[i][0] + (RANGE[i][1] - RANGE[i][0]) * cur[i];
+      swing.rotation.y = at(0); boom.rotation.z = at(1); stick.rotation.z = at(2); bucketG.rotation.z = at(3);
+      // Pushing a master in drives water into its slave, which extends: v = 1 is fully pushed in.
+      masters.forEach((m, i) => {
+        const seal = -1.1 + cur[i + 1] * 2.4;
+        m.plunger.position.y = seal;
+        const wl = Math.max(0.05, 1.45 - seal);
+        m.water.scale.y = wl; m.water.position.y = 1.5 - wl / 2;
+      });
+      scene.updateMatrixWorld();
+      plumb();
+      first = false;
     }
     controls.update();
     renderer.render(scene, camera);
