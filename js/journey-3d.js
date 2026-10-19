@@ -403,7 +403,12 @@ export function initTruck(root) {
     black: new THREE.MeshStandardMaterial({ color: 0x1c1d20, roughness: 0.8 }),
     tyre: new THREE.MeshStandardMaterial({ color: 0x18191b, roughness: 0.95 }),
   };
-  const floor = new THREE.Mesh(new THREE.CircleGeometry(18, 64), new THREE.MeshStandardMaterial({ color: 0x0c0f14, roughness: 1 }));
+  const fade = document.createElement('canvas'); fade.width = fade.height = 128;
+  const fg = fade.getContext('2d'), fgrad = fg.createRadialGradient(64, 64, 0, 64, 64, 64);
+  fgrad.addColorStop(0, '#fff'); fgrad.addColorStop(0.45, '#999'); fgrad.addColorStop(1, '#000');
+  fg.fillStyle = fgrad; fg.fillRect(0, 0, 128, 128);
+  const floor = new THREE.Mesh(new THREE.CircleGeometry(18, 64), new THREE.MeshBasicMaterial({
+    color: 0x050608, transparent: true, opacity: 0.9, alphaMap: new THREE.CanvasTexture(fade), depthWrite: false }));
   floor.rotation.x = -Math.PI / 2; scene.add(floor);
 
   // Moulded-plastic look: every block gets rounded edges scaled to its thinnest side.

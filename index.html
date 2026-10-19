@@ -52,7 +52,7 @@
 * { box-sizing: border-box; }
 html { background: var(--bg); scroll-padding-top: 88px; }
 body {
-  background: var(--bg); color: var(--text);
+  margin: 0; background: var(--bg); color: var(--text);
   font: 400 16px/1.75 var(--body);
   -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
@@ -94,6 +94,7 @@ h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); margin: 0; font
 .nav-links { display: flex; gap: 22px; }
 .nav-links a { text-decoration: none; font-size: 14.5px; color: var(--muted); transition: color .4s var(--ease); white-space: nowrap; }
 .nav-links a:hover { color: var(--ink); }
+.hero-copy { position: relative; z-index: 1; }
 .lang {
   flex: none; font: 500 12.5px/1 var(--mono); height: 34px; padding: 0 14px; border-radius: 999px; cursor: pointer;
   color: var(--ink); background: rgba(255, 255, 255, .06); border: 1px solid var(--line-2);
@@ -176,13 +177,6 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 }
 .hero-art figcaption::before { content: ''; flex: none; width: 28px; height: 1px; background: var(--copper); }
 
-/* ---------- marquee ---------- */
-.marquee { border-block: 1px solid var(--line); overflow: hidden; padding-block: 22px; }
-.mq-track { display: flex; width: max-content; }
-.mq-track ul { display: flex; align-items: center; gap: 44px; padding: 0 44px 0 0; margin: 0; list-style: none; }
-.mq-track li { display: flex; align-items: center; gap: 44px; font: 600 clamp(1.1rem, 2vw, 1.5rem)/1 var(--display); color: var(--ink); white-space: nowrap; }
-.mq-track li::after { content: ''; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--copper); }
-
 /* ---------- stats ---------- */
 .nw { white-space: nowrap; }
 .stats { list-style: none; margin: 0; padding: clamp(64px, 8vw, 104px) 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
@@ -208,7 +202,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 .meta { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 14px; font: 400 12.5px/1.6 var(--mono); color: var(--muted); }
 .meta > span + span { padding-left: 14px; border-left: 1px solid var(--line-2); }
 .card-body { margin-top: 18px; font-size: 15.5px; line-height: 1.72; max-width: 54ch; }
-.card-link { display: inline-block; margin-top: 14px; font: 500 13.5px/1.6 var(--mono); color: var(--copper); text-decoration: none; border-bottom: 1px solid currentColor; }
+.card-link { display: inline-block; margin-top: 4px; padding-block: 10px; font: 500 13.5px/1.6 var(--mono); color: var(--copper); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; }
 .card-link:hover { color: var(--copper-hi); }
 .card-link:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
 .card-media { position: relative; overflow: hidden; background: var(--bg-2); min-height: 280px; }
@@ -228,7 +222,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 .bytes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; }
 .bytes li { --i: 0; text-align: center; padding: 9px 2px 8px; border-radius: 8px; background: var(--panel-2); border: 1px solid var(--line); font-family: var(--mono); min-width: 0; }
 .bytes i { display: block; font-style: normal; font-size: 10.5px; line-height: 1.4; color: var(--muted); }
-.bytes b { display: block; margin-top: 2px; font-size: 11.5px; font-weight: 500; line-height: 1.4; color: var(--ink); overflow-wrap: anywhere; }
+.bytes b { display: block; margin-top: 2px; font-size: 11.5px; font-weight: 500; line-height: 1.4; color: var(--ink); overflow-wrap: normal; }
 .bytes .crc { border-color: rgba(236, 154, 90, .6); background: var(--copper-soft); }
 .bytes .crc b { color: var(--copper); }
 .cap { margin-top: 10px; font: 400 12px/1.6 var(--mono); color: var(--muted); }
@@ -238,8 +232,8 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 
 .awards { margin: 0; border-top: 1px solid var(--line-2); }
 .awards div { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--line); }
-.awards dt { color: var(--text); font-size: 15px; min-width: 0; }
-.awards dd { margin: 0; font: 600 1.05rem/1.4 var(--display); color: var(--copper); text-align: right; white-space: nowrap; }
+.awards dt { color: var(--text); font-size: 15px; min-width: 0; flex: 1 1 auto; }
+.awards dd { margin: 0; font: 600 1.05rem/1.4 var(--display); color: var(--copper); text-align: right; flex: 0 1 auto; max-width: 60%; }
 .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .chips li { font: 400 12.5px/1 var(--mono); padding: 9px 13px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text); background: rgba(255, 255, 255, .025); }
 .feats { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
@@ -253,7 +247,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 .web-media { background: radial-gradient(120% 90% at 75% 15%, rgba(236, 154, 90, .2), transparent 60%), var(--bg-2); }
 .web-media::after { display: none; }
 .screens { position: absolute; inset: 9% 7% 10%; }
-.shot { position: absolute; margin: 0; overflow: hidden; border-radius: 12px; border: 1px solid var(--line-2); background: var(--panel); box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .9); transition: transform 1s var(--ease); }
+.shot { position: absolute; margin: 0; overflow: hidden; border-radius: var(--r-md); border: 1px solid var(--line-2); background: var(--panel); box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .9); transition: transform 1s var(--ease); }
 .shot img { width: 100%; height: auto; }
 .shot-admin { left: 0; top: 0; width: 78%; }
 .shot-store { right: 0; top: 30%; width: 70%; }
@@ -308,38 +302,48 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 
 
 /* ---------- journey ---------- */
-.j-head p { margin-top: 20px; max-width: 58ch; font-size: clamp(1.02rem, 1.3vw, 1.15rem); }
+.j-head p { margin-top: 20px; max-width: 52ch; font-size: 1.05rem; color: var(--muted); }
 .j-year { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 0 clamp(24px, 4vw, 56px); margin-top: clamp(56px, 7vw, 96px); }
 .j-yl { position: sticky; top: 96px; align-self: start; }
-.j-yl b { display: block; font: 700 clamp(2rem, 3.6vw, 3rem)/1 var(--display); color: var(--ink); letter-spacing: -.01em; margin-top: 8px; }
+.j-yl b { display: block; font: 700 clamp(2rem, 3.2vw, 2.75rem)/1 var(--display); color: var(--ink); letter-spacing: -.01em; margin-top: 8px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .j-yl small { display: block; margin-top: 10px; font: 400 13px/1.5 var(--mono); color: var(--muted); }
 .j-list { list-style: none; margin: 0; padding: 0 0 0 34px; position: relative; display: grid; gap: clamp(40px, 5vw, 64px); }
 .j-list::before { content: ''; position: absolute; top: 6px; bottom: 0; left: 7px; width: 2px; background: linear-gradient(180deg, var(--copper), rgba(236, 154, 90, .1)); box-shadow: 0 0 16px rgba(236, 154, 90, .3); }
 .j-item { position: relative; min-width: 0; }
-.j-item::before { content: ''; position: absolute; top: 5px; left: -34px; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--copper); background: var(--bg); box-shadow: 0 0 0 5px var(--bg), 0 0 18px rgba(236, 154, 90, .55); }
+.j-item::before { content: ''; position: absolute; top: 5px; left: -34px; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--copper); background: var(--bg); box-shadow: 0 0 0 5px var(--bg); }
+.j-item:has(.win)::before, .j-item.now::before { box-shadow: 0 0 0 5px var(--bg), 0 0 18px rgba(236, 154, 90, .55); }
+.j-item.now::before { background: var(--copper); }
+.j-item.slim::before { width: 12px; height: 12px; top: 6px; left: -32px; }
+.j-list:has(.slim) { gap: clamp(32px, 4vw, 48px); }
 .j-item time { display: block; font: 500 13px/1.5 var(--mono); color: var(--copper); }
 .j-item h4 { margin-top: 8px; font-size: clamp(1.3rem, 2vw, 1.7rem); line-height: 1.3; }
+.j-item.slim h4 { font-size: clamp(1.1rem, 1.5vw, 1.3rem); }
 .j-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
-.j-tags li { font: 500 12px/1.2 var(--mono); padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--ink); }
+.j-tags li { font: 400 12.5px/1 var(--mono); padding: 9px 13px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text); background: rgba(255, 255, 255, .025); }
 .j-tags li.win { border-color: rgba(236, 154, 90, .5); background: var(--copper-soft); color: var(--copper-hi); }
 .j-item > p { margin-top: 14px; max-width: 64ch; }
-.j-strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 10px; margin: 20px 0 0; }
+.j-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 20px 0 0; }
 .j-strip button { all: unset; cursor: zoom-in; display: block; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); aspect-ratio: 4 / 3; background: var(--panel); }
 .j-strip button:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
 .j-strip img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
 .j-strip button:hover img { transform: scale(1.04); }
 .j-strip.tall button { aspect-ratio: 3 / 4; }
-.j-strip.one { grid-template-columns: minmax(0, 560px); }
+.j-strip.one button { grid-column: span 2; }
+.j-strip .cert { background: #d9d6cf; }
+.j-strip .cert img { object-fit: contain; padding: 6px; filter: brightness(.78) saturate(.85); transition: filter .6s var(--ease), transform .8s var(--ease); }
+.j-strip .cert:hover img, .j-strip .cert:focus-visible img { filter: none; }
 
 .j3d { position: relative; margin-top: 22px; border-radius: var(--r-lg); border: 1px solid var(--line-2); overflow: hidden;
   background: radial-gradient(120% 90% at 50% 0%, #151a22, var(--bg-2) 70%); }
-.j3d canvas { display: block; width: 100%; height: clamp(320px, 46vw, 500px); touch-action: pan-y; cursor: grab; }
+.j3d canvas { display: block; width: 100%; height: clamp(240px, 62vw, 500px); touch-action: pan-y; cursor: grab; }
 .j3d canvas:active { cursor: grabbing; }
 .j3d-hint { position: absolute; top: 14px; left: 16px; font: 400 12px/1.4 var(--mono); color: var(--muted); pointer-events: none; }
 .j3d-tip { position: absolute; transform: translate(14px, -130%); pointer-events: none; padding: 6px 12px; border-radius: 999px; background: rgba(16, 20, 26, .92); border: 1px solid rgba(236, 154, 90, .5); color: var(--ink); font: 500 12.5px/1.2 var(--mono); white-space: nowrap; }
 .j3d-ui { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; padding: 14px 16px 16px; border-top: 1px solid var(--line); background: rgba(10, 13, 18, .7); }
-.j3d-ui label { display: flex; align-items: center; gap: 12px; flex: 1 1 260px; font: 500 13px/1.3 var(--body); color: var(--ink); }
-.j3d-ui input[type=range] { flex: 1; accent-color: var(--copper); min-width: 120px; }
+.j3d-ui label { display: flex; align-items: center; gap: 12px; flex: 1 1 220px; font: 500 13px/1.3 var(--body); color: var(--ink); }
+.j3d-ui input[type=range] { flex: 1; accent-color: var(--copper); min-width: 120px; height: 32px; }
+.j3d-ui label > span { white-space: nowrap; }
+[data-j3d="backhoe"] .j3d-ui label > span { flex: 0 0 4.5em; }
 .j3d-ui .chip-btn { font: 500 13px/1 var(--body); min-height: 40px; padding: 0 18px; border-radius: 999px; cursor: pointer; color: var(--ink); background: rgba(255, 255, 255, .05); border: 1px solid var(--line-2); transition: background .4s var(--ease), border-color .4s var(--ease); }
 .j3d-ui .chip-btn:hover, .j3d-ui .chip-btn[aria-pressed="true"] { border-color: var(--copper); background: var(--copper-soft); }
 .j3d-note { margin-top: 10px; font: 400 12.5px/1.6 var(--mono); color: var(--muted); max-width: 70ch; }
@@ -354,8 +358,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 .lightbox form { position: fixed; top: 16px; right: 16px; }
 .lightbox button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-2); background: var(--panel); color: var(--ink); font-size: 20px; cursor: pointer; }
 
-.j3d-ui .dot { flex: none; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 10px currentColor; }
-.j3d-ui label { flex-basis: 220px; }
+.j3d-ui .dot { flex: none; width: 10px; height: 10px; border-radius: 50%; }
 
 /* ---------- contact ---------- */
 .contact { position: relative; isolation: isolate; overflow: hidden; margin-top: clamp(96px, 12vw, 168px); border-top: 1px solid var(--line); }
@@ -373,7 +376,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 .note { font: 400 13px/1.4 var(--mono); color: var(--copper); }
 
 .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-block: 28px 44px; border-top: 1px solid var(--line); font: 400 12.5px/1.5 var(--mono); color: var(--muted); }
-.foot a { text-decoration: none; }
+.foot a { display: inline-block; padding-block: 12px; margin-block: -12px; text-decoration: none; }
 .foot a:hover { color: var(--ink); }
 
 /* ---------- motion ---------- */
@@ -390,9 +393,6 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
   @keyframes hover { 50% { transform: translateY(-14px) rotate(-1deg); } }
   @keyframes lineUp { from { transform: translateY(110%); } }
   @keyframes fadeUp { from { opacity: .001; transform: translateY(24px); } }
-  .mq-track { animation: mq 42s linear infinite; }
-  .marquee:hover .mq-track { animation-play-state: paused; }
-  @keyframes mq { to { transform: translateX(-50%); } }
   /* Bytes light up in order, over and over: a frame on the wire. */
   .bytes li { position: relative; z-index: 0; }
   .bytes li::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; background: var(--copper); opacity: 0; z-index: -1;
@@ -411,6 +411,33 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 :root[data-motion="off"] { scroll-behavior: auto !important; }
 
 /* ---------- layout switches ---------- */
+@media (min-width: 961px) and (min-height: 760px) and (max-height: 860px) {
+  .card-copy { padding-block: 28px; gap: 18px; }
+  .card h3 { font-size: clamp(1.6rem, 2.2vw, 2.1rem); }
+}
+@media (min-width: 961px) and (max-width: 1180px) {
+  .bytes { gap: 3px; }
+  .bytes li { padding-inline: 0; }
+  .bytes b { font-size: 10px; letter-spacing: -.03em; }
+}
+/* The copper trace runs unbroken through the year gaps and fades out only after the last year. */
+@media (min-width: 961px) {
+  .j-year + .j-year .j-list::before { top: calc(-1 * clamp(56px, 7vw, 96px)); }
+  .j-list::before { background: var(--copper); }
+  .j-year:last-child .j-list::before { background: linear-gradient(180deg, var(--copper), rgba(236, 154, 90, .1)); }
+}
+@media (pointer: coarse) {
+  .nav { padding: 4px 4px 4px 6px; }
+  .nav-links a { display: inline-flex; align-items: center; min-height: 40px; padding-inline: 6px; }
+  .lang { height: 40px; }
+  .motion { width: 40px; }
+  .mark-q { width: 40px; height: 40px; }
+}
+@media (max-width: 420px) {
+  .awards div { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .awards dd { text-align: left; max-width: none; }
+}
+@media (max-width: 400px) { .stat-l .nw { white-space: normal; } }
 @media (min-width: 961px) and (min-height: 760px) {
   .card { position: sticky; top: calc(96px + var(--i) * 14px); }
   .card-in { height: min(660px, calc(100svh - 180px)); min-height: 0; }
@@ -442,6 +469,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
   .inset-br { right: 12px; bottom: 12px; }
   .bytes { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .minis { gap: 22px; }
+  .j-strip { gap: 6px; }
 }
 </style>
 </head>
@@ -496,12 +524,6 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
     </div>
   </section>
 
-  <div class="marquee" role="region" aria-label="เครื่องมือและเทคนิค" data-label-en="Tools and techniques">
-    <div class="mq-track">
-      <ul><li>ESP32</li><li>STM32</li><li>Teensy 4.1</li><li>C / C++</li><li>Python</li><li>PID</li><li>IMU</li><li>Mecanum</li><li>ROS</li><li>XBee</li><li>CRC8</li><li>Node.js</li><li>SQLite</li><li>YOLOv8</li><li>OAK-D</li></ul>
-      <ul aria-hidden="true"><li>ESP32</li><li>STM32</li><li>Teensy 4.1</li><li>C / C++</li><li>Python</li><li>PID</li><li>IMU</li><li>Mecanum</li><li>ROS</li><li>XBee</li><li>CRC8</li><li>Node.js</li><li>SQLite</li><li>YOLOv8</li><li>OAK-D</li></ul>
-    </div>
-  </div>
 
   <div class="page">
     <ul class="stats">
@@ -677,7 +699,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 
     <section id="journey" class="sec">
       <div class="j-head rise">
-        <h2 class="mega"><span class="th">เส้นทาง</span><span class="en">Journey</span></h2>
+        <h2 class="h2"><span class="th">เส้นทาง</span><span class="en">Journey</span></h2>
         <p><span class="th">สามปีในมหาวิทยาลัย ตั้งแต่โปรเจกต์ปี 1 จนถึงเวทีต่างประเทศ เรียงตามเวลา</span><span class="en">Three years at university, from first-year projects to stages abroad, in chronological order.</span></p>
       </div>
       <div class="j-year">
@@ -707,22 +729,22 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
       <div class="j-year">
         <div class="j-yl" role="heading" aria-level="3"><span class="kicker"><span class="th">ปี 2</span><span class="en">Year 2</span></span><b>2025–26</b><small><span class="th">ปีการศึกษา 2568</span><span class="en">Academic year 2025</span></small></div>
         <ol class="j-list">
-          <li class="j-item rise"><time><span class="th">พ.ค.–มิ.ย. 2025</span><span class="en">May–Jun 2025</span></time><h4><span class="th">Startup Thailand League 2025 เวทีพิตช์ครั้งแรก</span><span class="en">Startup Thailand League 2025, my first pitch</span></h4><ul class="j-tags"><li><span class="th">ทีม Mini moo</span><span class="en">Team Mini moo</span></li><li class="win"><span class="th">รองชนะเลิศอันดับ 2 รอบมหาวิทยาลัย</span><span class="en">3rd place, university round</span></li><li class="win"><span class="th">ผ่านเข้ารอบ Regional</span><span class="en">Reached the Regional round</span></li></ul><p><span class="th">ขึ้นเวทีพิตช์ครั้งแรกในชีวิต ทีมได้รองชนะเลิศอันดับ 2 ในรอบมหาวิทยาลัยบูรพา และได้ไปต่อในรอบ Regional Pitching</span><span class="en">My first time on a pitching stage. Our team took third place in the Burapha University round and went on to the Regional Pitching round.</span></p><div class="j-strip"><button type="button" data-full="img/j/stl-pitch.webp"><img src="img/j/t/stl-pitch.webp" width="784" height="523" loading="lazy" decoding="async" alt="อภิภัทรถือไมโครโฟนพิตช์บนเวที Startup Thailand League" data-alt-en="Apipath pitching with a microphone at Startup Thailand League"></button><button type="button" data-full="img/j/stl-award.webp"><img src="img/j/t/stl-award.webp" width="1200" height="675" loading="lazy" decoding="async" alt="ทีม Mini moo รับรางวัลรองชนะเลิศอันดับ 2 บนเวที" data-alt-en="Team Mini moo receiving the third-place award on stage"></button><button type="button" data-full="img/j/stl-cert.webp"><img src="img/j/t/stl-cert.webp" width="1200" height="848" loading="lazy" decoding="async" alt="เกียรติบัตร Regional Pitching Startup Thailand League 2025 ทีม Mini moo" data-alt-en="Regional Pitching certificate, Startup Thailand League 2025, Team Mini moo"></button></div></li>
+          <li class="j-item rise"><time><span class="th">พ.ค.–มิ.ย. 2025</span><span class="en">May–Jun 2025</span></time><h4><span class="th">Startup Thailand League 2025 เวทีพิตช์ครั้งแรก</span><span class="en">Startup Thailand League 2025, my first pitch</span></h4><ul class="j-tags"><li><span class="th">ทีม Mini moo</span><span class="en">Team Mini moo</span></li><li class="win"><span class="th">รองชนะเลิศอันดับ 2 รอบมหาวิทยาลัย</span><span class="en">3rd place, university round</span></li><li class="win"><span class="th">ผ่านเข้ารอบ Regional</span><span class="en">Reached the Regional round</span></li></ul><p><span class="th">ขึ้นเวทีพิตช์ครั้งแรกในชีวิต ทีมได้รองชนะเลิศอันดับ 2 ในรอบมหาวิทยาลัยบูรพา และได้ไปต่อในรอบ Regional Pitching</span><span class="en">My first time on a pitching stage. Our team took third place in the Burapha University round and went on to the Regional Pitching round.</span></p><div class="j-strip"><button type="button" data-full="img/j/stl-pitch.webp"><img src="img/j/t/stl-pitch.webp" width="784" height="523" loading="lazy" decoding="async" alt="อภิภัทรถือไมโครโฟนพิตช์บนเวที Startup Thailand League" data-alt-en="Apipath pitching with a microphone at Startup Thailand League"></button><button type="button" data-full="img/j/stl-award.webp"><img src="img/j/t/stl-award.webp" width="1200" height="675" loading="lazy" decoding="async" alt="ทีม Mini moo รับรางวัลรองชนะเลิศอันดับ 2 บนเวที" data-alt-en="Team Mini moo receiving the third-place award on stage"></button><button class="cert" type="button" data-full="img/j/stl-cert.webp"><img src="img/j/t/stl-cert.webp" width="1200" height="848" loading="lazy" decoding="async" alt="เกียรติบัตร Regional Pitching Startup Thailand League 2025 ทีม Mini moo" data-alt-en="Regional Pitching certificate, Startup Thailand League 2025, Team Mini moo"></button></div></li>
           <li class="j-item rise"><time><span class="th">7–11 มิ.ย. 2025</span><span class="en">7–11 Jun 2025</span></time><h4><span class="th">Pitch Your IP, Power Your Future</span><span class="en">Pitch Your IP, Power Your Future</span></h4><ul class="j-tags"><li class="win"><span class="th">ชนะเลิศ</span><span class="en">1st place</span></li><li><span class="th">MIONEX</span><span class="en">MIONEX</span></li></ul><p><span class="th">ค่ายบ่มเพาะห้าวันสำหรับต่อยอดผลงานวิจัยเป็นธุรกิจ ผมพัฒนาแผนธุรกิจของ MIONEX กับพี่เลี้ยง แล้วขึ้นพิตช์ในวันสุดท้าย ได้รางวัลชนะเลิศ</span><span class="en">A five-day incubation camp on turning research into a business. I worked on the MIONEX business plan with mentors, pitched on the last day and won first place.</span></p><div class="j-strip"><button type="button" data-full="img/j/pyip-stage.webp"><img src="img/j/t/pyip-stage.webp" width="1200" height="675" loading="lazy" decoding="async" alt="อภิภัทรพิตช์บนเวที Pitch Your IP หน้าจอใหญ่ที่เขียนว่า CHANCE" data-alt-en="Apipath pitching at Pitch Your IP in front of a screen reading CHANCE"></button><button type="button" data-full="img/j/pyip-work.webp"><img src="img/j/t/pyip-work.webp" width="1080" height="720" loading="lazy" decoding="async" alt="อภิภัทรช่วยเพื่อนร่วมทีมดูงานบนแล็ปท็อประหว่างเวิร์กช็อป" data-alt-en="Apipath helping a teammate at a laptop during a workshop"></button><button type="button" data-full="img/j/pyip-group.webp"><img src="img/j/t/pyip-group.webp" width="1200" height="800" loading="lazy" decoding="async" alt="ผู้เข้าร่วมและทีมงาน Pitch Your IP ถ่ายรูปรวมหน้าเวที" data-alt-en="Pitch Your IP participants and staff in a group photo"></button></div></li>
-          <li class="j-item rise"><time><span class="th">ตั้งแต่ ก.ค. 2025</span><span class="en">From Jul 2025</span></time><h4><span class="th">ผู้ช่วยสอนที่ Appa Camp</span><span class="en">Teaching assistant at Appa Camp</span></h4><ul class="j-tags"><li><span class="th">TA</span><span class="en">TA</span></li><li><span class="th">ผศ.ดร.พิศักดิ์ เจิมประยงค์</span><span class="en">Asst. Prof. Dr. Pisak Chermprayong</span></li></ul><p><span class="th">ไปเป็นผู้ช่วยสอนให้ <span class="nw">ผศ.ดร.พิศักดิ์ เจิมประยงค์</span> ที่ Appa Camp หลายรุ่น ช่วยน้อง ๆ ต่อวงจรบนเบรดบอร์ด เขียนโค้ด และแก้ปัญหาตอนวงจรไม่ทำงาน</span><span class="en">I assist Asst. Prof. Dr. Pisak Chermprayong across several Appa Camp cohorts, helping students wire breadboards, write code and debug when things don't work.</span></p><div class="j-strip one"><button type="button" data-full="img/j/appa.webp"><img src="img/j/t/appa.webp" width="1200" height="1200" loading="lazy" decoding="async" alt="อภิภัทรก้มดูหน้าจอช่วยนักเรียนที่ Appa Camp" data-alt-en="Apipath leaning in to help a student at Appa Camp"></button></div></li>
+          <li class="j-item rise"><time><span class="th">ตั้งแต่ ก.ค. 2025</span><span class="en">From Jul 2025</span></time><h4><span class="th">ผู้ช่วยสอนที่ Appa Camp</span><span class="en">Teaching assistant at Appa Camp</span></h4><ul class="j-tags"><li><span class="th">TA</span><span class="en">TA</span></li></ul><p><span class="th">ไปเป็นผู้ช่วยสอนให้ <span class="nw">ผศ.ดร.พิศักดิ์ เจิมประยงค์</span> ที่ Appa Camp หลายรุ่น ช่วยน้อง ๆ ต่อวงจรบนเบรดบอร์ด เขียนโค้ด และแก้ปัญหาตอนวงจรไม่ทำงาน</span><span class="en">I assist Asst. Prof. Dr. Pisak Chermprayong across several Appa Camp cohorts, helping students wire breadboards, write code and debug when things don't work.</span></p><div class="j-strip one"><button type="button" data-full="img/j/appa.webp"><img src="img/j/t/appa.webp" width="1200" height="1200" loading="lazy" decoding="async" alt="อภิภัทรก้มดูหน้าจอช่วยนักเรียนที่ Appa Camp" data-alt-en="Apipath leaning in to help a student at Appa Camp"></button></div></li>
           <li class="j-item rise"><time><span class="th">ส.ค. 2025</span><span class="en">Aug 2025</span></time><h4><span class="th">TMIRC ไต้หวัน ตัวแทนประเทศไทย</span><span class="en">Representing Thailand at TMIRC, Taiwan</span></h4><ul class="j-tags"><li><span class="th">Robotrace</span><span class="en">Robotrace</span></li><li><span class="th">ไปกับรุ่นพี่</span><span class="en">With a senior</span></li></ul><p><span class="th">ไปแข่ง Taiwan Micromouse and Intelligent Mobile Robot Contest ในนามประเทศไทยกับรุ่นพี่ ในประเภท Robotrace ซึ่งเป็นหุ่นวิ่งตามเส้นที่ต้องจำเส้นทางก่อน แล้วจึงวิ่งรอบทำเวลา</span><span class="en">With a senior student, I represented Thailand at the Taiwan Micromouse and Intelligent Mobile Robot Contest (TMIRC) in the Robotrace event, where the robot learns the course on one run and then races it.</span></p><div class="j-strip one"><button type="button" data-full="img/j/robotracer.webp"><img src="img/j/t/robotracer.webp" width="1200" height="900" loading="lazy" decoding="async" alt="ทีมไทยสามคนยืนหน้าเวที TMIRC 2025 ถือป้ายหมายเลข 114" data-alt-en="Team Thailand, three people, in front of the TMIRC 2025 stage holding number 114"></button></div></li>
-          <li class="j-item rise"><time><span class="th">ต.ค. 2025 และ ม.ค. 2026</span><span class="en">Oct 2025 and Jan 2026</span></time><h4><span class="th">สองหลักสูตร ROS ที่ MARA</span><span class="en">Two ROS courses at MARA</span></h4><ul class="j-tags"><li><span class="th">Autonomous Mobile Robot <span class="nw">30 ชม.</span></span><span class="en">Autonomous Mobile Robot, 30 h</span></li><li><span class="th">Basic ROS <span class="nw">30 ชม.</span></span><span class="en">Basic ROS, 30 h</span></li></ul><p><span class="th">เรียนหุ่นยนต์เคลื่อนที่อัตโนมัติ (20–24 <span class="nw">ต.ค. 2025</span>) และการใช้ ROS ขั้นพื้นฐาน (10–18 <span class="nw">ม.ค. 2026</span>) ที่สถาบันพัฒนาบุคลากรสาขาเทคโนโลยีการผลิตอัตโนมัติและหุ่นยนต์ (MARA) กรมพัฒนาฝีมือแรงงาน ได้วุฒิบัตรทั้งสองหลักสูตร</span><span class="en">I took Autonomous Mobile Robot (20–24 Oct 2025) and Basic ROS (10–18 Jan 2026) at the Manufacturing Automation and Robotics Academy (MARA), Department of Skill Development, and earned the certificate for both.</span></p><div class="j-strip tall"><button type="button" data-full="img/j/cert-mara-amr.webp"><img src="img/j/t/cert-mara-amr.webp" width="849" height="1200" loading="lazy" decoding="async" alt="วุฒิบัตรหลักสูตรหุ่นยนต์เคลื่อนที่อัตโนมัติ 30 ชั่วโมง กรมพัฒนาฝีมือแรงงาน" data-alt-en="Certificate, Autonomous Mobile Robot, 30 hours, Department of Skill Development"></button><button type="button" data-full="img/j/cert-mara-ros.webp"><img src="img/j/t/cert-mara-ros.webp" width="849" height="1200" loading="lazy" decoding="async" alt="วุฒิบัตรหลักสูตรการใช้ ROS ขั้นพื้นฐาน 30 ชั่วโมง กรมพัฒนาฝีมือแรงงาน" data-alt-en="Certificate, Basic ROS, 30 hours, Department of Skill Development"></button></div></li>
+          <li class="j-item rise"><time><span class="th">ต.ค. 2025 และ ม.ค. 2026</span><span class="en">Oct 2025 and Jan 2026</span></time><h4><span class="th">สองหลักสูตร ROS ที่ MARA</span><span class="en">Two ROS courses at MARA</span></h4><ul class="j-tags"><li><span class="th">Autonomous Mobile Robot <span class="nw">30 ชม.</span></span><span class="en">Autonomous Mobile Robot, 30 h</span></li><li><span class="th">Basic ROS <span class="nw">30 ชม.</span></span><span class="en">Basic ROS, 30 h</span></li></ul><p><span class="th">เรียนหุ่นยนต์เคลื่อนที่อัตโนมัติ (20–24 <span class="nw">ต.ค. 2025</span>) และการใช้ ROS ขั้นพื้นฐาน (10–18 <span class="nw">ม.ค. 2026</span>) ที่สถาบันพัฒนาบุคลากรสาขาเทคโนโลยีการผลิตอัตโนมัติและหุ่นยนต์ (MARA) กรมพัฒนาฝีมือแรงงาน ได้วุฒิบัตรทั้งสองหลักสูตร</span><span class="en">I took Autonomous Mobile Robot (20–24 Oct 2025) and Basic ROS (10–18 Jan 2026) at the Manufacturing Automation and Robotics Academy (MARA), Department of Skill Development, and earned the certificate for both.</span></p><div class="j-strip tall"><button class="cert" type="button" data-full="img/j/cert-mara-amr.webp"><img src="img/j/t/cert-mara-amr.webp" width="849" height="1200" loading="lazy" decoding="async" alt="วุฒิบัตรหลักสูตรหุ่นยนต์เคลื่อนที่อัตโนมัติ 30 ชั่วโมง กรมพัฒนาฝีมือแรงงาน" data-alt-en="Certificate, Autonomous Mobile Robot, 30 hours, Department of Skill Development"></button><button class="cert" type="button" data-full="img/j/cert-mara-ros.webp"><img src="img/j/t/cert-mara-ros.webp" width="849" height="1200" loading="lazy" decoding="async" alt="วุฒิบัตรหลักสูตรการใช้ ROS ขั้นพื้นฐาน 30 ชั่วโมง กรมพัฒนาฝีมือแรงงาน" data-alt-en="Certificate, Basic ROS, 30 hours, Department of Skill Development"></button></div></li>
           <li class="j-item rise"><time><span class="th">ก.พ. 2026</span><span class="en">Feb 2026</span></time><h4><span class="th">บอร์ด Arduino Nano ที่ออกแบบเอง</span><span class="en">My own Arduino Nano board</span></h4><ul class="j-tags"><li><span class="th">EasyEDA</span><span class="en">EasyEDA</span></li><li><span class="th">ATmega328P</span><span class="en">ATmega328P</span></li><li><span class="th">CH340G + USB-C</span><span class="en">CH340G + USB-C</span></li></ul><p><span class="th">ออกแบบบอร์ดโคลน Arduino Nano เป็นงานในวิชาเรียน ตั้งแต่วงจร ATmega328P กับออสซิลเลเตอร์ <span class="nw">16 MHz</span> ตัวแปลง USB CH340G ช่อง USB-C และเรกูเลเตอร์ <span class="nw">3.3 V</span> ไปจนถึงวางลายวงจรสองชั้นและดูโมเดล 3 มิติก่อนสั่งผลิต</span><span class="en">A Nano clone for a class: ATmega328P with a 16 MHz oscillator, CH340G USB bridge, USB-C and a 3.3 V regulator, laid out on two layers and checked in 3D before ordering.</span></p><div class="j-strip tall"><button type="button" data-full="img/j/nano-layout.webp"><img src="img/j/t/nano-layout.webp" width="750" height="1000" loading="lazy" decoding="async" alt="ลายวงจรสองชั้นของบอร์ด Nano clone ใน EasyEDA" data-alt-en="The two-layer Nano clone layout in EasyEDA"></button><button type="button" data-full="img/j/nano-3d.webp"><img src="img/j/t/nano-3d.webp" width="750" height="1000" loading="lazy" decoding="async" alt="มุมมอง 3 มิติของบอร์ด Nano clone สีน้ำเงิน" data-alt-en="3D view of the blue Nano clone board"></button></div></li>
-          <li class="j-item rise"><time><span class="th">พ.ค.–มิ.ย. 2026</span><span class="en">May–Jun 2026</span></time><h4><span class="th">ABU Robocon 2026 ลงแข่งกับทีม</span><span class="en">ABU Robocon 2026, on the team</span></h4><ul class="j-tags"><li><span class="th">ซอฟต์แวร์หุ่น + คอนโทรลเลอร์</span><span class="en">Robot + controller software</span></li><li><span class="th">เดินสายไฟ</span><span class="en">Wiring</span></li><li class="win"><span class="th">อันดับ 8 กลุ่มมหาวิทยาลัย</span><span class="en">8th among universities</span></li><li class="win"><span class="th">อันดับ 13 ของประเทศ</span><span class="en">13th nationally</span></li></ul><p><span class="th">ปีนี้ทีมมีหุ่นสองตัว ผมรับผิดชอบหนึ่งตัว เขียนซอฟต์แวร์ทั้งหมดของหุ่นกับคอนโทรลเลอร์ และเดินสายไฟเองเกือบทั้งหมด ส่วนตัวหุ่นสร้างร่วมกับทีม เราไปถึงรอบชิงแชมป์ประเทศไทย ได้อันดับ 8 ในกลุ่มมหาวิทยาลัย และอันดับ 13 ของประเทศ รายละเอียดโปรโตคอลอยู่ในการ์ดผลงานด้านบน</span><span class="en">The team fielded two robots and one was mine: I wrote all the software for it and its controller, did most of the wiring, and built the robot itself together with the team. We made the Thailand championship round, finishing 8th among universities and 13th nationally. The radio protocol is described in the Work section above.</span></p><div class="j-strip one"><button type="button" data-full="img/j/cert-abu26.webp"><img src="img/j/t/cert-abu26.webp" width="1200" height="848" loading="lazy" decoding="async" alt="เกียรติบัตรการแข่งขันหุ่นยนต์ ส.ส.ท. ชิงแชมป์ประเทศไทย 2569 เกม Kung Fu Quest ทีม B1-U2 มหาวิทยาลัยบูรพา" data-alt-en="Certificate, TPA Robot Contest Thailand Championship 2026, Kung Fu Quest, team B1-U2, Burapha University"></button></div></li>
+          <li class="j-item rise"><time><span class="th">พ.ค.–มิ.ย. 2026</span><span class="en">May–Jun 2026</span></time><h4><span class="th">ABU Robocon 2026 ลงแข่งกับทีม</span><span class="en">ABU Robocon 2026, on the team</span></h4><ul class="j-tags"><li><span class="th">ซอฟต์แวร์หุ่น + คอนโทรลเลอร์</span><span class="en">Robot + controller software</span></li><li><span class="th">เดินสายไฟ</span><span class="en">Wiring</span></li><li class="win"><span class="th">อันดับ 8 กลุ่มมหาวิทยาลัย</span><span class="en">8th among universities</span></li><li class="win"><span class="th">อันดับ 13 ของประเทศ</span><span class="en">13th nationally</span></li></ul><p><span class="th">ปีนี้ทีมมีหุ่นสองตัว ผมรับผิดชอบหนึ่งตัว เขียนซอฟต์แวร์ทั้งหมดของหุ่นกับคอนโทรลเลอร์ และเดินสายไฟเองเกือบทั้งหมด ส่วนตัวหุ่นสร้างร่วมกับทีม เราไปถึงรอบชิงแชมป์ประเทศไทย ได้อันดับ 8 ในกลุ่มมหาวิทยาลัย และอันดับ 13 ของประเทศ รายละเอียดโปรโตคอลอยู่ในการ์ดผลงานด้านบน</span><span class="en">The team fielded two robots and one was mine: I wrote all the software for it and its controller, did most of the wiring, and built the robot itself together with the team. We made the Thailand championship round, finishing 8th among universities and 13th nationally. The radio protocol is described in the Work section above.</span></p><div class="j-strip"><button type="button" data-full="img/abu-pit-1280.webp"><img src="img/abu-pit-800.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ทีม ABU Robocon ช่วยกันประกอบหุ่นในพื้นที่เตรียมหุ่นก่อนลงแข่ง" data-alt-en="The ABU Robocon team assembling robots in the pit before a match"></button><button class="cert" type="button" data-full="img/j/cert-abu26.webp"><img src="img/j/t/cert-abu26.webp" width="1200" height="848" loading="lazy" decoding="async" alt="เกียรติบัตรการแข่งขันหุ่นยนต์ ส.ส.ท. ชิงแชมป์ประเทศไทย 2569 เกม Kung Fu Quest ทีม B1-U2 มหาวิทยาลัยบูรพา" data-alt-en="Certificate, TPA Robot Contest Thailand Championship 2026, Kung Fu Quest, team B1-U2, Burapha University"></button></div></li>
         </ol>
       </div>
       <div class="j-year">
         <div class="j-yl" role="heading" aria-level="3"><span class="kicker"><span class="th">ปี 3</span><span class="en">Year 3</span></span><b>2026–27</b><small><span class="th">ปีการศึกษา 2569</span><span class="en">Academic year 2026</span></small></div>
         <ol class="j-list">
-          <li class="j-item rise"><time><span class="th">พ.ค.–ต.ค. 2026</span><span class="en">May–Oct 2026</span></time><h4><span class="th">ELP4 จากรอบมหาวิทยาลัยถึงเกาหลี</span><span class="en">ELP4, from campus to Korea</span></h4><ul class="j-tags"><li class="win"><span class="th">1 ใน 9 จากผู้สมัคร <span class="nw">540 คน</span></span><span class="en">1 of 9 from 540</span></li><li><span class="th">MIONEX</span><span class="en">MIONEX</span></li></ul><p><span class="th">พา MIONEX ผ่านทุกรอบของ ELP4 ตั้งแต่รอบมหาวิทยาลัย รอบภูมิภาค จนถึงรอบประเทศ จนเป็น 1 ใน 9 คนจากผู้สมัคร <span class="nw">540 คน</span>ที่ได้ไปดูงานที่ SKKU ประเทศเกาหลีใต้ เมื่อ <span class="nw">ต.ค. 2026</span></span><span class="en">I took MIONEX through every ELP4 round, from university to regional to national, and was one of 9 picked from 540 applicants for a study visit to SKKU, South Korea, in October 2026.</span></p><div class="j-strip"><button type="button" data-full="img/j/cert-elp4-rep.webp"><img src="img/j/t/cert-elp4-rep.webp" width="1200" height="849" loading="lazy" decoding="async" alt="เกียรติบัตร ELP4 ผู้แทนมหาวิทยาลัยบูรพาไปแข่งรอบภูมิภาค 13 พ.ค. 2026" data-alt-en="ELP4 certificate: Burapha University representative for the regional round, 13 May 2026"></button><button type="button" data-full="img/j/cert-elp4-fc.webp"><img src="img/j/t/cert-elp4-fc.webp" width="1200" height="849" loading="lazy" decoding="async" alt="วุฒิบัตร ELP4 The Founder's Compass ผ่านโครงการ 8 มิ.ย. 2026" data-alt-en="ELP4 certificate: The Founder's Compass, programme completed, 8 Jun 2026"></button></div></li>
-          <li class="j-item rise"><time><span class="th">ปี 3</span><span class="en">Year 3</span></time><h4><span class="th">ตามอาจารย์ไปงานประชุม IEEE ที่ญี่ปุ่น</span><span class="en">An IEEE conference in Japan</span></h4><ul class="j-tags"><li><span class="th">ผู้ติดตาม</span><span class="en">Attendee</span></li></ul><p><span class="th">ติดตามอาจารย์ไปงานประชุมวิชาการ IEEE ที่ญี่ปุ่น ไปฟังและดูงาน ไม่ได้นำเสนอผลงานเอง</span><span class="en">I went with my professor to an IEEE conference in Japan to listen and learn. I didn't present.</span></p></li>
-          <li class="j-item rise"><time><span class="th">เป็นระยะ</span><span class="en">Ongoing</span></time><h4><span class="th">สอนเด็กแทนอาจารย์</span><span class="en">Covering classes for my professor</span></h4><ul class="j-tags"><li><span class="th">ผู้สอน</span><span class="en">Instructor</span></li></ul><p><span class="th">ช่วงที่อาจารย์ไม่ว่าง ผมรับสอนเด็ก ๆ แทนเป็นครั้งคราว</span><span class="en">When my professor can't make it, I sometimes step in and teach the kids.</span></p></li>
-          <li class="j-item rise"><time><span class="th">ก.ย. 2026–ปัจจุบัน</span><span class="en">Sep 2026 to now</span></time><h4><span class="th">SiBB 2026</span><span class="en">SiBB 2026</span></h4><ul class="j-tags"><li><span class="th">MIONEX</span><span class="en">MIONEX</span></li><li><span class="th">กลุ่มสุขภาพและการแพทย์</span><span class="en">Health and medical track</span></li></ul><p><span class="th">ล่าสุด ผมส่ง MIONEX เข้าโครงการ SiBB Business Brotherhood ส่งคลิปทีมและ pitch deck ไปแล้ว ตอนนี้รอขึ้นนำเสนอรอบจริงใน <span class="nw">พ.ย. 2026</span></span><span class="en">Most recently, I entered MIONEX in the SiBB Business Brotherhood programme. The team video and pitch deck are submitted, and the live pitch is in November 2026.</span></p></li>
+          <li class="j-item rise"><time><span class="th">พ.ค.–ต.ค. 2026</span><span class="en">May–Oct 2026</span></time><h4><span class="th">ELP4 จากรอบมหาวิทยาลัยถึงเกาหลี</span><span class="en">ELP4, from campus to Korea</span></h4><ul class="j-tags"><li class="win"><span class="th">1 ใน 9 จากผู้สมัคร <span class="nw">540 คน</span></span><span class="en">1 of 9 from 540</span></li><li><span class="th">MIONEX</span><span class="en">MIONEX</span></li></ul><p><span class="th">พา MIONEX ผ่านทุกรอบของ ELP4 ตั้งแต่รอบมหาวิทยาลัย รอบภูมิภาค จนถึงรอบประเทศ จนเป็น 1 ใน 9 คนจากผู้สมัคร <span class="nw">540 คน</span>ที่ได้ไปดูงานที่ SKKU ประเทศเกาหลีใต้ เมื่อ <span class="nw">ต.ค. 2026</span></span><span class="en">I took MIONEX through every ELP4 round, from university to regional to national, and was one of 9 picked from 540 applicants for a study visit to SKKU, South Korea, in October 2026.</span></p><div class="j-strip"><button class="cert" type="button" data-full="img/j/cert-elp4-rep.webp"><img src="img/j/t/cert-elp4-rep.webp" width="1200" height="849" loading="lazy" decoding="async" alt="เกียรติบัตร ELP4 ผู้แทนมหาวิทยาลัยบูรพาไปแข่งรอบภูมิภาค 13 พ.ค. 2026" data-alt-en="ELP4 certificate: Burapha University representative for the regional round, 13 May 2026"></button><button class="cert" type="button" data-full="img/j/cert-elp4-fc.webp"><img src="img/j/t/cert-elp4-fc.webp" width="1200" height="849" loading="lazy" decoding="async" alt="วุฒิบัตร ELP4 The Founder's Compass ผ่านโครงการ 8 มิ.ย. 2026" data-alt-en="ELP4 certificate: The Founder's Compass, programme completed, 8 Jun 2026"></button></div></li>
+          <li class="j-item slim rise"><time><span class="th">ปี 3</span><span class="en">Year 3</span></time><h4><span class="th">ตามอาจารย์ไปงานประชุม IEEE ที่ญี่ปุ่น</span><span class="en">An IEEE conference in Japan</span></h4><p><span class="th">ติดตามอาจารย์ไปงานประชุมวิชาการ IEEE ที่ญี่ปุ่น ไปฟังและดูงาน ไม่ได้นำเสนอผลงานเอง</span><span class="en">I went with my professor to an IEEE conference in Japan to listen and learn. I didn't present.</span></p></li>
+          <li class="j-item slim rise"><time><span class="th">เป็นระยะ</span><span class="en">Ongoing</span></time><h4><span class="th">สอนเด็กแทนอาจารย์</span><span class="en">Covering classes for my professor</span></h4><p><span class="th">ช่วงที่อาจารย์ไม่ว่าง ผมรับสอนเด็ก ๆ แทนเป็นครั้งคราว</span><span class="en">When my professor can't make it, I sometimes step in and teach the kids.</span></p></li>
+          <li class="j-item rise now"><time><span class="th">ก.ย. 2026–ปัจจุบัน</span><span class="en">Sep 2026 to now</span></time><h4><span class="th">SiBB 2026</span><span class="en">SiBB 2026</span></h4><ul class="j-tags"><li><span class="th">MIONEX</span><span class="en">MIONEX</span></li><li><span class="th">กลุ่มสุขภาพและการแพทย์</span><span class="en">Health and medical track</span></li></ul><p><span class="th">ล่าสุด ผมส่ง MIONEX เข้าโครงการ SiBB Business Brotherhood ส่งคลิปทีมและ pitch deck ไปแล้ว ตอนนี้รอขึ้นนำเสนอรอบจริงใน <span class="nw">พ.ย. 2026</span></span><span class="en">Most recently, I entered MIONEX in the SiBB Business Brotherhood programme. The team video and pitch deck are submitted, and the live pitch is in November 2026.</span></p></li>
         </ol>
       </div>
     </section>
