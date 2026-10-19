@@ -11,6 +11,8 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
 
 const COPPER = 0xec9a5a;
 const lang = () => (document.documentElement.dataset.lang === 'en' ? 'en' : 'th');
+// OS setting or the page's own pause-motion switch (WCAG 2.2.2).
+const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.motion === 'off';
 
 function makeStage(canvas, { fov = 32, pos = [10, 7, 12], target = [0, 2, 0], min = 8, max = 34 } = {}) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -18,6 +20,7 @@ function makeStage(canvas, { fov = 32, pos = [10, 7, 12], target = [0, 2, 0], mi
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  canvas.addEventListener('webglcontextlost', () => canvas.closest('.j3d')?.classList.add('off'));
 
   const scene = new THREE.Scene();
   const pmrem = new THREE.PMREMGenerator(renderer), room = new RoomEnvironment();
@@ -104,7 +107,7 @@ export function initBackhoe(root) {
   const canvas = root.querySelector('canvas');
   const sliders = [...root.querySelectorAll('input[type=range]')];
   const digBtn = root.querySelector('[data-dig]');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduce = reducedMotion();
   const { renderer, scene, camera, controls } = makeStage(canvas, { pos: [8, 12, 25], target: [0, 3, 0], min: 10, max: 60 });
   // Zoom is off, so the distance is ours: back off until the board and the arm's reach fit the canvas.
   const hull = [[-10, 0, -7.5], [10, 0, -7.5], [-10, 0, 7.5], [10, 0, 7.5], [-10, 0.6, 8.3], [10, 0.6, 7.5],
@@ -390,8 +393,8 @@ export function initTruck(root) {
   const slider = root.querySelector('input[type=range]');
   const tip = root.querySelector('[data-tip]');
   const dumpBtn = root.querySelector('[data-dump]');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const { renderer, scene, camera, controls } = makeStage(canvas, { pos: [25, 14, 27], target: [0, 6, 0], min: 20, max: 50 });
+  const reduce = reducedMotion();
+  const { renderer, scene, camera, controls } = makeStage(canvas, { pos: [25, 14, 27], target: [0, 6, 0], min: 20, max: 90 });
   controls.autoRotate = !reduce;
 
   const M = {
@@ -519,12 +522,16 @@ export function initTruck(root) {
   }
 
   let ex = Number(slider.value) / 100, exT = ex, tilt = 0, tiltT = 0;
-  slider.addEventListener('input', () => { exT = Number(slider.value) / 100; controls.autoRotate = false; });
+  const spinBtn = root.querySelector('[data-spin]');
+  const syncSpin = () => spinBtn?.setAttribute('aria-pressed', String(controls.autoRotate));
+  spinBtn?.addEventListener('click', () => { controls.autoRotate = !controls.autoRotate; syncSpin(); });
+  slider.addEventListener('input', () => { exT = Number(slider.value) / 100; controls.autoRotate = false; syncSpin(); });
   dumpBtn?.addEventListener('click', () => {
     tiltT = tiltT ? 0 : 1;
     dumpBtn.setAttribute('aria-pressed', String(!!tiltT));
   });
-  controls.addEventListener('start', () => { controls.autoRotate = false; });
+  controls.addEventListener('start', () => { controls.autoRotate = false; syncSpin(); });
+  syncSpin();
 
   // Hover (or tap) a part to see its number and name.
   const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
@@ -550,12 +557,16 @@ export function initTruck(root) {
     if (p) {
       tip.hidden = false;
       tip.textContent = `${p.userData.n} · ${p.userData[lang()]}`;
-      tip.style.left = `${e.clientX - r.left}px`; tip.style.top = `${e.clientY - r.top}px`;
+      const tx = e.clientX - r.left, ty = e.clientY - r.top;
+      tip.style.left = `${tx}px`; tip.style.top = `${ty}px`;
+      const flipX = tx + 14 + tip.offsetWidth > r.width, flipY = ty - tip.offsetHeight * 1.3 < 0;
+      tip.style.transform = `translate(${flipX ? 'calc(-100% - 14px)' : '14px'}, ${flipY ? '30%' : '-130%'})`;
     } else tip.hidden = true;
   }
   canvas.addEventListener('pointermove', pick);
   canvas.addEventListener('pointerdown', pick);
-  canvas.addEventListener('pointerleave', () => { tip.hidden = true; setHot(null); });
+  canvas.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') { tip.hidden = true; setHot(null); } });
+  document.addEventListener('pointerdown', (e) => { if (e.target !== canvas) { tip.hidden = true; setHot(null); } });
 
   const ease = t => t * t * (3 - 2 * t);
   // Zoom is off, so the camera distance is ours: pull back while the parts fly apart.
@@ -566,7 +577,8 @@ export function initTruck(root) {
     const e = ease(ex);
     for (const p of parts) p.position.copy(p.userData.home).addScaledVector(p.userData.dir, e * 0.8);
     controls.target.y = 6 + e * 2;
-    off.subVectors(camera.position, controls.target).setLength(baseLen * (1 + e * 0.45));
+    const fit = Math.max(1, 1.35 / camera.aspect);
+    off.subVectors(camera.position, controls.target).setLength(baseLen * fit * (1 + e * 0.45));
     camera.position.copy(controls.target).add(off);
     pivot.rotation.z = tilt * 0.7;
     controls.update();
