@@ -467,18 +467,18 @@ export function initTruck(root) {
   const hook = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.1, 8, 20), M.yellow); hook.position.set(1.8, 8.0, 3.35); cab.push(hook);
   part(7, 'โครงห้องคนขับ', 'Cab frame', [0, 4.6, 0], ...cab);
 
-  // 10 seat insert.
+  // 10 seat and console.
   const seat = [box(4.2, 0.8, 5.0, M.gray, 4.3, 7.6, 0)];
   for (const s of [-1, 1]) seat.push(box(0.6, 2.0, 1.8, M.gray, 3.0, 8.9, s * 1.3), box(1.6, 0.5, 1.8, M.gray, 3.8, 8.2, s * 1.3));
   const wheelS = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.1, 8, 24), M.gray); wheelS.position.set(5.7, 8.9, 1.2); wheelS.rotation.y = Math.PI / 2; seat.push(wheelS);
-  part(10, 'เบาะและคอนโซล', 'Seat insert', [0, 2.4, 0], ...seat);
+  part(10, 'เบาะและคอนโซล', 'Seat and console', [0, 2.4, 0], ...seat);
 
-  // 4 front guard (FRONT GUARD): grey grille with the big cross screw and yellow lamps.
+  // 4 front bumper (FRONT GUARD on the parts sheet): grey grille with the big cross screw and yellow lamps.
   const guard = [box(0.6, 3.2, 6.6, M.gray, 8.05, 5.4, 0), box(1.0, 0.8, 7.0, M.gray, 8.2, 3.7, 0)];
   guard.push(cyl(1.0, 0.35, M.gray, 8.45, 5.6, 0, 'x', 28));
   for (const r of [Math.PI / 4, -Math.PI / 4]) { const b = box(0.12, 1.5, 0.3, M.black, 8.65, 5.6, 0); b.rotation.x = r; guard.push(b); }
   for (const s of [-1, 1]) for (const y of [5.4, 6.4]) guard.push(cyl(0.32, 0.3, M.yellow, 7.85, y, s * 2.6, 'x', 20));
-  part(4, 'กันชนหน้า', 'Front guard', [4.6, 0, 0], ...guard);
+  part(4, 'กันชนหน้า', 'Front bumper', [4.6, 0, 0], ...guard);
 
   // 1 roof (CAR-ROOF): grey visor with five light bumps and a rear hinge.
   const roof = [box(6.3, 0.6, 6.8, M.gray, 4.45, 11.35, 0)];
@@ -506,7 +506,7 @@ export function initTruck(root) {
   }
   const pivot = new THREE.Group(); pivot.position.set(-6.8, 5.0, 0);
   bed.position.set(3.8, 0.25, 0); pivot.add(bed);
-  part(9, 'กระบะดั๊มพ์', 'Dump bed', [-2, 6, 0], pivot);
+  part(9, 'กระบะดัมพ์', 'Dump bed', [-2, 6, 0], pivot);
 
   // 6 tailgate (TRUCK COVER): the small plate with two hinge clips at the back.
   const gate = [box(0.4, 2.4, 6.0, M.yellow, -7.3, 6.5, 0)];
