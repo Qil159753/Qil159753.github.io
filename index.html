@@ -348,6 +348,9 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 .lightbox form { position: fixed; top: 16px; right: 16px; }
 .lightbox button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-2); background: var(--panel); color: var(--ink); font-size: 20px; cursor: pointer; }
 
+.j3d-ui .dot { flex: none; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 10px currentColor; }
+.j3d-ui label { flex-basis: 220px; }
+
 /* ---------- contact ---------- */
 .contact { position: relative; isolation: isolate; overflow: hidden; margin-top: clamp(96px, 12vw, 168px); border-top: 1px solid var(--line); }
 .contact::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(90% 70% at 30% 50%, rgba(7, 9, 12, .92), rgba(7, 9, 12, .45) 70%, rgba(7, 9, 12, .2)); }
@@ -660,12 +663,11 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
       <div class="j-year">
         <div class="j-yl"><span class="kicker"><span class="th">ปี 1</span><span class="en">Year 1</span></span><b>2024–25</b><small><span class="th">ปีการศึกษา 2567</span><span class="en">Academic year 2024</span></small></div>
         <ol class="j-list">
-          <li class="j-item rise"><time><span class="th">ปี 1</span><span class="en">Year 1</span></time><h3><span class="th">หลุมดำที่ขยับด้วยไฮดรอลิก</span><span class="en">A black hole driven by hydraulics</span></h3><ul class="j-tags"><li><span class="th">โปรเจกต์ไฮดรอลิก</span><span class="en">Hydraulics project</span></li></ul><p><span class="th">โมเดลหลุมดำที่ขับด้วยไซริงค์สองตัวต่อท่อน้ำถึงกัน ดึงไซริงค์ฝั่งหนึ่ง อีกฝั่งจะดึงกลางแผ่นยืดให้ยุบลงเป็นหลุม ลูกแก้วที่วิ่งอยู่บนแผ่นจะวนเร็วขึ้นแล้วไหลลงตรงกลาง เหมือนวัตถุที่โคจรรอบหลุมดำ ลองเลื่อนแถบด้านล่างดูได้</span><span class="en">A black-hole model driven by two syringes joined by a water line. Pull one syringe and the other pulls the centre of a stretched sheet down into a well. Marbles rolling on the sheet orbit faster and spiral into the middle, like matter around a black hole. Try the slider below.</span></p><div class="j3d" data-j3d="blackhole">
-<canvas aria-label="โมเดล 3 มิติแบบโต้ตอบ: หลุมดำบนแผ่นยืดที่ขยับด้วยระบบไฮดรอลิกจากไซริงค์"></canvas>
+          <li class="j-item rise"><time><span class="th">ปี 1</span><span class="en">Year 1</span></time><h3><span class="th">แขนขุดดินไฮดรอลิกจากไซริงค์</span><span class="en">A syringe-powered hydraulic digger</span></h3><ul class="j-tags"><li><span class="th">โปรเจกต์ไฮดรอลิก</span><span class="en">Hydraulics project</span></li></ul><p><span class="th">โมเดลรถขุดดินที่ขยับด้วยระบบไฮดรอลิกจากไซริงค์ ไซริงค์แต่ละคู่ต่อท่อน้ำถึงกัน กดไซริงค์ตัวคุมบนฐาน น้ำจะไปดันไซริงค์อีกตัวที่ติดอยู่บนแขน ทำให้บูม แขนตัก และบุ้งกี๋ขยับทีละข้อ ลองคุมเองด้วยแถบเลื่อน หรือกด "ตักดินให้ดู"</span><span class="en">A model digger moved by syringe hydraulics. Each pair of syringes is joined by a water line: push the control syringe on the base and water drives the one mounted on the arm, moving the boom, stick and bucket one joint at a time. Work it with the sliders or press "Dig a scoop".</span></p><div class="j3d" data-j3d="backhoe">
+<canvas aria-label="โมเดล 3 มิติแบบโต้ตอบ: แขนขุดดินที่ขยับด้วยไซริงค์และน้ำ"></canvas>
 <span class="j3d-hint"><span class="th">ลากเพื่อหมุนดูรอบ ๆ</span><span class="en">Drag to look around</span></span>
-<div class="j3d-ui"><label><span class="th">ดึงไซริงค์</span><span class="en">Pull the syringe</span><input type="range" min="0" max="100" value="35" aria-label="Syringe"></label>
-<button class="chip-btn" type="button" data-drop><span class="th">ปล่อยลูกแก้วเพิ่ม</span><span class="en">Drop a marble</span></button></div>
-<p class="j3d-fallback"><span class="th">เบราว์เซอร์นี้แสดงโมเดล 3 มิติไม่ได้</span><span class="en">This browser can't show the 3D model.</span></p>
+<div class="j3d-ui"><label><i class="dot" style="background:#c89a62"></i><span class="th">หมุนฐาน</span><span class="en">Swing</span><input type="range" min="0" max="100" value="50" aria-label="Swing"></label><label><i class="dot" style="background:#3aa0ff"></i><span class="th">บูม</span><span class="en">Boom</span><input type="range" min="0" max="100" value="50" aria-label="Boom"></label><label><i class="dot" style="background:#ff5a4e"></i><span class="th">แขนตัก</span><span class="en">Stick</span><input type="range" min="0" max="100" value="40" aria-label="Stick"></label><label><i class="dot" style="background:#4fd18b"></i><span class="th">บุ้งกี๋</span><span class="en">Bucket</span><input type="range" min="0" max="100" value="40" aria-label="Bucket"></label><button class="chip-btn" type="button" data-dig><span class="th">ตักดินให้ดู</span><span class="en">Dig a scoop</span></button></div>
+<p class="j3d-fallback"><span class="th">เบราว์เซอร์นี้แสดงโมเดล 3 มิติไม่ได้</span><span class="en">This browser can&#39;t show the 3D model.</span></p>
 </div>
 <p class="j3d-note"><span class="th">โมเดลนี้สร้างใหม่ด้วยโค้ดให้ลองเล่นบนเว็บ ไม่ได้สแกนจากชิ้นงานจริง</span><span class="en">Rebuilt in code so you can play with it here; not a scan of the original model.</span></p></li>
           <li class="j-item rise"><time><span class="th">ก.พ.–มี.ค. 2025</span><span class="en">Feb–Mar 2025</span></time><h3><span class="th">รถดั๊มพ์ของเล่น TRUCK SERIES D917 ใน SolidWorks</span><span class="en">TRUCK SERIES D917, a toy truck in SolidWorks</span></h3><ul class="j-tags"><li><span class="th">วิชาเขียนแบบวิศวกรรม</span><span class="en">Engineering Drawing</span></li><li><span class="th">งานกลุ่ม 3 คน</span><span class="en">Group of 3</span></li><li><span class="th">11 ชิ้นส่วน</span><span class="en">11 parts</span></li></ul><p><span class="th">ถอดรถของเล่นออกทีละชิ้น วัดขนาดด้วยเวอร์เนียร์ แล้วขึ้นโมเดลใน SolidWorks ครบทั้ง 11 ชิ้น ตั้งแต่ล้อ กระทะล้อ น็อต ไปจนถึงกระบะ จากนั้นประกอบเป็น assembly ทำ exploded view และเขียนแบบพร้อม BOM ส่งเป็นงานกลุ่ม</span><span class="en">We took a toy truck apart, measured every piece with calipers and modelled all 11 parts in SolidWorks, from tyres, rims and bolts to the dump bed. Then we built the assembly, an exploded view and drawings with a BOM.</span></p><div class="j3d" data-j3d="truck">
@@ -1196,7 +1198,7 @@ const io = new IntersectionObserver(async (entries) => {
     io.unobserve(e.target);
     try {
       const m = await import('./js/journey-3d.js');
-      (e.target.dataset.j3d === 'truck' ? m.initTruck : m.initBlackhole)(e.target);
+      (e.target.dataset.j3d === 'truck' ? m.initTruck : m.initBackhoe)(e.target);
     } catch (err) {
       console.warn('journey 3d', err);
       e.target.classList.add('off');
