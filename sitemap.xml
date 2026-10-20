@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://qil159753.github.io/</loc>
+    <lastmod>2026-10-20</lastmod>
+    <image:image><image:loc>https://qil159753.github.io/img/mionex-arm-cut.webp</image:loc></image:image>
+    <image:image><image:loc>https://qil159753.github.io/img/abu-pit-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://qil159753.github.io/img/abu-operator.webp</image:loc></image:image>
+    <image:image><image:loc>https://qil159753.github.io/img/mionex-render.webp</image:loc></image:image>
+    <image:image><image:loc>https://qil159753.github.io/img/tmirc-2025.webp</image:loc></image:image>
+    <image:image><image:loc>https://qil159753.github.io/img/mionex-pitch.webp</image:loc></image:image>
+    <image:image><image:loc>https://qil159753.github.io/img/pawn-desktop.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://qil159753.github.io/mionex/</loc>
+    <lastmod>2026-10-20</lastmod>
+    <image:image><image:loc>https://qil159753.github.io/mionex/img/mionex-arm.png</image:loc></image:image>
+    <image:image><image:loc>https://qil159753.github.io/mionex/img/mionex-finished.jpg</image:loc></image:image>
+  </url>
+</urlset>
