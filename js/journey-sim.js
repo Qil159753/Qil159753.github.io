@@ -20,7 +20,7 @@ function loop(el, step) {
   let seen = false, raf = 0, last = 0, dead = false;
   function frame(now) {
     const dt = Math.min((now - last) / 1000, 0.05); last = now;
-    try { step(dt); } catch (err) { dead = true; raf = 0; console.error('journey sim', err); return; }
+    try { step(dt); el.closest('.j3d')?.classList.add('ready'); } catch (err) { dead = true; raf = 0; console.error('journey sim', err); el.closest('.j3d')?.classList.add('off'); return; }
     raf = requestAnimationFrame(frame);
   }
   function sync() {
@@ -28,15 +28,20 @@ function loop(el, step) {
     if (run && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); }
     else if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
   }
-  new IntersectionObserver(([e]) => { seen = e.isIntersecting; sync(); }, { rootMargin: '80px' }).observe(el);
+  new IntersectionObserver((es) => { seen = es[es.length - 1].isIntersecting; sync(); }, { rootMargin: '80px' }).observe(el);
   document.addEventListener('visibilitychange', sync);
 }
 
+/* Screen readers hear only the milestones; the full log would be far too chatty for a live region. */
+const SAY = /Nav2 Goal|Heading to|Arrived at|Mission complete|Interrupted|Goal succeeded|Failed to create plan|FAIL-SAFE|link restored|link cut|STATE\] DRIVING/;
+
 function terminal(pre, max = 160) {
-  const lines = [];
+  const lines = [], say = pre.parentElement.closest('.j3d')?.querySelector('[data-say]');
   return {
     print(s) {
-      lines.push(...String(s).split('\n'));
+      const add = String(s).split('\n');
+      if (say) { const hit = add.filter(l => SAY.test(l)).pop(); if (hit) say.textContent = hit.replace(/^\s*\[[^\]]+\]\s*/, ''); }
+      lines.push(...add);
       if (lines.length > max) lines.splice(0, lines.length - max);
       pre.textContent = lines.join('\n');
       pre.scrollTop = pre.scrollHeight;
@@ -58,7 +63,6 @@ const STATIONS = [
   { id: 'C', name: 'Station C - QC', x: -0.6888, y: 1.8841, yaw: 1.022 },
 ];
 const NUM_LOOPS = 2, SETTLE_SEC = 1.5;
-const SID = '<student-id>';                 // the package is named after my student ID; kept off the public page
 const ROBOT_R = 0.19;                       // BATLY R1 footprint radius, m
 const V_MAX = 0.3, W_MAX = 1.2;             // m/s, rad/s
 const LIDAR_RANGE = 12, LIDAR_RAYS = 240;   // RPLIDAR C1
@@ -223,8 +227,8 @@ export async function initRos(root) {
   runBtn.addEventListener('click', () => {
     if (mission) return;
     const wps = Array.from({ length: NUM_LOOPS }, () => STATIONS).flat();
-    term.print(`\n$ ros2 run ${SID}_nav loop_navigator`);
-    term.print('='.repeat(52) + '\n   Loop Navigator - Student ' + SID + '\n' + `   Stations : ${STATIONS.length}   |   Loops : ${NUM_LOOPS}\n` + '='.repeat(52));
+    term.print('\n$ ros2 run batly_nav loop_navigator');
+    term.print('='.repeat(52) + '\n   Loop Navigator\n' + `   Stations : ${STATIONS.length}   |   Loops : ${NUM_LOOPS}\n` + '='.repeat(52));
     term.print('[NAV]  Waiting for Nav2 FollowWaypoints server...\n[NAV]  Nav2 ready. Starting mission.');
     term.print(`\n---------- Loop 1 / ${NUM_LOOPS} ----------\n[NAV]  Heading to ${wps[0].name}...`);
     mission = { wps, cur: 0, wait: 0, after: null };
@@ -245,6 +249,12 @@ export async function initRos(root) {
     if (navigate({ x, y, yaw: null }, () => term.print('[bt_navigator] Goal succeeded'))) term.print(`[planner_server] Plan: ${nav.path.length} poses`);
   });
 
+  root.querySelectorAll('[data-goal]').forEach(b => b.addEventListener('click', () => {
+    const st = STATIONS.find(q => q.id === b.dataset.goal);
+    if (mission) interrupt();
+    term.print(`\n[rviz2] Nav2 Goal  ${st.name}`);
+    if (navigate(st, () => term.print(`[bt_navigator] Goal succeeded: ${st.name}`))) term.print(`[planner_server] Plan: ${nav.path.length} poses`);
+  }));
   term.print('$ ros2 launch batly_nav nav.launch.py\n[lifecycle_manager_navigation]: Managed nodes are active');
 
   const sim = dt => {

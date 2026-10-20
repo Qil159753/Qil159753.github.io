@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'sha256-zXRYQ4sGshWOaiXS8yPP1eLk9IgSmEpBQokLWyLYqPU=' 'sha256-mxmJBuSr/2noW3X90U/5QsDx3PV6foCX2PN0OpWwY1w=' 'sha256-Qv0tE7KZYUndsRin9VAppU8173SRYqOd3zcqHA/VY/I=' 'sha256-LnH9i1mOc5ccq3uZsmN11vr6rQElrUtk5JRXgEyj8QA=' 'sha256-b+w3KM5+/qKMF1xz7zWGcJajkr3Y8Yx02o/0OYWbYok='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'sha256-zXRYQ4sGshWOaiXS8yPP1eLk9IgSmEpBQokLWyLYqPU=' 'sha256-Maq4OAyHEFSpaDq89u3j/FQZtYX6ni/6FUx9NN8n4SQ=' 'sha256-I6xd6YBtksqIjJmKYJ3u1nYNeoT3G0k7iaAT5QRPtdE=' 'sha256-Qv0tE7KZYUndsRin9VAppU8173SRYqOd3zcqHA/VY/I=' 'sha256-JZDPbhWYQBHoiEzT1A0xlVzHpCa0cgs5Wau4AZ5h1ho=' 'sha256-dyT9EPCeeECtPdx2JbLR86mg7yNBy207dDGB3vuXyF0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="อภิภัทร สันทัสนะโชค (คิว) นักศึกษาวิศวกรรมระบบสมองกลฝังตัว ม.บูรพา ทำเฟิร์มแวร์ หุ่นยนต์แข่ง แขนเทียม MIONEX และระบบเว็บสำหรับร้านค้า">
@@ -101,7 +101,7 @@ body {
   -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 body::after {
-  content: ''; position: fixed; inset: 0; z-index: 30; pointer-events: none; opacity: .05;
+  content: ''; position: fixed; inset: 0; z-index: 30; pointer-events: none; opacity: .035; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 .en { display: none !important; }
@@ -117,8 +117,8 @@ h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); margin: 0; font
 .page { max-width: 1280px; margin-inline: auto; padding-inline: clamp(16px, 4vw, 48px); }
 .sec { padding-block: clamp(96px, 12vw, 168px) 0; }
 .kicker { font: 500 13px/1.5 var(--mono); color: var(--copper); letter-spacing: .04em; }
-.mega { font-size: clamp(3rem, 10vw, 8.6rem); line-height: 1.02; font-weight: 700; letter-spacing: -.02em; }
-.h2 { font-size: clamp(2.2rem, 5vw, 4.2rem); line-height: 1.1; font-weight: 700; letter-spacing: -.015em; }
+.mega { font-size: clamp(2.4rem, 5.6vw, 4.8rem); line-height: 1.05; font-weight: 700; letter-spacing: -.02em; }
+.h2 { font-size: clamp(2.2rem, 5.2vw, 4.4rem); line-height: 1.1; font-weight: 700; letter-spacing: -.015em; }
 
 /* ---------- floating nav ---------- */
 .nav-wrap {
@@ -158,7 +158,7 @@ h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); margin: 0; font
   transition: transform .5s var(--ease), background .4s var(--ease), border-color .4s var(--ease);
 }
 .btn:active { transform: scale(.97); }
-.btn-copper { background: var(--copper); color: var(--copper-ink); box-shadow: 0 10px 30px -10px rgba(236, 154, 90, .55); }
+.btn-copper { background: var(--copper); color: var(--copper-ink); }
 .btn-copper:hover { background: var(--copper-hi); }
 .btn-ghost { padding: 0 26px; color: var(--ink); border-color: var(--line-2); background: rgba(255, 255, 255, .03); }
 .btn-ghost:hover { border-color: var(--ink); }
@@ -179,12 +179,13 @@ h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); margin: 0; font
   grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(32px, 5vw, 72px);
   padding-block: clamp(128px, 15vw, 176px) clamp(72px, 9vw, 120px);
 }
+@media (min-width: 961px) { .hero-in { padding-block: clamp(104px, 11vw, 140px) clamp(16px, 2vw, 32px); } }
 .hero .kicker { display: block; margin-bottom: 26px; }
 h1 { font-size: clamp(2.8rem, 6.6vw, 6.3rem); line-height: 1.08; font-weight: 700; letter-spacing: -.02em; }
 :root[data-lang="en"] h1 { font-size: clamp(2.6rem, 5.6vw, 5.3rem); }
 h1 .line { display: block; overflow: hidden; padding-top: .16em; margin-top: -.16em; padding-bottom: .08em; }
 h1 .line > span { display: inline-block; }
-h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236, 154, 90, .35); }
+h1 em { font-style: normal; color: var(--copper); }
 .lead { font-size: clamp(1.05rem, 1.4vw, 1.22rem); color: var(--text); max-width: 40ch; margin-top: 28px; }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
 
@@ -223,8 +224,9 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 
 /* ---------- stats ---------- */
 .nw { white-space: nowrap; }
-.stats { list-style: none; margin: 0; padding: clamp(64px, 8vw, 104px) 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
-.stats li { border-top: 1px solid var(--line-2); padding-top: 22px; min-width: 0; }
+.stats { list-style: none; margin: 0; padding: clamp(40px, 5vw, 64px) 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
+.stats li { position: relative; border-top: 1px solid var(--line-2); padding-top: 22px; min-width: 0; }
+.stats li::before { content: ''; position: absolute; left: 0; top: -1px; width: 32px; height: 1px; background: var(--copper); }
 .stat-v { display: block; font: 700 clamp(2.6rem, 5.2vw, 4.6rem)/1 var(--display); color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
 .stat-v i { font-style: normal; color: var(--copper); }
 .stat-l { display: block; margin-top: 14px; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
@@ -277,12 +279,12 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 .awards { margin: 0; border-top: 1px solid var(--line-2); }
 .awards div { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--line); }
 .awards dt { color: var(--text); font-size: 15px; min-width: 0; flex: 1 1 auto; }
-.awards dd { margin: 0; font: 600 1.05rem/1.4 var(--display); color: var(--copper); text-align: right; flex: 0 1 auto; max-width: 60%; }
+.awards dd { margin: 0; font: 500 1.05rem/1.4 var(--display); color: var(--copper); text-align: right; flex: 0 1 auto; max-width: 60%; }
 .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-.chips li { font: 400 12.5px/1 var(--mono); padding: 9px 13px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text); background: rgba(255, 255, 255, .025); }
+.chips li { font: 400 12px/1 var(--mono); padding: 7px 10px; border-radius: 6px; border: 1px solid var(--line-2); color: var(--text); background: rgba(255, 255, 255, .025); }
 .feats { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .feats li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 6px; font-size: 15px; }
-.feats li::before { content: ''; width: 9px; height: 9px; margin-top: 9px; border-radius: 50%; border: 2px solid var(--copper); }
+.feats li::before { content: ''; width: 9px; height: 9px; margin-top: 9px; border-radius: 50%; border: 2px solid var(--line-2); }
 
 .render-media { background: #000; }
 .render-media > img { object-fit: contain; padding-block: 4%; }
@@ -327,7 +329,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 .spot .chips { margin-top: auto; padding-top: 6px; }
 .get { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 10px; }
 .get li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 6px; }
-.get li::before { content: ''; width: 9px; height: 9px; margin-top: 9px; border-radius: 50%; border: 2px solid var(--copper); }
+.get li::before { content: ''; width: 9px; height: 9px; margin-top: 9px; border-radius: 50%; border: 2px solid var(--line-2); }
 .get-title { font: 500 12.5px/1.5 var(--mono); color: var(--muted); }
 .svc-note { margin-top: 26px; color: var(--muted); }
 
@@ -341,7 +343,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 .about-copy .lead { margin-top: 0; max-width: 46ch; color: var(--ink); }
 .about-copy p + p { margin-top: 16px; color: var(--text); max-width: 52ch; }
 .tools { margin: 32px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 28px; }
-.tools dt { font: 500 12.5px/1.4 var(--mono); color: var(--copper); margin-bottom: 6px; }
+.tools dt { font: 500 12.5px/1.4 var(--mono); color: var(--muted); margin-bottom: 6px; }
 .tools dd { margin: 0; color: var(--ink); font-size: 15px; }
 
 
@@ -352,18 +354,19 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 .j-yl b { display: block; font: 700 clamp(2rem, 3.2vw, 2.75rem)/1 var(--display); color: var(--ink); letter-spacing: -.01em; margin-top: 8px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .j-yl small { display: block; margin-top: 10px; font: 400 13px/1.5 var(--mono); color: var(--muted); }
 .j-list { list-style: none; margin: 0; padding: 0 0 0 34px; position: relative; display: grid; gap: clamp(40px, 5vw, 64px); }
-.j-list::before { content: ''; position: absolute; top: 6px; bottom: 0; left: 7px; width: 2px; background: linear-gradient(180deg, var(--copper), rgba(236, 154, 90, .1)); box-shadow: 0 0 16px rgba(236, 154, 90, .3); }
+.j-list::before { content: ''; position: absolute; top: 6px; bottom: 0; left: 7px; width: 2px; background: linear-gradient(180deg, var(--copper), rgba(236, 154, 90, .1)); }
 .j-item { position: relative; min-width: 0; }
 .j-item::before { content: ''; position: absolute; top: 5px; left: -34px; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--copper); background: var(--bg); box-shadow: 0 0 0 5px var(--bg); }
 .j-item:has(.win)::before, .j-item.now::before { box-shadow: 0 0 0 5px var(--bg), 0 0 18px rgba(236, 154, 90, .55); }
 .j-item.now::before { background: var(--copper); }
 .j-item.slim::before { width: 12px; height: 12px; top: 6px; left: -32px; }
 .j-list:has(.slim) { gap: clamp(32px, 4vw, 48px); }
-.j-item time { display: block; font: 500 13px/1.5 var(--mono); color: var(--copper); }
+.j-item time { display: block; font: 500 13px/1.5 var(--mono); color: var(--muted); letter-spacing: .02em; }
+.j-item.now time { color: var(--copper); }
 .j-item h4 { margin-top: 8px; font-size: clamp(1.3rem, 2vw, 1.7rem); line-height: 1.3; }
 .j-item.slim h4 { font-size: clamp(1.1rem, 1.5vw, 1.3rem); }
 .j-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
-.j-tags li { font: 400 12.5px/1 var(--mono); padding: 9px 13px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text); background: rgba(255, 255, 255, .025); }
+.j-tags li { font: 400 12px/1 var(--mono); padding: 7px 10px; border-radius: 6px; border: 1px solid var(--line-2); color: var(--text); background: rgba(255, 255, 255, .025); }
 .j-tags li.win { border-color: rgba(236, 154, 90, .5); background: var(--copper-soft); color: var(--copper-hi); }
 .j-item > p { margin-top: 14px; max-width: 64ch; }
 .j-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 20px 0 0; }
@@ -381,7 +384,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
   background: radial-gradient(120% 90% at 50% 0%, #151a22, var(--bg-2) 70%); }
 .j3d canvas { display: block; width: 100%; height: clamp(240px, 62vw, 500px); touch-action: pan-y; cursor: grab; }
 .j3d canvas:active { cursor: grabbing; }
-.j3d-hint { position: absolute; top: 14px; left: 16px; font: 400 12px/1.4 var(--mono); color: var(--muted); pointer-events: none; }
+.j3d-hint { position: absolute; top: 12px; left: 12px; right: 12px; width: fit-content; font: 400 12px/1.4 var(--mono); color: var(--text); pointer-events: none; padding: 5px 9px; border-radius: 6px; background: rgba(10, 13, 18, .72); }
 .j3d-tip { position: absolute; transform: translate(14px, -130%); pointer-events: none; padding: 6px 12px; border-radius: 999px; background: rgba(16, 20, 26, .92); border: 1px solid rgba(236, 154, 90, .5); color: var(--ink); font: 500 12.5px/1.2 var(--mono); white-space: nowrap; }
 .j3d-ui { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; padding: 14px 16px 16px; border-top: 1px solid var(--line); background: rgba(10, 13, 18, .7); }
 .j3d-ui label { display: flex; align-items: center; gap: 12px; flex: 1 1 220px; font: 500 13px/1.3 var(--body); color: var(--ink); }
@@ -418,7 +421,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 .sim-stat { flex: 1 1 100%; font: 400 12px/1.4 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .j3d-ui .chip-btn b { font: 600 12px/1 var(--mono); color: var(--copper); margin-left: 4px; }
 .j3d-note a { color: var(--copper); }
-@media (max-width: 640px) { [data-j3d="abu"] canvas { height: clamp(380px, 118vw, 560px); } [data-j3d="ros"] canvas, [data-j3d="lidar"] canvas { height: clamp(360px, 115vw, 560px); } .sim-ui { flex-wrap: wrap; } .sim-btns { order: -1; flex-basis: 100%; } .sim-key { margin-left: 0; flex-basis: 100%; } }
+@media (max-width: 640px) { [data-j3d="abu"] canvas { height: clamp(320px, 96vw, 480px); } [data-j3d="ros"] canvas, [data-j3d="lidar"] canvas { height: clamp(360px, 115vw, 560px); } .sim-ui { flex-wrap: wrap; } .sim-btns { order: 2; flex-basis: 100%; } .sim-key { margin-left: 0; flex-basis: 100%; } }
 .j3d-fallback { display: none; padding: 28px; color: var(--muted); }
 .j3d.off .j3d-fallback { display: block; }
 
@@ -474,11 +477,11 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
   @keyframes pktInk { 0%, 8% { color: var(--copper-ink); } 26%, 100% { } }
   @supports (animation-timeline: view()) {
     .rise { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
-    @keyframes rise { from { transform: translateY(48px); } }
+    @keyframes rise { from { transform: translateY(24px); } }
   }
 }
 /* In-page "pause motion" switch (WCAG 2.2.2). JS reads the same flag and skips every loop. */
-:root[data-motion="off"] *, :root[data-motion="off"] *::before, :root[data-motion="off"] *::after { animation: none !important; }
+:root[data-motion="off"] *, :root[data-motion="off"] *::before, :root[data-motion="off"] *::after { animation: none !important; transition-duration: 0s !important; }
 :root[data-motion="off"] { scroll-behavior: auto !important; }
 
 /* ---------- layout switches ---------- */
@@ -499,17 +502,22 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 }
 @media (pointer: coarse) {
   .nav { padding: 4px 4px 4px 6px; }
-  .nav-links a { display: inline-flex; align-items: center; min-height: 40px; padding-inline: 6px; }
-  .lang { height: 40px; }
-  .motion { width: 40px; }
-  .mark-q { width: 40px; height: 40px; }
+  .nav-links a { display: inline-flex; align-items: center; min-height: 44px; padding-inline: 8px; }
+  .lang { height: 44px; }
+  .motion { width: 44px; }
+  .mark-q { width: 44px; height: 44px; }
+  .j3d-ui .chip-btn { min-height: 44px; }
+  .j3d-ui input[type=range] { height: 44px; }
+  .mail { padding-top: 6px; }
+  .h-mouse { display: none; }
+  .h-touch { display: inline; }
 }
 @media (max-width: 420px) {
   .awards div { flex-direction: column; align-items: flex-start; gap: 2px; }
   .awards dd { text-align: left; max-width: none; }
 }
 @media (max-width: 400px) { .stat-l .nw { white-space: normal; } }
-@media (max-width: 420px) { .j3d-ui label { gap: 8px; min-width: 0; } .j3d-ui input[type=range] { min-width: 0; width: 0; } }
+@media (max-width: 420px) { .j3d-ui label { gap: 8px; min-width: 0; } .j3d-ui input[type=range] { min-width: 0; width: 0; } [data-j3d="backhoe"] .j3d-ui label { flex-basis: 100%; } }
 @media (min-width: 961px) and (min-height: 760px) {
   .card { position: sticky; top: calc(96px + var(--i) * 14px); }
   .card-in { height: min(660px, calc(100svh - 180px)); min-height: 0; }
@@ -533,7 +541,14 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 }
 @media (max-width: 760px) {
   .nav { gap: 12px; }
-  .nav-links a:not(.nav-contact) { display: none; }
+  .nav-links { overflow-x: auto; scrollbar-width: none; max-width: 52vw; gap: 2px; overscroll-behavior-x: contain;
+               -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { flex: none; }
+  .meta > span + span { border-left: 0; padding-left: 0; }
+  .meta > span + span::before { content: '· '; color: var(--muted); }
+  .j3d-note { font: 400 13.5px/1.65 var(--body); }
+  .sim-frame small { font-size: 11px; }
   .mark-name { display: none; }
   .tools { grid-template-columns: minmax(0, 1fr); }
   .inset { width: 44%; }
@@ -543,9 +558,86 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
   .minis { gap: 22px; }
   .j-strip { gap: 6px; }
 }
+/* ---------- range strip: every skill points at its proof ---------- */
+.range { margin-top: 34px; }
+.range-t { font: 400 12px/1.4 var(--mono); color: var(--muted); margin-bottom: 10px; }
+.range ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; max-width: 620px; }
+.range a { display: inline-flex; align-items: center; gap: 7px; min-height: 34px; padding: 0 12px 0 6px; border-radius: 999px; border: 1px solid var(--line-2);
+           background: rgba(10, 13, 18, .55); font: 500 13px/1 var(--body); color: var(--ink); text-decoration: none;
+           transition: border-color .3s var(--ease), background .3s var(--ease), transform .3s var(--ease); }
+.range a i { font: 500 10px/1 var(--mono); font-style: normal; color: var(--muted); padding: 5px 5px; border-radius: 999px; background: rgba(255, 255, 255, .05); transition: color .3s var(--ease), background .3s var(--ease); }
+.range a:hover, .range a:focus-visible { border-color: var(--copper); background: var(--copper-soft); }
+.range a:hover i, .range a:focus-visible i { color: var(--copper-ink); background: var(--copper); }
+.range a:active { transform: scale(.97); }
+@media (pointer: coarse) { .range a { min-height: 44px; } }
+@media (max-width: 760px) {
+  .range ul { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: calc(-1 * clamp(16px, 4vw, 48px)); padding-inline: clamp(16px, 4vw, 48px);
+              -webkit-mask-image: linear-gradient(90deg, transparent, #000 16px, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 16px, #000 88%, transparent); }
+  .range ul::-webkit-scrollbar { display: none; }
+  .range li { flex: none; }
+}
+/* ---------- "try it live" row ---------- */
+.work-head p.live { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 22px; max-width: none; font: 400 13px/1.6 var(--mono); color: var(--text); }
+.live a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--copper); text-decoration-thickness: 1px; text-underline-offset: 4px; padding-block: 8px; }
+.live a:hover { color: var(--copper); }
+.live a + a::before { content: '/'; display: inline-block; margin-right: 14px; color: var(--line-2); text-decoration: none; }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: #4fd18b; box-shadow: 0 0 0 0 rgba(79, 209, 139, .5); }
+@media (prefers-reduced-motion: no-preference) { .live-dot { animation: ping 2.4s ease-out infinite; } @keyframes ping { 70%, 100% { box-shadow: 0 0 0 8px rgba(79, 209, 139, 0); } } }
+/* ---------- section designators, like the reference marks on a board ---------- */
+main { counter-reset: sec; }
+.sec { counter-increment: sec; }
+.sec > h2::before, .sec > div > h2::before { content: 'J' counter(sec) ' \2500\2500'; display: block; margin-bottom: 16px; font: 500 12px/1 var(--mono); letter-spacing: .12em; color: var(--muted); }
+/* ---------- work cards alternate sides, copy sits at the top ---------- */
+@media (min-width: 961px) {
+  .card:nth-child(even) .card-in { grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); }
+  .card:nth-child(even) .card-media { order: -1; }
+  .card:nth-child(even) .card-media::after { background: linear-gradient(270deg, rgba(16, 20, 26, .55), transparent 30%); }
+}
+h3:target, .j-item:target { scroll-margin-top: 100px; }
+.j-item:target h4 { color: var(--copper); }
+.xref { text-decoration: underline dotted var(--muted); text-underline-offset: 3px; }
+.xref:hover { color: var(--copper); text-decoration-color: var(--copper); }
+/* ---------- CRC demo on the drive frame ---------- */
+.bytes li[role="button"] { cursor: pointer; }
+.bytes li[role="button"]:hover { border-color: var(--line-2); }
+.bytes li[data-bad] { border-color: #ff5a4e; }
+.bytes li[data-bad] b { color: #ff5a4e; }
+.bytes .crc.fail { background: rgba(255, 90, 78, .14); border-color: #ff5a4e; }
+.bytes .crc.fail b { color: #ff5a4e; }
+.bytes.idle li::before { opacity: 0 !important; }
+.frame-msg { font: 500 12px/1.4 var(--mono); color: #ff5a4e; min-height: 1.4em; margin-top: 4px; }
+.frame-msg.ok { color: #4fd18b; }
+.tap-hint { color: var(--text); }
+/* ---------- touch vs mouse hints ---------- */
+.h-touch { display: none; }
+/* ---------- 3D viewers: say they're loading instead of showing an empty box ---------- */
+.j3d:not(.ready):not(.off)::after {
+  content: 'กำลังโหลด…'; position: absolute; left: 0; right: 0; top: 0; height: clamp(240px, 62vw, 500px); display: grid; place-items: center;
+  font: 400 12px/1 var(--mono); color: var(--muted); pointer-events: none;
+  background: linear-gradient(100deg, transparent 40%, rgba(236, 154, 90, .07) 50%, transparent 60%) 0 0 / 200% 100%;
+}
+:root[data-lang="en"] .j3d:not(.ready):not(.off)::after { content: 'Loading…'; }
+.j3d.sim::after { display: none; }
+@media (prefers-reduced-motion: no-preference) { .j3d:not(.ready)::after { animation: shim 1.4s linear infinite; } @keyframes shim { to { background-position: -200% 0; } } }
+.goal-btns { display: inline-flex; flex-wrap: wrap; gap: 8px; }
+.j3d-ui .chip-btn[aria-pressed="true"]::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-right: 8px; border-radius: 50%; background: var(--copper); vertical-align: middle; }
+/* ---------- small things ---------- */
+.skip { position: fixed; left: 12px; top: 12px; z-index: 60; padding: 12px 16px; border-radius: 999px; background: var(--copper); color: var(--copper-ink); font: 600 14px/1 var(--body); text-decoration: none; transform: translateY(-160%); }
+.skip:focus { transform: none; }
+.ack { display: inline-block; margin-right: 8px; padding: 3px 6px; border-radius: 4px; background: var(--copper); color: var(--copper-ink); font: 600 10.5px/1 var(--mono); letter-spacing: .06em; vertical-align: 1px; }
+.foot .fw { font-variant-numeric: tabular-nums; }
+.foot kbd, .toast kbd { font: 500 11px/1 var(--mono); padding: 3px 6px; border-radius: 4px; border: 1px solid var(--line-2); border-bottom-width: 2px; color: var(--ink); }
+@media (pointer: coarse) { .keys-hint { display: none; } }
+.toast { position: fixed; left: 50%; bottom: 24px; z-index: 50; transform: translateX(-50%); max-width: calc(100vw - 32px); padding: 12px 16px; border-radius: 12px;
+         background: rgba(16, 20, 26, .96); border: 1px solid var(--line-2); font: 400 12.5px/1.8 var(--mono); color: var(--text); box-shadow: 0 20px 40px -12px rgba(0, 0, 0, .8); }
+.toast[hidden] { display: none; }
+.mark-q { transition: transform .4s var(--ease), box-shadow .4s var(--ease); }
+.mark:hover .mark-q { transform: rotate(-8deg); }
 </style>
 </head>
 <body>
+<!-- Hi, fellow engineer. Open the console. -->
+<a class="skip" href="#work"><span class="th">ข้ามไปที่ผลงาน</span><span class="en" lang="en">Skip to the work</span></a>
 
 <header class="nav-wrap">
   <nav class="nav" aria-label="เมนูหลัก" data-label-en="Main">
@@ -572,11 +664,24 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
           <span class="th"><span class="line"><span>จากแผงวงจร</span></span><span class="line"><span>ถึง<em>หน้าเว็บ</em></span></span></span>
           <span class="en" lang="en"><span class="line"><span>Circuit board</span></span><span class="line"><span>to <em>browser</em>.</span></span></span>
         </h1>
-        <p class="lead"><span class="th">ผมเขียนเฟิร์มแวร์ สร้างหุ่นยนต์แข่ง และทำระบบเว็บให้ร้านค้า งานฮาร์ดแวร์และซอฟต์แวร์จบได้ในคนเดียว</span><span class="en" lang="en">I write firmware, build competition robots and make web systems for shops. I handle both the hardware and the software myself.</span></p>
+        <p class="lead"><span class="th">ผมเขียนเฟิร์มแวร์ สร้างหุ่นยนต์แข่ง และทำระบบเว็บให้ร้านค้า ทั้งงานฮาร์ดแวร์และซอฟต์แวร์ ผมทำเองได้ครบจบในคนเดียว</span><span class="en" lang="en">I write firmware, build competition robots and make web systems for shops. From the bare board to the screen, I build both halves myself.</span></p>
         <div class="cta">
           <a class="btn btn-copper" href="#work" data-magnet><span class="th">ดูผลงาน</span><span class="en" lang="en">See the work</span><span class="btn-ico" aria-hidden="true">↓</span></a>
           <a class="btn btn-ghost" href="#contact" data-magnet><span class="th">ติดต่อ</span><span class="en" lang="en">Contact</span></a>
         </div>
+        <nav class="range" aria-label="สิ่งที่ผมสร้าง ลิงก์ไปยังงานจริง" data-label-en="What I build, linked to the real work">
+          <p class="range-t"><span class="th">สิ่งที่ผมสร้าง · กดเพื่อดูงานจริง</span><span class="en" lang="en">What I build · each one links to the real work</span></p>
+          <ul>
+            <li><a href="#c-abu"><i>U1</i><span class="th">เฟิร์มแวร์</span><span class="en" lang="en">Firmware</span></a></li>
+            <li><a href="#c-mio"><i>U2</i><span class="th">อุปกรณ์การแพทย์</span><span class="en" lang="en">Medical device</span></a></li>
+            <li><a href="#c-lt"><i>U3</i><span class="th">หุ่นแข่ง</span><span class="en" lang="en">Race robots</span></a></li>
+            <li><a href="#j-ros"><i>U4</i>ROS 2 · Nav2</a></li>
+            <li><a href="#j-nano"><i>U5</i><span class="th">ออกแบบ PCB</span><span class="en" lang="en">PCB design</span></a></li>
+            <li><a href="#j-lidar"><i>U6</i><span class="th">3D บนเว็บ</span><span class="en" lang="en">3D on the web</span></a></li>
+            <li><a href="#c-web"><i>U7</i><span class="th">ระบบเว็บ</span><span class="en" lang="en">Web systems</span></a></li>
+            <li><a href="#j-pyip"><i>U8</i><span class="th">พิตช์บนเวที</span><span class="en" lang="en">Pitching</span></a></li>
+          </ul>
+        </nav>
       </div>
       <figure class="hero-art">
         <div class="arm" id="tilt-in">
@@ -590,7 +695,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
         </div>
         <figcaption>
           <span class="cap-photo"><span class="th">แขนเทียม MIONEX ตัวจริง ตอนนี้มีคนใส่อยู่ 6 คน</span><span class="en" lang="en">The real MIONEX arm. Six people wear it today.</span></span>
-          <span class="cap-3d" hidden><span class="th">แขน MIONEX สร้างเป็นโมเดล 3 มิติด้วยโค้ด อิงสัดส่วนจากแขนจริง · ลากเพื่อหมุน</span><span class="en" lang="en">The MIONEX arm as a live 3D model, built in code to the real arm's proportions · drag to rotate</span></span>
+          <span class="cap-3d" hidden><span class="th">แขน MIONEX ที่มีคนใส่ใช้งานจริง 6 คน สร้างเป็นโมเดล 3 มิติด้วยโค้ด อิงสัดส่วนจากแขนจริง · ลากเพื่อหมุน</span><span class="en" lang="en">The MIONEX arm six people wear, as a live 3D model built in code to its real proportions · drag to rotate</span></span>
         </figcaption>
       </figure>
     </div>
@@ -599,16 +704,21 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 
   <div class="page">
     <ul class="stats">
-      <li class="rise"><span class="stat-v"><i>#</i><span data-count="8">8</span></span><span class="stat-l"><span class="th">ในกลุ่มมหาวิทยาลัย ABU Robocon 2026 และอันดับ 13 ของประเทศ</span><span class="en" lang="en">among universities at ABU Robocon 2026, 13th nationally</span></span></li>
-      <li class="rise"><span class="stat-v"><span data-count="9">9</span><i>/540</i></span><span class="stat-l"><span class="th">คนที่ ELP4 คัดไปดูงานต่างประเทศ <span class="nw">จากผู้สมัครทั่วประเทศ</span></span><span class="en" lang="en">picked by ELP4 for a study visit abroad, from 540 applicants nationwide</span></span></li>
-      <li class="rise"><span class="stat-v"><span data-count="6">6</span></span><span class="stat-l"><span class="th">คนใส่แขนเทียม MIONEX อยู่จริงในตอนนี้</span><span class="en" lang="en">people wear the MIONEX arm today</span></span></li>
-      <li class="rise"><span class="stat-v"><span data-count="1.3" data-dec="1">1.3</span><i><span class="th">ล้าน</span><span class="en" lang="en">M</span></i></span><span class="stat-l"><span class="th">บาท ทุน TED Fund สำหรับพัฒนา MIONEX</span><span class="en" lang="en">baht from the TED Fund to develop MIONEX</span></span></li>
+      <li class="rise"><span class="stat-v"><i>#</i><span aria-hidden="true" data-count="8">8</span><span class="sr-only">8</span></span><span class="stat-l"><span class="th">ในกลุ่มมหาวิทยาลัย ABU Robocon 2026 และอันดับ 13 ของประเทศ</span><span class="en" lang="en">among universities at ABU Robocon 2026 (13th nationally)</span></span></li>
+      <li class="rise"><span class="stat-v"><span aria-hidden="true" data-count="9">9</span><span class="sr-only">9</span><i>/540</i></span><span class="stat-l"><span class="th">คนที่ ELP4 คัดไปดูงานต่างประเทศ <span class="nw">จากผู้สมัครทั่วประเทศ</span></span><span class="en" lang="en">picked by ELP4 for a study visit abroad, from 540 applicants nationwide</span></span></li>
+      <li class="rise"><span class="stat-v"><span aria-hidden="true" data-count="6">6</span><span class="sr-only">6</span></span><span class="stat-l"><span class="th">คนที่ใส่แขนเทียม MIONEX ใช้งานจริงอยู่ตอนนี้</span><span class="en" lang="en">people wear the MIONEX arm today</span></span></li>
+      <li class="rise"><span class="stat-v"><span aria-hidden="true" data-count="1.3" data-dec="1">1.3</span><span class="sr-only">1.3</span><i><span class="th">ล้าน</span><span class="en" lang="en">M</span></i></span><span class="stat-l"><span class="th">บาท จากทุน TED Fund เพื่อพัฒนา MIONEX</span><span class="en" lang="en">baht from the TED Fund to develop MIONEX</span></span></li>
     </ul>
 
     <section id="work" class="sec">
       <div class="work-head rise">
         <h2 class="mega"><span class="th">ผลงาน</span><span class="en" lang="en">Work</span></h2>
-        <p><span class="th">สี่งานที่บอกได้ชัดที่สุดว่าผมทำอะไรได้ ทุกภาพมาจากงานจริง</span><span class="en" lang="en">Four projects that best show what I can do. Every image comes from the actual project.</span></p>
+        <p><span class="th">สี่งาน สี่สาย: เฟิร์มแวร์ อุปกรณ์การแพทย์ หุ่นยนต์ และเว็บ ทุกภาพมาจากงานจริง</span><span class="en" lang="en">Four projects across firmware, medical hardware, robotics and the web. Every image is from the real project.</span></p>
+        <p class="live"><span class="live-dot" aria-hidden="true"></span><span class="th">ลองเล่นของจริงได้ในหน้านี้:</span><span class="en" lang="en">Try them live on this page:</span>
+          <a href="#j-abu"><span class="th">ขับหุ่น ABU ของผม</span><span class="en" lang="en">drive my ABU robot</span></a>
+          <a href="#j-ros"><span class="th">สั่งหุ่น ROS 2 ไปตามเป้าหมาย</span><span class="en" lang="en">give a ROS 2 robot a goal</span></a>
+          <a href="#j-lidar"><span class="th">นั่งรถ LiDAR รอบ SKKU</span><span class="en" lang="en">ride a LiDAR round SKKU</span></a>
+          <a href="#j-digger"><span class="th">คุมแขนขุดไซริงค์</span><span class="en" lang="en">work a syringe digger</span></a></p>
       </div>
 
       <div class="stack">
@@ -616,23 +726,25 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
           <div class="card-in">
             <div class="card-copy">
               <div>
-                <h3 id="c-abu"><span class="th">เฟิร์มแวร์หุ่นแข่ง ABU Robocon 2026</span><span class="en" lang="en">Firmware for an ABU Robocon 2026 robot</span></h3>
-                <p class="meta"><span>2026</span><span><span class="th">หุ่นและคอนโทรลเลอร์</span><span class="en" lang="en">Robot and controller</span></span><span>Teensy 4.1 + 4.0</span></p>
-                <p class="card-body"><span class="th">หุ่นกับคอนโทรลเลอร์มือถือคุยกันผ่านวิทยุด้วยโปรโตคอลที่ผมออกแบบเอง ทุกเฟรมตรวจด้วย CRC ถ้าสัญญาณเงียบเกิน <span class="nw">1.5 วินาที</span> หุ่นจะตัดไฟสเต็ปเปอร์ ลดความเร็วล้อจนหยุด แล้วจับคู่ใหม่เองอัตโนมัติ</span><span class="en" lang="en">The robot and a handheld controller talk over radio with a protocol I designed. Every frame is CRC-checked. If the link goes quiet for 1.5 s, the robot cuts its steppers, ramps the wheels to a stop and re-pairs on its own.</span></p>
+                <h3 id="c-abu"><span class="th">เฟิร์มแวร์หุ่นแข่ง ABU Robocon 2026</span><span class="en" lang="en">Fail-safe radio firmware for an ABU Robocon 2026 robot</span></h3>
+                <p class="meta"><span>2026</span><span><span class="th">ผมเขียนซอฟต์แวร์หุ่นและคอนโทรลเลอร์</span><span class="en" lang="en">My role: robot + controller software</span></span><span>Teensy 4.1 + 4.0</span></p>
+                <p class="card-body"><span class="th">หุ่นกับคอนโทรลเลอร์มือถือคุยกันผ่านวิทยุด้วยโปรโตคอลที่ผมออกแบบเอง ทุกเฟรมตรวจด้วย CRC ถ้าขาดสัญญาณเกิน <span class="nw">1.5 วินาที</span> หุ่นจะตัดไฟสเต็ปเปอร์ ลดความเร็วล้อจนหยุด แล้วจับคู่กับคอนโทรลเลอร์ใหม่โดยอัตโนมัติ</span><span class="en" lang="en">The robot and a handheld controller talk over radio with a protocol I designed. Every frame is CRC-checked. If the link goes quiet for 1.5 s, the robot cuts its steppers, ramps the wheels to a stop and re-pairs on its own.</span></p>
               </div>
               <div>
                 <ol class="bytes" aria-label="โครงสร้างเฟรมคำสั่งขับ" data-label-en="Drive frame layout">
                   <li style="--i:0"><i>0</i><b>SOF</b></li><li style="--i:1"><i>1</i><b>VER</b></li><li style="--i:2"><i>2</i><b>BTN</b></li><li style="--i:3"><i>3</i><b>AUX</b></li><li style="--i:4"><i>4</i><b>VX</b></li><li style="--i:5"><i>5</i><b>VY</b></li><li style="--i:6"><i>6</i><b>VT</b></li><li style="--i:7"><i>7</i><b>SPD</b></li><li style="--i:8"><i>8</i><b>MODE</b></li><li style="--i:9" class="crc"><i>9</i><b>CRC8</b></li>
                 </ol>
-                <p class="cap"><span class="th">เฟรมคำสั่งขับ 10 ไบต์ ผ่าน XBee ที่ <span class="nw">115200 baud</span></span><span class="en" lang="en">The 10-byte drive frame, over XBee at 115200 baud</span></p>
+                <p class="cap"><span class="th">เฟรมคำสั่งขับ 10 ไบต์ ผ่าน XBee ที่ <span class="nw">115200 baud</span> · <span class="tap-hint">แตะไบต์ไหนก็ได้เพื่อทำให้เฟรมเสีย</span></span><span class="en" lang="en">The 10-byte drive frame, over XBee at 115200 baud · <span class="tap-hint">tap any byte to corrupt it</span></span></p>
+                <p class="frame-msg" aria-live="polite"></p>
                 <div class="minis">
                   <div class="mini"><b>#8</b><span><span class="th">กลุ่มมหาวิทยาลัย</span><span class="en" lang="en">Among universities</span></span></div>
                   <div class="mini"><b>#13</b><span><span class="th">ทั้งประเทศ</span><span class="en" lang="en">Nationally</span></span></div>
                 </div>
+                <a class="card-link" href="#j-abu"><span class="th">ลองขับหุ่นตัวนี้ด้วยตัวเอง ↓</span><span class="en" lang="en">Drive it yourself ↓</span></a>
               </div>
             </div>
             <div class="card-media">
-              <img src="img/abu-pit-800.webp" srcset="img/abu-pit-800.webp 800w, img/abu-pit-1280.webp 1280w" sizes="(min-width: 961px) 640px, 100vw" width="1280" height="720" loading="lazy" decoding="async"
+              <img src="img/abu-pit-800.webp" srcset="img/abu-pit-800.webp 800w, img/abu-pit-1280.webp 1280w" sizes="(min-width: 961px) 640px, min(100vw, 420px)" width="1280" height="720" loading="lazy" decoding="async"
                    alt="ทีม ABU Robocon ช่วยกันประกอบหุ่นในพื้นที่เตรียมหุ่นก่อนลงแข่ง"
                    data-alt-en="The ABU Robocon team assembling robots in the pit before a match">
               <figure class="inset inset-bl">
@@ -650,14 +762,14 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
             <div class="card-copy">
               <div>
                 <h3 id="c-mio"><span class="th">MIONEX แขนเทียมควบคุมด้วยกล้ามเนื้อ</span><span class="en" lang="en">MIONEX, a myoelectric arm</span></h3>
-                <p class="meta"><span><span class="th">ทำต่อเนื่องถึงปัจจุบัน</span><span class="en" lang="en">Ongoing</span></span><span><span class="th">โครงการที่ผมพัฒนา</span><span class="en" lang="en">A project I develop</span></span><span><span class="th">อุปกรณ์การแพทย์</span><span class="en" lang="en">Medical device</span></span></p>
-                <p class="card-body"><span class="th">แขนเทียมสำหรับผู้ที่สูญเสียแขนระดับใต้ศอก อ่านสัญญาณไฟฟ้าจากกล้ามเนื้อแขนส่วนที่เหลือ แล้วสั่งให้มือกำและแบ ตอนนี้มีผู้ใช้จริง 6 คน และพาผมขึ้นเวทีนำเสนอมาแล้วหลายเวที</span><span class="en" lang="en">A prosthetic arm for below-elbow amputees. It reads electrical signals from the remaining forearm muscles and drives the hand to open and close. Six people wear it today, and it has taken me to several pitch stages.</span></p>
-                <a class="card-link" href="mionex/"><span class="th">ดูหน้าโปรเจกต์ MIONEX →</span><span class="en" lang="en">MIONEX project page →</span></a>
+                <p class="meta"><span><span class="th">ทำต่อเนื่องถึงปัจจุบัน</span><span class="en" lang="en">Ongoing</span></span><span><span class="th">โครงการที่ผมพัฒนา</span><span class="en" lang="en">My project</span></span><span><span class="th">อุปกรณ์การแพทย์</span><span class="en" lang="en">Medical device</span></span></p>
+                <p class="card-body"><span class="th">แขนเทียมสำหรับผู้ที่สูญเสียแขนระดับใต้ศอก อ่านสัญญาณไฟฟ้าจากกล้ามเนื้อแขนส่วนที่เหลือ แล้วสั่งให้มือกำและแบ ตอนนี้มีผู้ใช้จริง 6 คน ได้ทุน TED Fund และชนะเลิศเวที Pitch Your IP</span><span class="en" lang="en">A prosthetic arm for below-elbow amputees. It reads electrical signals from the remaining forearm muscles and drives the hand to open and close. Six people wear it today, It has won a TED Fund grant and first place at Pitch Your IP.</span></p>
+                <a class="card-link" href="mionex/"><span class="th">ดูหน้าโปรเจกต์ MIONEX (ภาษาอังกฤษ) →</span><span class="en" lang="en">MIONEX project page →</span></a>
               </div>
               <dl class="awards">
                 <div><dt>TED Fund</dt><dd><span class="th">ทุน <span class="nw">1.3 ล้านบาท</span></span><span class="en" lang="en">THB 1.3M grant</span></dd></div>
                 <div><dt>Pitch Your IP, Power Your Future</dt><dd><span class="th">รางวัล <span class="nw">100,000 บาท</span></span><span class="en" lang="en">THB 100,000 prize</span></dd></div>
-                <div><dt>Startup Thailand League</dt><dd><span class="th">รอบ Regional</span><span class="en" lang="en">Regional round</span></dd></div>
+                <div><dt>Startup Thailand League</dt><dd><span class="th">รอบภูมิภาค</span><span class="en" lang="en">Regional Pitching round</span></dd></div>
                 <div><dt>ELP4, STeP CMU</dt><dd><span class="th">1 ใน 9 จากผู้สมัคร <span class="nw">540 คน</span></span><span class="en" lang="en">1 of 9 from 540 applicants</span></dd></div>
               </dl>
             </div>
@@ -681,9 +793,10 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
               <ul class="chips" aria-label="เทคโนโลยีที่ใช้" data-label-en="Stack">
                 <li>ESP32</li><li>TB6612FNG</li><li><span class="th">IR 16 ช่อง</span><span class="en" lang="en">16-ch IR</span></li><li>PID</li><li>Weighted centroid</li>
               </ul>
+              <a class="card-link" href="https://github.com/Qil159753/Linetracer_Taiwan" target="_blank" rel="noopener"><span class="th">ดูโค้ดบน GitHub ↗</span><span class="en" lang="en">Source on GitHub ↗</span><span class="sr-only"><span class="th"> (เปิดแท็บใหม่)</span><span class="en" lang="en"> (opens in a new tab)</span></span></a>
             </div>
             <div class="card-media">
-              <img class="stage" src="img/tmirc-2025-900.webp" srcset="img/tmirc-2025-900.webp 900w, img/tmirc-2025.webp 1400w" sizes="(min-width: 961px) 640px, 100vw" width="1400" height="1050" loading="lazy" decoding="async"
+              <img class="stage" src="img/tmirc-2025-900.webp" srcset="img/tmirc-2025-900.webp 900w, img/tmirc-2025.webp 1400w" sizes="(min-width: 961px) 640px, min(100vw, 420px)" width="1400" height="1050" loading="lazy" decoding="async"
                    alt="ทีมไทยสี่คนยืนบนเวทีหน้าป้ายงาน TMIRC 2025 ที่ไต้หวัน"
                    data-alt-en="Team Thailand, four people, on stage in front of the TMIRC 2025 banner in Taiwan">
             </div>
@@ -726,7 +839,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
       <div class="svc">
         <div class="spot svc-a rise">
           <h3><span class="th">เฟิร์มแวร์และอุปกรณ์ IoT</span><span class="en" lang="en">Firmware and IoT devices</span></h3>
-          <p><span class="th">อ่านเซนเซอร์ คุมมอเตอร์ สื่อสารไร้สาย และเขียนโค้ด interrupt ให้ปลอดภัย ตั้งแต่บอร์ดเปล่าจนเป็นอุปกรณ์ที่ใช้งานได้</span><span class="en" lang="en">Sensor reading, motor control, wireless links and interrupt-safe code, taking a bare board to a working device.</span></p>
+          <p><span class="th">อ่านเซนเซอร์ คุมมอเตอร์ สื่อสารไร้สาย และเขียนโค้ด interrupt ให้ปลอดภัย ตั้งแต่บอร์ดเปล่าจนเป็นอุปกรณ์ที่ใช้งานได้</span><span class="en" lang="en">Sensor reading, motor control, wireless links and interrupt-safe code. From a bare board to a working device.</span></p>
           <p class="get-title"><span class="th">สิ่งที่คุณจะได้รับ</span><span class="en" lang="en">What you get</span></p>
           <ul class="get">
             <li><span><span class="th">โค้ดที่คนอื่นอ่านต่อได้ มีคอมเมนต์ตรงจุดสำคัญ</span><span class="en" lang="en">Readable code, commented where it matters</span></span></li>
@@ -737,16 +850,16 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
         </div>
         <div class="spot rise">
           <h3><span class="th">หุ่นยนต์และระบบควบคุม</span><span class="en" lang="en">Robots and control</span></h3>
-          <p><span class="th">ระบบขับเคลื่อนล้อ mecanum และสองล้อ สเต็ปเปอร์ IMU และคอนโทรลเลอร์ไร้สาย จูน PID จนวิ่งได้จริงในสนาม</span><span class="en" lang="en">Mecanum and two-wheel drives, steppers, IMUs and wireless controllers, with PID tuned until they run on a real field.</span></p>
+          <p><span class="th">ระบบขับล้อเมคานัมและแบบสองล้อ มอเตอร์สเต็ปเปอร์ เซนเซอร์ IMU และคอนโทรลเลอร์ไร้สาย จูน PID จนหุ่นวิ่งได้จริงในสนาม</span><span class="en" lang="en">Mecanum and two-wheel drives, steppers, IMUs and wireless controllers, with PID tuned on a real competition field, not just the bench.</span></p>
           <ul class="chips"><li>PID</li><li>IMU</li><li>Mecanum</li><li>ROS</li></ul>
         </div>
         <div class="spot rise">
           <h3><span class="th">เว็บและระบบหลังร้าน</span><span class="en" lang="en">Web apps and back offices</span></h3>
-          <p><span class="th">หน้าร้านออนไลน์ ระบบจอง สัญญา และหลังบ้านสำหรับธุรกิจขนาดเล็ก ใช้บนมือถือได้ และดูแลต่อได้ง่าย</span><span class="en" lang="en">Storefronts, bookings, contracts and admin panels for small businesses. They work on phones and are easy to maintain.</span></p>
+          <p><span class="th">หน้าร้านออนไลน์ ระบบจอง สัญญา และหลังบ้านสำหรับธุรกิจขนาดเล็ก ใช้บนมือถือได้ และดูแลต่อได้ง่าย</span><span class="en" lang="en">Storefronts, bookings, contracts and admin panels for small businesses. Built for phones first and kept simple to maintain.</span></p>
           <ul class="chips"><li>Node.js</li><li>SQLite</li><li>HTML / CSS / JS</li></ul>
         </div>
       </div>
-      <p class="svc-note"><span class="th">ไม่แน่ใจว่างานของคุณเข้าหมวดไหน ส่งรายละเอียดมาคุยกันก่อนได้</span><span class="en" lang="en">Not sure where your project fits? Send the details and we can work it out.</span></p>
+      <p class="svc-note"><span class="th">ไม่แน่ใจว่างานของคุณเข้าหมวดไหน ส่งรายละเอียดมาคุยกันก่อนได้</span><span class="en" lang="en">Not sure where your project fits? Send me the details and I'll suggest where to start.</span></p>
     </section>
 
     <section id="about" class="sec">
@@ -759,11 +872,11 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
         </figure>
         <div class="about-copy rise">
           <p class="lead"><span class="th">ผมชื่อ<span class="nw">อภิภัทร สันทัสนะโชค</span> เรียกว่าคิวก็ได้ ตอนนี้เป็นนักศึกษาปี 3 สาขาวิศวกรรมระบบ<span class="nw">สมองกลฝังตัว</span> มหาวิทยาลัยบูรพา</span><span class="en" lang="en">I'm Apipath Santasnachok. Call me Q. I'm a third-year Embedded Systems Engineering student at Burapha University.</span></p>
-          <p><span class="th">ผมชอบงานที่ฮาร์ดแวร์กับซอฟต์แวร์ต้องทำงานร่วมกัน และชอบเห็นของที่ทำได้ใช้งานจริง ผมเคยอบรม ROS กับ MARA เคยแข่งหุ่นยนต์ทั้งในไทยและต่างประเทศ และตอนนี้กำลังพัฒนาแขนเทียมที่มีคนใส่อยู่จริง</span><span class="en" lang="en">I like work where hardware and software have to work together, and I like seeing what I build get used. I trained in ROS with MARA, have raced robots in Thailand and abroad, and I'm developing a prosthetic arm that people already wear.</span></p>
+          <p><span class="th">ผมชอบงานที่ฮาร์ดแวร์กับซอฟต์แวร์ต้องทำงานร่วมกัน และชอบเห็นสิ่งที่ผมสร้างถูกนำไปใช้งานจริง ผมผ่านการอบรม ROS กับ MARA รวม 60 ชั่วโมง เคยแข่งหุ่นยนต์ทั้งในไทยและไต้หวัน และตอนนี้กำลังพัฒนาแขนเทียมที่มีคนใส่ใช้งานจริงแล้ว 6 คน</span><span class="en" lang="en">I'm happiest where hardware meets software, and when what I build gets used. I've done 60 hours of ROS training at MARA, raced robots in Thailand and Taiwan, and I'm developing a prosthetic arm that six people already wear.</span></p>
           <dl class="tools">
-            <div><dt><span class="th">ไมโครคอนโทรลเลอร์</span><span class="en" lang="en">Microcontrollers</span></dt><dd>Teensy 4.x, ESP32, STM32, Arduino</dd></div>
+            <div><dt><span class="th">ไมโครคอนโทรลเลอร์</span><span class="en" lang="en">Microcontrollers</span></dt><dd><a class="xref" href="#c-abu">Teensy 4.x</a>, <a class="xref" href="#c-lt">ESP32</a>, STM32, <a class="xref" href="#j-nano">Arduino</a></dd></div>
             <div><dt><span class="th">ภาษา</span><span class="en" lang="en">Languages</span></dt><dd>C, C++, Python, JavaScript</dd></div>
-            <div><dt><span class="th">เครื่องมือ</span><span class="en" lang="en">Tools</span></dt><dd>STM32CubeIDE, arduino-cli, Node.js, SQLite, Git</dd></div>
+            <div><dt><span class="th">เครื่องมือ</span><span class="en" lang="en">Tools</span></dt><dd>STM32CubeIDE, arduino-cli, <a class="xref" href="#c-web">Node.js, SQLite</a>, Git, <a class="xref" href="#j-ros">ROS 2</a></dd></div>
             <div><dt><span class="th">กล้องและ AI</span><span class="en" lang="en">Vision and AI</span></dt><dd>YOLOv8, OAK-D (DepthAI), OpenCV</dd></div>
           </dl>
         </div>
@@ -773,21 +886,21 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
     <section id="journey" class="sec">
       <div class="j-head rise">
         <h2 class="h2"><span class="th">เส้นทาง</span><span class="en" lang="en">Journey</span></h2>
-        <p><span class="th">สามปีในมหาวิทยาลัย ตั้งแต่โปรเจกต์ปี 1 จนถึงเวทีต่างประเทศ เรียงตามเวลา</span><span class="en" lang="en">Three years at university, from first-year projects to stages abroad, in chronological order.</span></p>
+        <p><span class="th">สามปี เรียงจากเก่าไปใหม่ ตั้งแต่แขนขุดดินจากไซริงค์ ไปจนถึงไต้หวัน ญี่ปุ่น และเกาหลี ห้างานในนี้ลองเล่นได้จริง</span><span class="en" lang="en">Three years, oldest first: from a syringe-powered digger to Taiwan, Japan and Korea. Five of these you can play with.</span></p>
       </div>
       <div class="j-year">
-        <div class="j-yl" role="heading" aria-level="3"><span class="kicker"><span class="th">ปี 1</span><span class="en" lang="en">Year 1</span></span><b>2024–25</b><small><span class="th">ปีการศึกษา 2567</span><span class="en" lang="en">Academic year 2024</span></small></div>
+        <div class="j-yl" role="heading" aria-level="3"><span class="kicker"><span class="th">ปี 1</span><span class="en" lang="en">Year 1</span></span><b>2024–25</b><small><span class="th">ปีการศึกษา 2567 (2024)</span><span class="en" lang="en">Academic year 2024</span></small></div>
         <ol class="j-list">
-          <li class="j-item rise"><time><span class="th">ปี 1</span><span class="en" lang="en">Year 1</span></time><h4><span class="th">แขนขุดดินไฮดรอลิกจากไซริงค์</span><span class="en" lang="en">A syringe-powered hydraulic digger</span></h4><ul class="j-tags"><li><span class="th">โปรเจกต์ไฮดรอลิก</span><span class="en" lang="en">Hydraulics project</span></li></ul><p><span class="th">โมเดลรถขุดดินที่ขยับด้วยระบบไฮดรอลิกจากไซริงค์ ไซริงค์แต่ละคู่ต่อท่อน้ำถึงกัน กดไซริงค์ตัวคุมบนฐาน น้ำจะไปดันไซริงค์อีกตัวที่ติดอยู่บนแขน ทำให้บูม แขนตัก และบุ้งกี๋ขยับทีละข้อ ลองคุมเองด้วยแถบเลื่อน หรือกด "ตักดินให้ดู"</span><span class="en" lang="en">A model digger moved by syringe hydraulics. Each pair of syringes is joined by a water line: push the control syringe on the base and water drives the one mounted on the arm, moving the boom, stick and bucket one joint at a time. Work it with the sliders or press "Dig a scoop".</span></p><div class="j3d" data-j3d="backhoe">
+          <li class="j-item rise" id="j-digger"><time><span class="th">ปี 1</span><span class="en" lang="en">Year 1</span></time><h4><span class="th">แขนขุดดินไฮดรอลิกจากไซริงค์</span><span class="en" lang="en">A syringe-powered hydraulic digger</span></h4><ul class="j-tags"><li><span class="th">โปรเจกต์ไฮดรอลิก</span><span class="en" lang="en">Hydraulics project</span></li></ul><p><span class="th">โมเดลรถขุดดินที่ขยับด้วยระบบไฮดรอลิกจากไซริงค์ ไซริงค์แต่ละคู่ต่อท่อน้ำถึงกัน กดไซริงค์ตัวคุมบนฐาน น้ำจะไปดันไซริงค์อีกตัวที่ติดอยู่บนแขน ทำให้บูม แขนตัก และบุ้งกี๋ขยับทีละข้อ ลองคุมเองด้วยแถบเลื่อน หรือกด "ตักดินให้ดู"</span><span class="en" lang="en">A model digger moved by syringe hydraulics. Each pair of syringes is joined by a water line: push the control syringe on the base and water drives the one mounted on the arm, moving the boom, stick and bucket one joint at a time. Work it with the sliders or press "Dig a scoop".</span></p><div class="j3d" data-j3d="backhoe">
 <canvas role="img" aria-label="โมเดล 3 มิติแบบโต้ตอบ: แขนขุดดินที่ขยับด้วยไซริงค์และน้ำ" data-label-en="Interactive 3D model: a digger arm driven by syringes and water"></canvas>
 <span class="j3d-hint"><span class="th">ลากเพื่อหมุนดูรอบ ๆ</span><span class="en" lang="en">Drag to look around</span></span>
 <div class="j3d-ui"><label><i class="dot" style="background:#c89a62"></i><span class="th">หมุนฐาน</span><span class="en" lang="en">Swing</span><input type="range" min="0" max="100" value="50"></label><label><i class="dot" style="background:#3aa0ff"></i><span class="th">บูม</span><span class="en" lang="en">Boom</span><input type="range" min="0" max="100" value="50"></label><label><i class="dot" style="background:#ff5a4e"></i><span class="th">แขนตัก</span><span class="en" lang="en">Stick</span><input type="range" min="0" max="100" value="40"></label><label><i class="dot" style="background:#4fd18b"></i><span class="th">บุ้งกี๋</span><span class="en" lang="en">Bucket</span><input type="range" min="0" max="100" value="40"></label><button class="chip-btn" type="button" data-dig><span class="th">ตักดินให้ดู</span><span class="en" lang="en">Dig a scoop</span></button></div>
 <p class="j3d-fallback"><span class="th">เบราว์เซอร์นี้แสดงโมเดล 3 มิติไม่ได้</span><span class="en" lang="en">This browser can&#39;t show the 3D model.</span></p>
 </div>
 <p class="j3d-note"><span class="th">โมเดลนี้สร้างใหม่ด้วยโค้ดให้ลองเล่นบนเว็บ ไม่ได้สแกนจากชิ้นงานจริง</span><span class="en" lang="en">Rebuilt in code so you can play with it here; not a scan of the original model.</span></p></li>
-          <li class="j-item rise"><time><span class="th">ก.พ.–มี.ค. 2025</span><span class="en" lang="en">Feb–Mar 2025</span></time><h4><span class="th">รถดัมพ์ของเล่น TRUCK SERIES D917 ใน SolidWorks</span><span class="en" lang="en">TRUCK SERIES D917, a toy truck in SolidWorks</span></h4><ul class="j-tags"><li><span class="th">วิชาเขียนแบบวิศวกรรม</span><span class="en" lang="en">Engineering Drawing</span></li><li><span class="th">งานกลุ่ม 3 คน</span><span class="en" lang="en">Group of 3</span></li><li><span class="th">11 ชิ้นส่วน</span><span class="en" lang="en">11 parts</span></li></ul><p><span class="th">ถอดรถของเล่นออกทีละชิ้น วัดขนาดด้วยเวอร์เนียร์ แล้วขึ้นโมเดลใน SolidWorks ครบทั้ง 11 ชิ้น ตั้งแต่ล้อ กระทะล้อ น็อต ไปจนถึงกระบะ แล้วประกอบเป็น assembly ทำ exploded view และเขียนแบบพร้อม BOM</span><span class="en" lang="en">We took a toy truck apart, measured every piece with calipers and modelled all 11 parts in SolidWorks, from tyres, rims and bolts to the dump bed. Then we built the assembly, an exploded view and drawings with a BOM.</span></p><div class="j3d" data-j3d="truck">
+          <li class="j-item rise" id="j-truck"><time><span class="th">ก.พ.–มี.ค. 2025</span><span class="en" lang="en">Feb–Mar 2025</span></time><h4><span class="th">รถดัมพ์ของเล่น TRUCK SERIES D917 ใน SolidWorks</span><span class="en" lang="en">TRUCK SERIES D917, a toy truck in SolidWorks</span></h4><ul class="j-tags"><li><span class="th">วิชาเขียนแบบวิศวกรรม</span><span class="en" lang="en">Engineering Drawing</span></li><li><span class="th">งานกลุ่ม 3 คน</span><span class="en" lang="en">Group of 3</span></li><li><span class="th">11 ชิ้นส่วน</span><span class="en" lang="en">11 parts</span></li></ul><p><span class="th">กลุ่มเราถอดรถของเล่นออกทีละชิ้น วัดขนาดด้วยเวอร์เนียร์ แล้วขึ้นโมเดลใน SolidWorks ครบทั้ง 11 ชิ้น ตั้งแต่ล้อ กระทะล้อ น็อต ไปจนถึงกระบะ แล้วประกอบเป็น assembly ทำ exploded view และเขียนแบบพร้อม BOM</span><span class="en" lang="en">We took a toy truck apart, measured every piece with calipers and modelled all 11 parts in SolidWorks, from tyres, rims and bolts to the dump bed. Then we built the assembly, an exploded view and drawings with a BOM.</span></p><div class="j3d" data-j3d="truck">
 <canvas role="img" aria-label="โมเดล 3 มิติแบบโต้ตอบของรถดัมพ์ของเล่น แยกเป็น 11 ชิ้น" data-label-en="Interactive 3D model of the toy dump truck, in 11 parts" aria-describedby="truck-parts"></canvas>
-<span class="j3d-hint"><span class="th">ลากเพื่อหมุน · ชี้ที่ชิ้นส่วนเพื่อดูชื่อ</span><span class="en" lang="en">Drag to rotate · point at a part to see its name</span></span>
+<span class="j3d-hint"><span class="th">ลากเพื่อหมุน · <span class="h-mouse">ชี้</span><span class="h-touch">แตะ</span>ที่ชิ้นส่วนเพื่อดูชื่อ</span><span class="en" lang="en">Drag to rotate · <span class="h-mouse">point at</span><span class="h-touch">tap</span> a part to see its name</span></span>
 <span class="j3d-tip" data-tip hidden></span>
 <div class="j3d-ui"><label><span class="sr-only"><span class="th">แยกชิ้นส่วน:</span><span class="en" lang="en">Exploded view:</span></span><span class="th">ประกอบ</span><span class="en" lang="en">Assembled</span><input type="range" min="0" max="100" value="0"><span class="th">แยกชิ้น</span><span class="en" lang="en">Exploded</span></label>
 <button class="chip-btn" type="button" data-dump aria-pressed="false"><span class="th">ยกกระบะ</span><span class="en" lang="en">Tip the bed</span></button>
@@ -795,51 +908,51 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 <ol id="truck-parts" class="sr-only"><li>1 <span class="th">หลังคา</span><span class="en" lang="en">Roof</span></li><li>2 <span class="th">ล้อยาง</span><span class="en" lang="en">Tyre</span></li><li>3 <span class="th">น็อตล้อ</span><span class="en" lang="en">Wheel bolt</span></li><li>4 <span class="th">กันชนหน้า</span><span class="en" lang="en">Front bumper</span></li><li>5 <span class="th">กระทะล้อ</span><span class="en" lang="en">Rim</span></li><li>6 <span class="th">ฝาท้าย</span><span class="en" lang="en">Tailgate</span></li><li>7 <span class="th">โครงห้องคนขับ</span><span class="en" lang="en">Cab frame</span></li><li>8 <span class="th">แชสซี</span><span class="en" lang="en">Chassis</span></li><li>9 <span class="th">กระบะดัมพ์</span><span class="en" lang="en">Dump bed</span></li><li>10 <span class="th">เบาะและคอนโซล</span><span class="en" lang="en">Seat and console</span></li><li>11 <span class="th">ตัวถังล่าง</span><span class="en" lang="en">Lower body</span></li></ol>
 <p class="j3d-fallback"><span class="th">เบราว์เซอร์นี้แสดงโมเดล 3 มิติไม่ได้</span><span class="en" lang="en">This browser can't show the 3D model.</span></p>
 </div>
-<p class="j3d-note"><span class="th">ไฟล์ต้นฉบับเป็น SolidWorks ที่เปิดบนเว็บไม่ได้ ชิ้นงานด้านบนจึงขึ้นรูปใหม่ด้วยโค้ดจากรูปถ่ายและตารางชิ้นส่วนของกลุ่ม สัดส่วนใกล้เคียงแต่ไม่ใช่ขนาดจริง</span><span class="en" lang="en">The originals are SolidWorks files a browser can't open, so this is rebuilt in code from the photos and the group's parts sheet. Proportions are close but not to scale.</span></p><div class="j-strip"><button type="button" data-full="img/j/car-parts.webp"><img src="img/j/t/car-parts.webp" width="1200" height="863" loading="lazy" decoding="async" alt="ชิ้นส่วนรถของเล่นทั้ง 11 ชิ้น วางเรียงพร้อมหมายเลข" data-alt-en="All 11 parts of the toy truck laid out and numbered"></button><button type="button" data-full="img/j/car-side.webp"><img src="img/j/t/car-side.webp" width="750" height="1000" loading="lazy" decoding="async" alt="รถดัมพ์ของเล่นที่ประกอบเสร็จ มองจากด้านข้าง" data-alt-en="The assembled toy truck from the side"></button><button type="button" data-full="img/j/car-front.webp"><img src="img/j/t/car-front.webp" width="856" height="1000" loading="lazy" decoding="async" alt="ด้านหน้ารถ เห็นกันชนสีเทาและน็อตรูปกากบาท" data-alt-en="The front, with the grey bumper and cross-head screw"></button></div></li>
+<p class="j3d-note"><span class="th">ไฟล์ต้นฉบับเป็น SolidWorks ที่เปิดบนเว็บไม่ได้ ชิ้นงานด้านบนจึงสร้างขึ้นใหม่ด้วยโค้ดจากรูปถ่ายและตารางชิ้นส่วนของกลุ่ม สัดส่วนใกล้เคียงแต่ไม่ใช่ขนาดจริง</span><span class="en" lang="en">The originals are SolidWorks files a browser can't open, so this is rebuilt in code from the photos and the group's parts sheet. Proportions are close but not to scale.</span></p><div class="j-strip"><button type="button" data-full="img/j/car-parts.webp"><img src="img/j/t/car-parts.webp" width="1200" height="863" loading="lazy" decoding="async" alt="ชิ้นส่วนรถของเล่นทั้ง 11 ชิ้น วางเรียงพร้อมหมายเลข" data-alt-en="All 11 parts of the toy truck laid out and numbered"></button><button type="button" data-full="img/j/car-side.webp"><img src="img/j/t/car-side.webp" width="750" height="1000" loading="lazy" decoding="async" alt="รถดัมพ์ของเล่นที่ประกอบเสร็จ มองจากด้านข้าง" data-alt-en="The assembled toy truck from the side"></button><button type="button" data-full="img/j/car-front.webp"><img src="img/j/t/car-front.webp" width="856" height="1000" loading="lazy" decoding="async" alt="ด้านหน้ารถ เห็นกันชนสีเทาและน็อตรูปกากบาท" data-alt-en="The front, with the grey bumper and cross-head screw"></button></div></li>
           <li class="j-item rise"><time><span class="th">เม.ย. 2025</span><span class="en" lang="en">Apr 2025</span></time><h4><span class="th">ไปดูสนาม ABU Robocon 2025</span><span class="en" lang="en">Watching ABU Robocon 2025 at the venue</span></h4><ul class="j-tags"><li><span class="th">ผู้สังเกตการณ์</span><span class="en" lang="en">Observer</span></li></ul><p><span class="th">ปีนั้นผมยังไม่ได้อยู่ในทีม ABU แต่ก็ไปที่สนามเพื่อดูบรรยากาศจริง ดูว่าทีมชั่งน้ำหนักหุ่นกันอย่างไร และเซตอัปหุ่นก่อนลงแข่งอย่างไร สิ่งที่เห็นวันนั้นได้ใช้จริงตอนสร้างหุ่นของตัวเองในปีถัดมา</span><span class="en" lang="en">I wasn't on an ABU team yet, so I went to the venue to see the real thing: how teams weigh in their robots and set them up before a match. I put what I saw to use when I built my own robot the next year.</span></p><div class="j-strip tall"><button type="button" data-full="img/j/abu25-a.webp"><img src="img/j/t/abu25-a.webp" width="750" height="1000" loading="lazy" decoding="async" alt="หุ่นยิงลูกบาสสองตัวของทีมหนึ่ง จอดอยู่ข้างสนาม ABU Robocon 2025" data-alt-en="Two basketball robots parked beside the ABU Robocon 2025 field"></button><button type="button" data-full="img/j/abu25-b.webp"><img src="img/j/t/abu25-b.webp" width="750" height="1000" loading="lazy" decoding="async" alt="ทีมกำลังเซตอัปหุ่นในพื้นที่เตรียมหุ่น" data-alt-en="A team setting up its robot in the pit"></button><button type="button" data-full="img/j/abu25-c.webp"><img src="img/j/t/abu25-c.webp" width="750" height="1000" loading="lazy" decoding="async" alt="หุ่นยืนรอบนสนามแข่ง มีลูกบาสวางอยู่รอบ ๆ" data-alt-en="A robot on the field with basketballs around it"></button></div></li>
         </ol>
       </div>
       <div class="j-year">
-        <div class="j-yl" role="heading" aria-level="3"><span class="kicker"><span class="th">ปี 2</span><span class="en" lang="en">Year 2</span></span><b>2025–26</b><small><span class="th">ปีการศึกษา 2568</span><span class="en" lang="en">Academic year 2025</span></small></div>
+        <div class="j-yl" role="heading" aria-level="3"><span class="kicker"><span class="th">ปี 2</span><span class="en" lang="en">Year 2</span></span><b>2025–26</b><small><span class="th">ปีการศึกษา 2568 (2025)</span><span class="en" lang="en">Academic year 2025</span></small></div>
         <ol class="j-list">
-          <li class="j-item rise"><time><span class="th">พ.ค.–มิ.ย. 2025</span><span class="en" lang="en">May–Jun 2025</span></time><h4><span class="th">Startup Thailand League 2025 เวทีพิตช์ครั้งแรก</span><span class="en" lang="en">Startup Thailand League 2025, my first pitch</span></h4><ul class="j-tags"><li><span class="th">ทีม Mini moo</span><span class="en" lang="en">Team Mini moo</span></li><li class="win"><span class="th">รองชนะเลิศอันดับ 2 รอบมหาวิทยาลัย</span><span class="en" lang="en">3rd place, university round</span></li><li class="win"><span class="th">ผ่านเข้ารอบ Regional</span><span class="en" lang="en">Reached the Regional round</span></li></ul><p><span class="th">ขึ้นเวทีพิตช์ครั้งแรกในชีวิต ทีมได้รองชนะเลิศอันดับ 2 ในรอบมหาวิทยาลัยบูรพา และได้ไปต่อในรอบ Regional Pitching</span><span class="en" lang="en">My first time on a pitching stage. Our team took third place in the Burapha University round and went on to the Regional Pitching round.</span></p><div class="j-strip"><button type="button" data-full="img/j/stl-pitch.webp"><img src="img/j/t/stl-pitch.webp" width="784" height="523" loading="lazy" decoding="async" alt="อภิภัทรถือไมโครโฟนพิตช์บนเวที Startup Thailand League" data-alt-en="Apipath pitching with a microphone at Startup Thailand League"></button><button type="button" data-full="img/j/stl-award.webp"><img src="img/j/t/stl-award.webp" width="1200" height="675" loading="lazy" decoding="async" alt="ทีม Mini moo รับรางวัลรองชนะเลิศอันดับ 2 บนเวที" data-alt-en="Team Mini moo receiving the third-place award on stage"></button><button class="cert" type="button" data-full="img/j/stl-cert.webp"><img src="img/j/t/stl-cert.webp" width="1200" height="848" loading="lazy" decoding="async" alt="เกียรติบัตร Regional Pitching Startup Thailand League 2025 ทีม Mini moo" data-alt-en="Regional Pitching certificate, Startup Thailand League 2025, Team Mini moo"></button></div></li>
-          <li class="j-item rise"><time><span class="th">7–11 มิ.ย. 2025</span><span class="en" lang="en">7–11 Jun 2025</span></time><h4><span class="th">Pitch Your IP, Power Your Future</span><span class="en" lang="en">Pitch Your IP, Power Your Future</span></h4><ul class="j-tags"><li class="win"><span class="th">ชนะเลิศ</span><span class="en" lang="en">1st place</span></li><li><span class="th">MIONEX</span><span class="en" lang="en">MIONEX</span></li></ul><p><span class="th">ค่ายบ่มเพาะห้าวันสำหรับต่อยอดผลงานวิจัยเป็นธุรกิจ ผมพัฒนาแผนธุรกิจของ MIONEX กับพี่เลี้ยง แล้วขึ้นพิตช์ในวันสุดท้าย ได้รางวัลชนะเลิศ</span><span class="en" lang="en">A five-day incubation camp on turning research into a business. I worked on the MIONEX business plan with mentors, pitched on the last day and won first place.</span></p><div class="j-strip"><button type="button" data-full="img/j/pyip-stage.webp"><img src="img/j/t/pyip-stage.webp" width="1200" height="675" loading="lazy" decoding="async" alt="อภิภัทรพิตช์บนเวที Pitch Your IP หน้าจอใหญ่ที่เขียนว่า CHANCE" data-alt-en="Apipath pitching at Pitch Your IP in front of a screen reading CHANCE"></button><button type="button" data-full="img/j/pyip-work.webp"><img src="img/j/t/pyip-work.webp" width="1080" height="720" loading="lazy" decoding="async" alt="อภิภัทรช่วยเพื่อนร่วมทีมดูงานบนแล็ปท็อประหว่างเวิร์กช็อป" data-alt-en="Apipath helping a teammate at a laptop during a workshop"></button><button type="button" data-full="img/j/pyip-group.webp"><img src="img/j/t/pyip-group.webp" width="1200" height="800" loading="lazy" decoding="async" alt="ผู้เข้าร่วมและทีมงาน Pitch Your IP ถ่ายรูปรวมหน้าเวที" data-alt-en="Pitch Your IP participants and staff in a group photo"></button></div></li>
-          <li class="j-item rise"><time><span class="th">ตั้งแต่ ก.ค. 2025</span><span class="en" lang="en">From Jul 2025</span></time><h4><span class="th">ผู้ช่วยสอนที่ Appa Camp</span><span class="en" lang="en">Teaching assistant at Appa Camp</span></h4><ul class="j-tags"><li><span class="th">TA</span><span class="en" lang="en">TA</span></li></ul><p><span class="th">ไปเป็นผู้ช่วยสอนให้ <span class="nw">ผศ.ดร.พิศักดิ์ เจิมประยงค์</span> ที่ Appa Camp หลายรุ่น ช่วยน้อง ๆ ต่อวงจรบนเบรดบอร์ด เขียนโค้ด และแก้ปัญหาตอนวงจรไม่ทำงาน</span><span class="en" lang="en">I assist Asst. Prof. Dr. Pisak Chermprayong across several Appa Camp cohorts, helping students wire breadboards, write code and debug when things don't work.</span></p><div class="j-strip one"><button type="button" data-full="img/j/appa.webp"><img src="img/j/t/appa.webp" width="1200" height="1200" loading="lazy" decoding="async" alt="อภิภัทรก้มดูหน้าจอช่วยนักเรียนที่ Appa Camp" data-alt-en="Apipath leaning in to help a student at Appa Camp"></button></div></li>
-          <li class="j-item rise"><time><span class="th">ส.ค. 2025</span><span class="en" lang="en">Aug 2025</span></time><h4><span class="th">TMIRC ไต้หวัน ตัวแทนประเทศไทย</span><span class="en" lang="en">Representing Thailand at TMIRC, Taiwan</span></h4><ul class="j-tags"><li><span class="th">Robotrace</span><span class="en" lang="en">Robotrace</span></li><li><span class="th">ไปกับรุ่นพี่</span><span class="en" lang="en">With a senior</span></li></ul><p><span class="th">ไปแข่ง Taiwan Micromouse and Intelligent Mobile Robot Contest ในนามประเทศไทยกับรุ่นพี่ ในประเภท Robotrace ซึ่งเป็นหุ่นวิ่งตามเส้นที่ต้องจำเส้นทางก่อน แล้วจึงวิ่งรอบทำเวลา</span><span class="en" lang="en">With a senior student, I represented Thailand at the Taiwan Micromouse and Intelligent Mobile Robot Contest (TMIRC) in the Robotrace event, where the robot learns the course on one run and then races it.</span></p><div class="j-strip one"><button type="button" data-full="img/j/robotracer.webp"><img src="img/j/t/robotracer.webp" width="1200" height="900" loading="lazy" decoding="async" alt="ทีมไทยสามคนยืนหน้าเวที TMIRC 2025 ถือป้ายหมายเลข 114" data-alt-en="Team Thailand, three people, in front of the TMIRC 2025 stage holding number 114"></button></div></li>
-          <li class="j-item rise"><time><span class="th">ต.ค. 2025 และ ม.ค. 2026</span><span class="en" lang="en">Oct 2025 and Jan 2026</span></time><h4><span class="th">สองหลักสูตร ROS ที่ MARA</span><span class="en" lang="en">Two ROS courses at MARA</span></h4><ul class="j-tags"><li><span class="th">Autonomous Mobile Robot <span class="nw">30 ชม.</span></span><span class="en" lang="en">Autonomous Mobile Robot, 30 h</span></li><li><span class="th">Basic ROS <span class="nw">30 ชม.</span></span><span class="en" lang="en">Basic ROS, 30 h</span></li></ul><p><span class="th">เรียนหุ่นยนต์เคลื่อนที่อัตโนมัติ (20–24 <span class="nw">ต.ค. 2025</span>) และการใช้ ROS ขั้นพื้นฐาน (10–18 <span class="nw">ม.ค. 2026</span>) ที่สถาบันพัฒนาบุคลากรสาขาเทคโนโลยีการผลิตอัตโนมัติและหุ่นยนต์ (MARA) กรมพัฒนาฝีมือแรงงาน ได้วุฒิบัตรทั้งสองหลักสูตร</span><span class="en" lang="en">I took Autonomous Mobile Robot (20–24 Oct 2025) and Basic ROS (10–18 Jan 2026) at the Manufacturing Automation and Robotics Academy (MARA), Department of Skill Development, and earned the certificate for both.</span></p><div class="j-strip tall"><button class="cert" type="button" data-full="img/j/cert-mara-amr.webp"><img src="img/j/t/cert-mara-amr.webp" width="849" height="1200" loading="lazy" decoding="async" alt="วุฒิบัตรหลักสูตรหุ่นยนต์เคลื่อนที่อัตโนมัติ 30 ชั่วโมง กรมพัฒนาฝีมือแรงงาน" data-alt-en="Certificate, Autonomous Mobile Robot, 30 hours, Department of Skill Development"></button><button class="cert" type="button" data-full="img/j/cert-mara-ros.webp"><img src="img/j/t/cert-mara-ros.webp" width="849" height="1200" loading="lazy" decoding="async" alt="วุฒิบัตรหลักสูตรการใช้ ROS ขั้นพื้นฐาน 30 ชั่วโมง กรมพัฒนาฝีมือแรงงาน" data-alt-en="Certificate, Basic ROS, 30 hours, Department of Skill Development"></button></div></li>
-          <li class="j-item rise"><time><span class="th">ก.พ. 2026</span><span class="en" lang="en">Feb 2026</span></time><h4><span class="th">บอร์ด Arduino Nano ที่ออกแบบเอง</span><span class="en" lang="en">My own Arduino Nano board</span></h4><ul class="j-tags"><li><span class="th">EasyEDA</span><span class="en" lang="en">EasyEDA</span></li><li><span class="th">ATmega328P</span><span class="en" lang="en">ATmega328P</span></li><li><span class="th">CH340G + USB-C</span><span class="en" lang="en">CH340G + USB-C</span></li></ul><p><span class="th">ออกแบบบอร์ดโคลน Arduino Nano เป็นงานในวิชาเรียน ตั้งแต่วงจร ATmega328P กับออสซิลเลเตอร์ <span class="nw">16 MHz</span> ตัวแปลง USB CH340G ช่อง USB-C และเรกูเลเตอร์ <span class="nw">3.3 V</span> ไปจนถึงวางลายวงจรสองชั้นและดูโมเดล 3 มิติก่อนสั่งผลิต</span><span class="en" lang="en">A Nano clone for a class: ATmega328P with a 16 MHz oscillator, CH340G USB bridge, USB-C and a 3.3 V regulator, laid out on two layers and checked in 3D before ordering.</span></p><div class="j-strip tall"><button type="button" data-full="img/j/nano-layout.webp"><img src="img/j/t/nano-layout.webp" width="750" height="1000" loading="lazy" decoding="async" alt="ลายวงจรสองชั้นของบอร์ด Nano clone ใน EasyEDA" data-alt-en="The two-layer Nano clone layout in EasyEDA"></button><button type="button" data-full="img/j/nano-3d.webp"><img src="img/j/t/nano-3d.webp" width="750" height="1000" loading="lazy" decoding="async" alt="มุมมอง 3 มิติของบอร์ด Nano clone สีน้ำเงิน" data-alt-en="3D view of the blue Nano clone board"></button></div></li>
-          <li class="j-item rise"><time><span class="th">พ.ค.–มิ.ย. 2026</span><span class="en" lang="en">May–Jun 2026</span></time><h4><span class="th">ABU Robocon 2026 ลงแข่งกับทีม</span><span class="en" lang="en">ABU Robocon 2026, on the team</span></h4><ul class="j-tags"><li><span class="th">ซอฟต์แวร์หุ่น + คอนโทรลเลอร์</span><span class="en" lang="en">Robot + controller software</span></li><li><span class="th">เดินสายไฟ</span><span class="en" lang="en">Wiring</span></li><li class="win"><span class="th">อันดับ 8 กลุ่มมหาวิทยาลัย</span><span class="en" lang="en">8th among universities</span></li><li class="win"><span class="th">อันดับ 13 ของประเทศ</span><span class="en" lang="en">13th nationally</span></li></ul><p><span class="th">ปีนี้ทีมมีหุ่นสองตัว ผมรับผิดชอบหนึ่งตัว เขียนซอฟต์แวร์ทั้งหมดของหุ่นกับคอนโทรลเลอร์ และเดินสายไฟเองเกือบทั้งหมด ส่วนตัวหุ่นสร้างร่วมกับทีม เราไปถึงรอบชิงแชมป์ประเทศไทย ได้อันดับ 8 ในกลุ่มมหาวิทยาลัย และอันดับ 13 ของประเทศ รายละเอียดโปรโตคอลอยู่ในการ์ดผลงานด้านบน</span><span class="en" lang="en">The team fielded two robots and one was mine: I wrote all the software for it and its controller, did most of the wiring, and built the robot itself together with the team. We made the Thailand championship round, finishing 8th among universities and 13th nationally. The radio protocol is described in the Work section above.</span></p><div class="j3d sim" data-j3d="abu">
-<canvas tabindex="0" role="img" aria-label="ตัวจำลองหุ่น ABU มุมบน แสดงล้อเมคานัมทั้งสี่และทิศที่ล็อกไว้" data-label-en="Top-down simulator of the ABU robot showing its four mecanum wheels and locked heading"></canvas>
-<span class="j3d-hint"><span class="th">จอยซ้ายขับ จอยขวาหมุน · ใช้คีย์บอร์ด: คลิกสนามแล้วกด WASD กับ Q/E</span><span class="en" lang="en">Left stick drives, right stick turns · keyboard: click the field, then WASD and Q/E</span></span>
-<div class="j3d-ui sim-ui"><div class="pad" data-pad="L" aria-hidden="true"><i></i></div><div class="sim-btns"><button class="chip-btn" type="button" data-act="speed">R1 <b data-v>FULL 100%</b></button><button class="chip-btn" type="button" data-act="creep" aria-pressed="false">SW_R <span class="th">คลาน 10%</span><span class="en" lang="en">creep 10%</span></button><button class="chip-btn" type="button" data-act="phase">MODE <b data-v>MARTIAL ×1.0</b></button><button class="chip-btn" type="button" data-act="heading">SW_L <span class="th">ตั้งทิศใหม่</span><span class="en" lang="en">reset heading</span></button><button class="chip-btn" type="button" data-act="bump"><span class="th">ชนหุ่น</span><span class="en" lang="en">Bump it</span></button><button class="chip-btn" type="button" data-act="link" aria-pressed="false"><span class="th">ตัดสัญญาณวิทยุ</span><span class="en" lang="en">Cut the radio</span></button></div><div class="pad" data-pad="R" aria-hidden="true"><i></i></div></div>
-<div class="sim-io"><div class="sim-frame" data-frame aria-hidden="true"></div><pre class="sim-term short" data-log></pre></div>
+          <li class="j-item rise" id="j-stl"><time><span class="th">พ.ค.–มิ.ย. 2025</span><span class="en" lang="en">May–Jun 2025</span></time><h4><span class="th">Startup Thailand League 2025 เวทีพิตช์ครั้งแรก</span><span class="en" lang="en">Startup Thailand League 2025, my first pitch</span></h4><ul class="j-tags"><li><span class="th">ทีม Mini moo</span><span class="en" lang="en">Team Mini moo</span></li><li class="win"><span class="th">รองชนะเลิศอันดับ 2 รอบมหาวิทยาลัย</span><span class="en" lang="en">3rd place, university round</span></li><li class="win"><span class="th">ผ่านเข้ารอบภูมิภาค (Regional)</span><span class="en" lang="en">Reached the Regional Pitching round</span></li></ul><p><span class="th">ขึ้นเวทีพิตช์ครั้งแรกในชีวิต ทีมได้รองชนะเลิศอันดับ 2 ในรอบมหาวิทยาลัยบูรพา และได้ไปต่อในรอบ Regional Pitching</span><span class="en" lang="en">My first time on a pitching stage. Our team took third place in the Burapha University round and went on to the Regional Pitching round.</span></p><div class="j-strip"><button type="button" data-full="img/j/stl-pitch.webp"><img src="img/j/t/stl-pitch.webp" width="784" height="523" loading="lazy" decoding="async" alt="อภิภัทรถือไมโครโฟนพิตช์บนเวที Startup Thailand League" data-alt-en="Apipath pitching with a microphone at Startup Thailand League"></button><button type="button" data-full="img/j/stl-award.webp"><img src="img/j/t/stl-award.webp" width="1200" height="675" loading="lazy" decoding="async" alt="ทีม Mini moo รับรางวัลรองชนะเลิศอันดับ 2 บนเวที" data-alt-en="Team Mini moo receiving the third-place award on stage"></button><button class="cert" type="button" data-full="img/j/stl-cert.webp"><img src="img/j/t/stl-cert.webp" width="1200" height="848" loading="lazy" decoding="async" alt="เกียรติบัตร Regional Pitching Startup Thailand League 2025 ทีม Mini moo" data-alt-en="Regional Pitching certificate, Startup Thailand League 2025, Team Mini moo"></button></div></li>
+          <li class="j-item rise" id="j-pyip"><time><span class="th">7–11 มิ.ย. 2025</span><span class="en" lang="en">7–11 Jun 2025</span></time><h4><span class="th">Pitch Your IP, Power Your Future</span><span class="en" lang="en">Pitch Your IP, Power Your Future</span></h4><ul class="j-tags"><li class="win"><span class="th">ชนะเลิศ</span><span class="en" lang="en">1st place</span></li><li><span class="th">MIONEX</span><span class="en" lang="en">MIONEX</span></li></ul><p><span class="th">ค่ายบ่มเพาะห้าวันสำหรับต่อยอดผลงานวิจัยเป็นธุรกิจ ผมพัฒนาแผนธุรกิจของ MIONEX กับพี่เลี้ยง แล้วขึ้นพิตช์ในวันสุดท้าย ได้รางวัลชนะเลิศ</span><span class="en" lang="en">A five-day incubation camp on turning research into a business. I worked on the MIONEX business plan with mentors, pitched on the last day and won first place.</span></p><div class="j-strip"><button type="button" data-full="img/j/pyip-stage.webp"><img src="img/j/t/pyip-stage.webp" width="1200" height="675" loading="lazy" decoding="async" alt="อภิภัทรพิตช์บนเวที Pitch Your IP หน้าจอใหญ่ที่เขียนว่า CHANCE" data-alt-en="Apipath pitching at Pitch Your IP in front of a screen reading CHANCE"></button><button type="button" data-full="img/j/pyip-work.webp"><img src="img/j/t/pyip-work.webp" width="1080" height="720" loading="lazy" decoding="async" alt="อภิภัทรช่วยเพื่อนร่วมทีมดูงานบนแล็ปท็อประหว่างเวิร์กช็อป" data-alt-en="Apipath helping a teammate at a laptop during a workshop"></button><button type="button" data-full="img/j/pyip-group.webp"><img src="img/j/t/pyip-group.webp" width="1200" height="800" loading="lazy" decoding="async" alt="ผู้เข้าร่วมและทีมงาน Pitch Your IP ถ่ายรูปรวมหน้าเวที" data-alt-en="Pitch Your IP participants and staff in a group photo"></button></div></li>
+          <li class="j-item rise"><time><span class="th">ตั้งแต่ ก.ค. 2025</span><span class="en" lang="en">From Jul 2025</span></time><h4><span class="th">ผู้ช่วยสอนที่ Appa Camp</span><span class="en" lang="en">Teaching assistant at Appa Camp</span></h4><ul class="j-tags"><li><span class="th">TA</span><span class="en" lang="en">TA</span></li></ul><p><span class="th">เป็นผู้ช่วยสอนให้ <span class="nw">ผศ.ดร.พิศักดิ์ เจิมประยงค์</span> ที่ Appa Camp มาแล้วหลายรุ่น ช่วยน้อง ๆ ต่อวงจรบนเบรดบอร์ด เขียนโค้ด และแก้ปัญหาตอนวงจรไม่ทำงาน</span><span class="en" lang="en">I assist Asst. Prof. Dr. Pisak Chermprayong across several Appa Camp cohorts, helping students wire breadboards, write code and debug when things don't work.</span></p><div class="j-strip one"><button type="button" data-full="img/j/appa.webp"><img src="img/j/t/appa.webp" width="1200" height="1200" loading="lazy" decoding="async" alt="อภิภัทรก้มดูหน้าจอช่วยนักเรียนที่ Appa Camp" data-alt-en="Apipath leaning in to help a student at Appa Camp"></button></div></li>
+          <li class="j-item rise" id="j-tmirc"><time><span class="th">ส.ค. 2025</span><span class="en" lang="en">Aug 2025</span></time><h4><span class="th">TMIRC ไต้หวัน ตัวแทนประเทศไทย</span><span class="en" lang="en">Representing Thailand at TMIRC, Taiwan</span></h4><ul class="j-tags"><li><span class="th">Robotrace</span><span class="en" lang="en">Robotrace</span></li><li><span class="th">ไปกับรุ่นพี่</span><span class="en" lang="en">With a senior</span></li></ul><p><span class="th">ไปแข่ง Taiwan Micromouse and Intelligent Mobile Robot Contest ในนามประเทศไทยกับรุ่นพี่ ในประเภท Robotrace ซึ่งเป็นหุ่นวิ่งตามเส้นที่ต้องจำเส้นทางก่อน แล้วจึงวิ่งรอบทำเวลา</span><span class="en" lang="en">With a senior student, I represented Thailand at the Taiwan Micromouse and Intelligent Mobile Robot Contest (TMIRC) in the Robotrace event, where the robot learns the course on one run and then races it.</span></p><div class="j-strip one"><button type="button" data-full="img/j/robotracer.webp"><img src="img/j/t/robotracer.webp" width="1200" height="900" loading="lazy" decoding="async" alt="ทีมไทยสามคนยืนหน้าเวที TMIRC 2025 ถือป้ายหมายเลข 114" data-alt-en="Team Thailand, three people, in front of the TMIRC 2025 stage holding number 114"></button></div></li>
+          <li class="j-item rise" id="j-mara"><time><span class="th">ต.ค. 2025 และ ม.ค. 2026</span><span class="en" lang="en">Oct 2025 and Jan 2026</span></time><h4><span class="th">สองหลักสูตร ROS ที่ MARA</span><span class="en" lang="en">Two ROS courses at MARA</span></h4><ul class="j-tags"><li><span class="th">Autonomous Mobile Robot <span class="nw">30 ชม.</span></span><span class="en" lang="en">Autonomous Mobile Robot, 30 h</span></li><li><span class="th">Basic ROS <span class="nw">30 ชม.</span></span><span class="en" lang="en">Basic ROS, 30 h</span></li></ul><p><span class="th">เรียนหุ่นยนต์เคลื่อนที่อัตโนมัติ (20–24 <span class="nw">ต.ค. 2025</span>) และการใช้ ROS ขั้นพื้นฐาน (10–18 <span class="nw">ม.ค. 2026</span>) ที่สถาบันพัฒนาบุคลากรสาขาเทคโนโลยีการผลิตอัตโนมัติและหุ่นยนต์ (MARA) กรมพัฒนาฝีมือแรงงาน ได้วุฒิบัตรทั้งสองหลักสูตร</span><span class="en" lang="en">I took Autonomous Mobile Robot (20–24 Oct 2025) and Basic ROS (10–18 Jan 2026) at the Manufacturing Automation and Robotics Academy (MARA), Department of Skill Development, and earned the certificate for both.</span></p><div class="j-strip tall"><button class="cert" type="button" data-full="img/j/cert-mara-amr.webp"><img src="img/j/t/cert-mara-amr.webp" width="849" height="1200" loading="lazy" decoding="async" alt="วุฒิบัตรหลักสูตรหุ่นยนต์เคลื่อนที่อัตโนมัติ 30 ชั่วโมง กรมพัฒนาฝีมือแรงงาน" data-alt-en="Certificate, Autonomous Mobile Robot, 30 hours, Department of Skill Development"></button><button class="cert" type="button" data-full="img/j/cert-mara-ros.webp"><img src="img/j/t/cert-mara-ros.webp" width="849" height="1200" loading="lazy" decoding="async" alt="วุฒิบัตรหลักสูตรการใช้ ROS ขั้นพื้นฐาน 30 ชั่วโมง กรมพัฒนาฝีมือแรงงาน" data-alt-en="Certificate, Basic ROS, 30 hours, Department of Skill Development"></button></div></li>
+          <li class="j-item rise" id="j-nano"><time><span class="th">ก.พ. 2026</span><span class="en" lang="en">Feb 2026</span></time><h4><span class="th">บอร์ด Arduino Nano ที่ออกแบบเอง</span><span class="en" lang="en">My own Arduino Nano board</span></h4><ul class="j-tags"><li><span class="th">EasyEDA</span><span class="en" lang="en">EasyEDA</span></li><li><span class="th">ATmega328P</span><span class="en" lang="en">ATmega328P</span></li><li><span class="th">CH340G + USB-C</span><span class="en" lang="en">CH340G + USB-C</span></li></ul><p><span class="th">ออกแบบบอร์ดโคลน Arduino Nano เป็นงานของรายวิชา ตั้งแต่วงจร ATmega328P กับออสซิลเลเตอร์ <span class="nw">16 MHz</span> ตัวแปลง USB CH340G ช่อง USB-C และเรกูเลเตอร์ <span class="nw">3.3 V</span> ไปจนถึงวางลายวงจรสองชั้นและดูโมเดล 3 มิติก่อนสั่งผลิต</span><span class="en" lang="en">A Nano clone for a class: ATmega328P with a 16 MHz oscillator, CH340G USB bridge, USB-C and a 3.3 V regulator, laid out on two layers and checked in 3D before ordering.</span></p><div class="j-strip tall"><button type="button" data-full="img/j/nano-layout.webp"><img src="img/j/t/nano-layout.webp" width="750" height="1000" loading="lazy" decoding="async" alt="ลายวงจรสองชั้นของบอร์ด Nano clone ใน EasyEDA" data-alt-en="The two-layer Nano clone layout in EasyEDA"></button><button type="button" data-full="img/j/nano-3d.webp"><img src="img/j/t/nano-3d.webp" width="750" height="1000" loading="lazy" decoding="async" alt="มุมมอง 3 มิติของบอร์ด Nano clone สีน้ำเงิน" data-alt-en="3D view of the blue Nano clone board"></button></div></li>
+          <li class="j-item rise" id="j-abu"><time><span class="th">พ.ค.–มิ.ย. 2026</span><span class="en" lang="en">May–Jun 2026</span></time><h4><span class="th">ABU Robocon 2026 ลงสนามจริงกับทีม</span><span class="en" lang="en">ABU Robocon 2026, on the team</span></h4><ul class="j-tags"><li><span class="th">ซอฟต์แวร์หุ่น + คอนโทรลเลอร์</span><span class="en" lang="en">Robot + controller software</span></li><li><span class="th">เดินสายไฟ</span><span class="en" lang="en">Wiring</span></li><li class="win"><span class="th">อันดับ 8 กลุ่มมหาวิทยาลัย</span><span class="en" lang="en">8th among universities</span></li><li class="win"><span class="th">อันดับ 13 ของประเทศ</span><span class="en" lang="en">13th nationally</span></li></ul><p><span class="th">ปีนี้ทีมมีหุ่นสองตัว ผมรับผิดชอบหนึ่งตัว เขียนซอฟต์แวร์ทั้งหมดของหุ่นกับคอนโทรลเลอร์ และเดินสายไฟเองเกือบทั้งหมด ส่วนตัวหุ่นสร้างร่วมกับทีม เราไปถึงรอบชิงแชมป์ประเทศไทย ได้อันดับ 8 ในกลุ่มมหาวิทยาลัย และอันดับ 13 ของประเทศ รายละเอียดโปรโตคอลอยู่ในการ์ดผลงานด้านบน</span><span class="en" lang="en">The team fielded two robots and one was mine: I wrote all the software for it and its controller, did most of the wiring, and built the robot itself together with the team. We made the Thailand championship round, finishing 8th among universities and 13th nationally. The radio protocol is described in the Work section above.</span></p><div class="j3d sim" data-j3d="abu">
+<canvas tabindex="0" role="application" aria-roledescription="simulator" aria-describedby="abu-keys" aria-label="ตัวจำลองหุ่น ABU มุมบน แสดงล้อเมคานัมทั้งสี่และทิศที่ล็อกไว้" data-label-en="Top-down simulator of the ABU robot showing its four mecanum wheels and locked heading"></canvas>
+<span class="j3d-hint" id="abu-keys"><span class="th">จอยซ้ายขับ จอยขวาหมุน<span class="h-mouse"> · คีย์บอร์ด: คลิกหรือกด Tab มาที่สนาม แล้วกด WASD หรือลูกศร, Q/E หมุน</span></span><span class="en" lang="en">Left stick drives, right stick turns<span class="h-mouse"> · keyboard: click or Tab to the field, then WASD or arrows, Q/E to turn</span></span></span>
+<div class="j3d-ui sim-ui"><div class="pad" data-pad="L" aria-hidden="true"><i></i></div><div class="sim-btns"><button class="chip-btn" type="button" data-act="speed">R1 <b data-v>FULL 100%</b></button><button class="chip-btn" type="button" data-act="creep" aria-pressed="false">SW_R <span class="th">คลาน 10%</span><span class="en" lang="en">creep 10%</span></button><button class="chip-btn" type="button" data-act="phase">MODE <b data-v>MARTIAL ×1.0</b></button><button class="chip-btn" type="button" data-act="heading">SW_L <span class="th">ตั้งทิศใหม่</span><span class="en" lang="en">reset heading</span></button><button class="chip-btn" type="button" data-act="bump"><span class="th">ผลักหุ่น</span><span class="en" lang="en">Bump it</span></button><button class="chip-btn" type="button" data-act="link" aria-pressed="false"><span class="th">ตัดสัญญาณวิทยุ</span><span class="en" lang="en">Cut the radio</span></button></div><div class="pad" data-pad="R" aria-hidden="true"><i></i></div></div>
+<div class="sim-io"><div class="sim-frame" data-frame aria-hidden="true"></div><pre class="sim-term short" data-log tabindex="0" aria-label="เทอร์มินัลของตัวจำลอง" data-label-en="Simulator terminal"></pre><p class="sr-only" role="status" data-say></p></div>
 <p class="j3d-fallback"><span class="th">เบราว์เซอร์นี้เปิดตัวจำลองไม่ได้</span><span class="en" lang="en">This browser can&#39;t run the simulator.</span></p>
 </div>
-<p class="j3d-note"><span class="th">ตรรกะในตัวจำลองนี้พอร์ตมาบรรทัดต่อบรรทัดจาก Controller_v7 กับ robot_firmware_v6 ที่ผมเขียน ได้แก่ การคูณความเร็วตามโหมด การมิกซ์ล้อเมคานัม การไล่ความเร็วล้อ การล็อกทิศด้วยไจโร (Kp 0.8, Kd 0.02) เฟลเซฟสองขั้น และ payload วิทยุ 10 ไบต์พร้อม CRC-8 ด้านบน ลองกด "ชนหุ่น" แล้วดูหุ่นหมุนกลับเข้าทิศเดิมเอง ส่วนน้ำหนักและความเร็วสูงสุดของหุ่นเป็นค่าสมมติ</span><span class="en" lang="en">The logic here is ported line by line from my Controller_v7 and robot_firmware_v6: speed modes, mecanum mixing, wheel ramping, the gyro heading lock (Kp 0.8, Kd 0.02), the two-phase failsafe and the 10-byte radio payload with its CRC-8, shown above. Press "Bump it" and watch the robot turn itself back. The robot&#39;s mass and top speed are made up.</span></p><div class="j-strip"><button type="button" data-full="img/abu-pit-1280.webp"><img src="img/abu-pit-800.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ทีม ABU Robocon ช่วยกันประกอบหุ่นในพื้นที่เตรียมหุ่นก่อนลงแข่ง" data-alt-en="The ABU Robocon team assembling robots in the pit before a match"></button><button class="cert" type="button" data-full="img/j/cert-abu26.webp"><img src="img/j/t/cert-abu26.webp" width="1200" height="848" loading="lazy" decoding="async" alt="เกียรติบัตรการแข่งขันหุ่นยนต์ ส.ส.ท. ชิงแชมป์ประเทศไทย 2569 เกม Kung Fu Quest ทีม B1-U2 มหาวิทยาลัยบูรพา" data-alt-en="Certificate, TPA Robot Contest Thailand Championship 2026, Kung Fu Quest, team B1-U2, Burapha University"></button></div></li>
-          <li class="j-item rise"><time><span class="th">มิ.ย. 2026</span><span class="en" lang="en">Jun 2026</span></time><h4><span class="th">BATLY R1: หุ่น AMR นำทางเองด้วย ROS 2</span><span class="en" lang="en">BATLY R1: autonomous navigation with ROS 2</span></h4><ul class="j-tags"><li>ROS 2 Jazzy</li><li>SLAM · Nav2 · AMCL</li><li><span class="th">ภาคฤดูร้อน ปี 2</span><span class="en" lang="en">Year 2 summer term</span></li></ul><p><span class="th">มินิโปรเจกต์วิชาหุ่นยนต์ที่จำลองโรงงานสามสถานี คือ รับวัตถุดิบ ประกอบ และตรวจคุณภาพ ใช้หุ่น BATLY R1 ที่มี LiDAR RPLIDAR C1 บน Ubuntu 24.04 เริ่มจากทำ SLAM สร้างแผนที่ห้อง แล้วนำทางด้วย Nav2 กับ AMCL จากนั้นผมเขียน Python node ชื่อ loop_navigator ส่งเส้นทาง A → B → C สองรอบผ่าน action FollowWaypoints และพิมพ์ตำแหน่งจาก AMCL ทุกครั้งที่ถึงสถานี</span><span class="en" lang="en">A robotics mini project set in a mock factory with three stations: receiving, assembly and QC. On a BATLY R1 with an RPLIDAR C1 running Ubuntu 24.04, I mapped the room with SLAM and navigated it with Nav2 and AMCL. Then I wrote loop_navigator, a Python node that sends A → B → C twice through the FollowWaypoints action and prints the AMCL pose at every station.</span></p><div class="j3d sim" data-j3d="ros">
+<p class="j3d-note"><span class="th">ตรรกะในตัวจำลองนี้พอร์ตมาบรรทัดต่อบรรทัดจาก Controller_v7 กับ robot_firmware_v6 ที่ผมเขียน ได้แก่ การคูณความเร็วตามโหมด การมิกซ์ล้อเมคานัม การไล่ความเร็วล้อ การล็อกทิศด้วยไจโร (Kp 0.8, Kd 0.02) เฟลเซฟสองขั้น และ payload วิทยุ 10 ไบต์พร้อม CRC-8 ที่แสดงอยู่ด้านบน ลองกด "ผลักหุ่น" แล้วดูหุ่นหมุนกลับเข้าทิศเดิมเอง ส่วนน้ำหนักและความเร็วสูงสุดของหุ่นเป็นค่าสมมติ</span><span class="en" lang="en">The logic here is ported line by line from my Controller_v7 and robot_firmware_v6: speed modes, mecanum mixing, wheel ramping, the gyro heading lock (Kp 0.8, Kd 0.02), the two-phase failsafe and the 10-byte radio payload with its CRC-8, shown above. Press "Bump it" and watch the robot turn itself back. The robot&#39;s mass and top speed are made up.</span></p><div class="j-strip"><button type="button" data-full="img/abu-pit-1280.webp"><img src="img/abu-pit-800.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ทีม ABU Robocon ช่วยกันประกอบหุ่นในพื้นที่เตรียมหุ่นก่อนลงแข่ง" data-alt-en="The ABU Robocon team assembling robots in the pit before a match"></button><button class="cert" type="button" data-full="img/j/cert-abu26.webp"><img src="img/j/t/cert-abu26.webp" width="1200" height="848" loading="lazy" decoding="async" alt="เกียรติบัตรการแข่งขันหุ่นยนต์ ส.ส.ท. ชิงแชมป์ประเทศไทย 2569 เกม Kung Fu Quest ทีม B1-U2 มหาวิทยาลัยบูรพา" data-alt-en="Certificate, TPA Robot Contest Thailand Championship 2026, Kung Fu Quest, team B1-U2, Burapha University"></button></div></li>
+          <li class="j-item rise" id="j-ros"><time><span class="th">มิ.ย. 2026</span><span class="en" lang="en">Jun 2026</span></time><h4><span class="th">BATLY R1: หุ่น AMR นำทางเองด้วย ROS 2</span><span class="en" lang="en">BATLY R1: autonomous navigation with ROS 2</span></h4><ul class="j-tags"><li>ROS 2 Jazzy</li><li>SLAM · Nav2 · AMCL</li><li><span class="th">ภาคฤดูร้อน ปี 2</span><span class="en" lang="en">Year 2 summer term</span></li></ul><p><span class="th">มินิโปรเจกต์วิชาหุ่นยนต์ที่จำลองโรงงานสามสถานี คือ รับวัตถุดิบ ประกอบ และตรวจคุณภาพ ใช้หุ่น BATLY R1 ที่ติด RPLIDAR C1 และรัน Ubuntu 24.04 เริ่มจากทำ SLAM สร้างแผนที่ห้อง แล้วนำทางด้วย Nav2 กับ AMCL จากนั้นผมเขียน Python node ชื่อ loop_navigator ส่งเส้นทาง A → B → C สองรอบผ่าน action FollowWaypoints และพิมพ์ตำแหน่งจาก AMCL ทุกครั้งที่ถึงสถานี</span><span class="en" lang="en">A robotics mini project set in a mock factory with three stations: receiving, assembly and QC. On a BATLY R1 with an RPLIDAR C1 running Ubuntu 24.04, I mapped the room with SLAM and navigated it with Nav2 and AMCL. Then I wrote loop_navigator, a Python node that sends A → B → C twice through the FollowWaypoints action and prints the AMCL pose at every station.</span></p><div class="j3d sim" data-j3d="ros">
 <canvas role="img" aria-label="แผนที่ SLAM ของห้องทดสอบ พร้อมหุ่น สแกน LiDAR และสถานี A B C" data-label-en="SLAM map of the test room with the robot, its LiDAR scan and stations A, B and C"></canvas>
-<span class="j3d-hint"><span class="th">คลิกบนแผนที่เพื่อส่งเป้าหมายให้ Nav2</span><span class="en" lang="en">Click the map to send Nav2 a goal</span></span>
-<div class="j3d-ui"><button class="chip-btn code" type="button" data-run>ros2 run … loop_navigator</button><button class="chip-btn" type="button" data-stop>Ctrl+C</button><span class="sim-key"><i style="background:#ff5a4e"></i>LiDAR <i style="background:#4fd18b"></i><span class="th">เส้นทาง</span><span class="en" lang="en">plan</span> <i style="background:#3aa0ff"></i>AMCL</span></div>
-<pre class="sim-term" data-log></pre>
+<span class="j3d-hint"><span class="th"><span class="h-mouse">คลิก</span><span class="h-touch">แตะ</span>บนแผนที่เพื่อตั้งเป้าหมายให้หุ่น</span><span class="en" lang="en"><span class="h-mouse">Click</span><span class="h-touch">Tap</span> the map to set the robot a goal</span></span>
+<div class="j3d-ui"><button class="chip-btn code" type="button" data-run>ros2 run … loop_navigator</button><button class="chip-btn" type="button" data-stop>Ctrl+C</button><span class="goal-btns" role="group" aria-label="ส่งเป้าหมายไปยังสถานี" data-label-en="Send a goal to a station"><button class="chip-btn" type="button" data-goal="A">Goal A</button><button class="chip-btn" type="button" data-goal="B">Goal B</button><button class="chip-btn" type="button" data-goal="C">Goal C</button></span><span class="sim-key"><i style="background:#ff5a4e"></i>LiDAR <i style="background:#4fd18b"></i><span class="th">เส้นทาง</span><span class="en" lang="en">plan</span> <i style="background:#3aa0ff"></i>AMCL</span></div>
+<pre class="sim-term" data-log tabindex="0" aria-label="เทอร์มินัลของตัวจำลอง" data-label-en="Simulator terminal"></pre><p class="sr-only" role="status" data-say></p>
 <p class="j3d-fallback"><span class="th">เบราว์เซอร์นี้เปิดตัวจำลองไม่ได้</span><span class="en" lang="en">This browser can&#39;t run the simulator.</span></p>
 </div>
-<p class="j3d-note"><span class="th">แผนที่คือแผนที่ SLAM จริงที่ผมสร้าง (Apipath_map) และพิกัดสถานีมาจากโค้ดของผม แต่ไฟล์ yaml ที่บอกจุดกำเนิดกับความละเอียดไม่ได้เก็บไว้ ตำแหน่งสถานีบนแผนที่จึงเป็นค่าประมาณ ตัววางเส้นทางกับตัวควบคุมเป็นแบบย่อที่เขียนขึ้นใหม่ ไม่ใช่ Nav2 ตัวจริง</span><span class="en" lang="en">The map is the real SLAM map I built (Apipath_map) and the station poses come from my code. The yaml with the map origin and resolution wasn&#39;t kept, so where the stations sit on the map is approximate. The planner and controller are a small rewrite, not Nav2 itself.</span></p></li>
+<p class="j3d-note"><span class="th">แผนที่คือแผนที่ SLAM จริงที่ผมสร้าง (Apipath_map) และพิกัดสถานีมาจากโค้ดของผม แต่ผมไม่ได้เก็บไฟล์ yaml ที่ระบุจุดอ้างอิง (origin) และความละเอียดของแผนที่ไว้ ตำแหน่งสถานีบนแผนที่จึงเป็นค่าประมาณ ตัววางเส้นทางกับตัวควบคุมเป็นแบบย่อที่เขียนขึ้นใหม่ ไม่ใช่ Nav2 ตัวจริง</span><span class="en" lang="en">The map is the real SLAM map I built (Apipath_map) and the station poses come from my code. The yaml with the map origin and resolution wasn&#39;t kept, so where the stations sit on the map is approximate. The planner and controller are a small rewrite, not Nav2 itself.</span></p></li>
         </ol>
       </div>
       <div class="j-year">
-        <div class="j-yl" role="heading" aria-level="3"><span class="kicker"><span class="th">ปี 3</span><span class="en" lang="en">Year 3</span></span><b>2026–27</b><small><span class="th">ปีการศึกษา 2569</span><span class="en" lang="en">Academic year 2026</span></small></div>
+        <div class="j-yl" role="heading" aria-level="3"><span class="kicker"><span class="th">ปี 3</span><span class="en" lang="en">Year 3</span></span><b>2026–27</b><small><span class="th">ปีการศึกษา 2569 (2026)</span><span class="en" lang="en">Academic year 2026</span></small></div>
         <ol class="j-list">
-          <li class="j-item rise"><time><span class="th">พ.ค.–ต.ค. 2026</span><span class="en" lang="en">May–Oct 2026</span></time><h4><span class="th">ELP4 จากรอบมหาวิทยาลัยถึงเกาหลี</span><span class="en" lang="en">ELP4, from campus to Korea</span></h4><ul class="j-tags"><li class="win"><span class="th">1 ใน 9 จากผู้สมัคร <span class="nw">540 คน</span></span><span class="en" lang="en">1 of 9 from 540</span></li><li><span class="th">MIONEX</span><span class="en" lang="en">MIONEX</span></li></ul><p><span class="th">พา MIONEX ผ่านทุกรอบของ ELP4 ตั้งแต่รอบมหาวิทยาลัย รอบภูมิภาค จนถึงรอบประเทศ จนเป็น 1 ใน 9 คนจากผู้สมัคร <span class="nw">540 คน</span>ที่ได้ไปดูงานที่ SKKU ประเทศเกาหลีใต้ เมื่อ <span class="nw">ต.ค. 2026</span></span><span class="en" lang="en">I took MIONEX through every ELP4 round, from university to regional to national, and was one of 9 picked from 540 applicants for a study visit to SKKU, South Korea, in October 2026.</span></p><div class="j-strip"><button class="cert" type="button" data-full="img/j/cert-elp4-rep.webp"><img src="img/j/t/cert-elp4-rep.webp" width="1200" height="849" loading="lazy" decoding="async" alt="เกียรติบัตร ELP4 ผู้แทนมหาวิทยาลัยบูรพาไปแข่งรอบภูมิภาค 13 พ.ค. 2026" data-alt-en="ELP4 certificate: Burapha University representative for the regional round, 13 May 2026"></button><button class="cert" type="button" data-full="img/j/cert-elp4-fc.webp"><img src="img/j/t/cert-elp4-fc.webp" width="1200" height="849" loading="lazy" decoding="async" alt="วุฒิบัตร ELP4 The Founder's Compass ผ่านโครงการ 8 มิ.ย. 2026" data-alt-en="ELP4 certificate: The Founder's Compass, programme completed, 8 Jun 2026"></button></div></li>
-                    <li class="j-item rise"><time><span class="th">ต.ค. 2026</span><span class="en" lang="en">Oct 2026</span></time><h4><span class="th">แคมปัส SKKU ในสายตา LiDAR 3 มิติ</span><span class="en" lang="en">SKKU&#39;s campus through a 3D LiDAR</span></h4><ul class="j-tags"><li>OpenStreetMap</li><li><span class="th">LiDAR 64 เส้น (จำลอง)</span><span class="en" lang="en">64-channel LiDAR (simulated)</span></li><li>three.js</li></ul><p><span class="th">ระหว่างอยู่ที่ SKKU วิทยาเขตซูวอนกับ ELP4 ผมอยากรู้ว่าแคมปัสนี้จะออกมาเป็นอย่างไรในสายตาหุ่นที่ติด LiDAR 3 มิติ เลยเอารูปทรงอาคารและถนนจริงจาก OpenStreetMap มาสร้างฉาก ให้รถจำลองติดเซนเซอร์แบบ 64 เส้นขับวนรอบลานกลาง ยิงเลเซอร์ทุกรอบแล้วสะสมจุดเป็นแผนที่ 3 มิติ</span><span class="en" lang="en">While at SKKU&#39;s Suwon campus for ELP4, I wanted to see how it would look to a robot with a 3D LiDAR. I built the scene from the real building footprints and roads in OpenStreetMap, then drove a simulated car with a 64-channel sensor around the main quad, sweeping and stacking every return into a 3D map.</span></p><div class="j3d" data-j3d="lidar">
+          <li class="j-item rise" id="j-elp4"><time><span class="th">พ.ค.–ต.ค. 2026</span><span class="en" lang="en">May–Oct 2026</span></time><h4><span class="th">ELP4 จากรอบมหาวิทยาลัยถึงเกาหลี</span><span class="en" lang="en">ELP4, from campus to Korea</span></h4><ul class="j-tags"><li class="win"><span class="th">1 ใน 9 จากผู้สมัคร <span class="nw">540 คน</span></span><span class="en" lang="en">1 of 9 from 540</span></li><li><span class="th">MIONEX</span><span class="en" lang="en">MIONEX</span></li></ul><p><span class="th">พา MIONEX ผ่านทุกรอบของ ELP4 ตั้งแต่รอบมหาวิทยาลัย รอบภูมิภาค จนถึงรอบระดับประเทศ และได้เป็น 1 ใน 9 คนจากผู้สมัคร <span class="nw">540 คน</span>ที่ได้ไปดูงานที่ SKKU ประเทศเกาหลีใต้ เมื่อ <span class="nw">ต.ค. 2026</span></span><span class="en" lang="en">I took MIONEX through every ELP4 round, from university to regional to national, and was one of 9 picked from 540 applicants for a study visit to SKKU, South Korea, in October 2026.</span></p><div class="j-strip"><button class="cert" type="button" data-full="img/j/cert-elp4-rep.webp"><img src="img/j/t/cert-elp4-rep.webp" width="1200" height="849" loading="lazy" decoding="async" alt="เกียรติบัตร ELP4 ผู้แทนมหาวิทยาลัยบูรพาไปแข่งรอบภูมิภาค 13 พ.ค. 2026" data-alt-en="ELP4 certificate: Burapha University representative for the regional round, 13 May 2026"></button><button class="cert" type="button" data-full="img/j/cert-elp4-fc.webp"><img src="img/j/t/cert-elp4-fc.webp" width="1200" height="849" loading="lazy" decoding="async" alt="วุฒิบัตร ELP4 The Founder's Compass ผ่านโครงการ 8 มิ.ย. 2026" data-alt-en="ELP4 certificate: The Founder's Compass, programme completed, 8 Jun 2026"></button></div></li>
+                    <li class="j-item rise" id="j-lidar"><time><span class="th">ต.ค. 2026</span><span class="en" lang="en">Oct 2026</span></time><h4><span class="th">แคมปัส SKKU ในสายตา LiDAR 3 มิติ</span><span class="en" lang="en">SKKU&#39;s campus through a 3D LiDAR</span></h4><ul class="j-tags"><li>OpenStreetMap</li><li><span class="th">LiDAR 64 เส้น (จำลอง)</span><span class="en" lang="en">64-channel LiDAR (simulated)</span></li><li>three.js</li></ul><p><span class="th">ระหว่างอยู่ที่ SKKU วิทยาเขตซูวอนกับ ELP4 ผมอยากรู้ว่าแคมปัสนี้จะดูเป็นอย่างไรในสายตาหุ่นที่ติด LiDAR 3 มิติ เลยเอารูปทรงอาคารและถนนจริงจาก OpenStreetMap มาสร้างฉาก ให้รถจำลองติดเซนเซอร์แบบ 64 เส้นขับวนรอบลานกลาง ยิงเลเซอร์ทุกรอบแล้วสะสมจุดเป็นแผนที่ 3 มิติ</span><span class="en" lang="en">While at SKKU&#39;s Suwon campus for ELP4, I wanted to see how it would look to a robot with a 3D LiDAR. I built the scene from the real building footprints and roads in OpenStreetMap, then drove a simulated car with a 64-channel sensor around the main quad, sweeping and stacking every return into a 3D map.</span></p><div class="j3d" data-j3d="lidar">
 <canvas role="img" aria-label="แผนที่ point cloud 3 มิติของแคมปัส SKKU ซูวอน ที่สร้างจาก LiDAR จำลอง" data-label-en="3D point-cloud map of SKKU&#39;s Suwon campus, built by a simulated LiDAR"></canvas>
 <span class="j3d-hint"><span class="th">ลากเพื่อหมุนมุมมอง</span><span class="en" lang="en">Drag to orbit</span></span>
-<div class="j3d-ui"><button class="chip-btn" type="button" data-act="play" aria-pressed="false"><span class="th">หยุด</span><span class="en" lang="en">Pause</span></button><button class="chip-btn" type="button" data-act="speed"><span class="th">ความเร็ว</span><span class="en" lang="en">Speed</span> <b data-v>1×</b></button><button class="chip-btn" type="button" data-act="view"><span class="th">มุมกล้อง</span><span class="en" lang="en">View</span> <b data-v>CHASE</b></button><button class="chip-btn" type="button" data-act="osm" aria-pressed="false"><span class="th">โชว์อาคาร OSM</span><span class="en" lang="en">Show OSM buildings</span></button><button class="chip-btn" type="button" data-act="clear"><span class="th">ล้างแผนที่</span><span class="en" lang="en">Clear map</span></button><span class="sim-stat" data-stat aria-hidden="true"></span></div>
+<div class="j3d-ui"><button class="chip-btn" type="button" data-act="play" aria-pressed="false"><span class="th">หยุด</span><span class="en" lang="en">Pause</span></button><button class="chip-btn" type="button" data-act="speed"><span class="th">ความเร็ว</span><span class="en" lang="en">Speed</span> <b data-v>1×</b></button><button class="chip-btn" type="button" data-act="view"><span class="th">มุมกล้อง</span><span class="en" lang="en">View</span> <b data-v>CHASE</b></button><button class="chip-btn" type="button" data-act="osm" aria-pressed="false"><span class="th">แสดงอาคาร OSM</span><span class="en" lang="en">Show OSM buildings</span></button><button class="chip-btn" type="button" data-act="clear"><span class="th">ล้างแผนที่</span><span class="en" lang="en">Clear map</span></button><span class="sim-stat" data-stat aria-hidden="true"></span></div>
 <p class="j3d-fallback"><span class="th">เบราว์เซอร์นี้แสดงโมเดล 3 มิติไม่ได้</span><span class="en" lang="en">This browser can&#39;t show the 3D model.</span></p>
 </div>
 <p class="j3d-note"><span class="th">ข้อมูลแผนที่ © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> (ODbL) ความสูงอาคารใช้ค่าจาก OSM ถ้ามี ถ้าไม่มีจะประมาณจากขนาดอาคาร เซนเซอร์และเส้นทางเป็นการจำลอง ไม่ใช่ข้อมูลที่เก็บจริง และแผนที่สะสมจากตำแหน่งที่แม่นยำสมบูรณ์ จึงไม่มีความคลาดเคลื่อนแบบ SLAM จริง</span><span class="en" lang="en">Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> (ODbL). Building heights come from OSM where tagged and are estimated from footprint size otherwise. The sensor and drive are simulated, not recorded, and the map is stacked from perfect poses, so there is none of the drift a real SLAM run has.</span></p></li>
-          <li class="j-item slim rise"><time><span class="th">ปี 3</span><span class="en" lang="en">Year 3</span></time><h4><span class="th">ตามอาจารย์ไปงานประชุม IEEE ที่ญี่ปุ่น</span><span class="en" lang="en">An IEEE conference in Japan</span></h4><p><span class="th">ติดตามอาจารย์ไปงานประชุมวิชาการ IEEE ที่ญี่ปุ่น ไปฟังและดูงาน ไม่ได้นำเสนอผลงานเอง</span><span class="en" lang="en">I went with my professor to an IEEE conference in Japan to listen and learn. I didn't present.</span></p></li>
-          <li class="j-item slim rise"><time><span class="th">เป็นระยะ</span><span class="en" lang="en">Ongoing</span></time><h4><span class="th">สอนเด็กแทนอาจารย์</span><span class="en" lang="en">Covering classes for my professor</span></h4><p><span class="th">ช่วงที่อาจารย์ไม่ว่าง ผมรับสอนเด็ก ๆ แทนเป็นครั้งคราว</span><span class="en" lang="en">When my professor can't make it, I sometimes step in and teach the kids.</span></p></li>
-          <li class="j-item rise now"><time><span class="th">ก.ย. 2026–ปัจจุบัน</span><span class="en" lang="en">Sep 2026 to now</span></time><h4><span class="th">SiBB 2026</span><span class="en" lang="en">SiBB 2026</span></h4><ul class="j-tags"><li><span class="th">MIONEX</span><span class="en" lang="en">MIONEX</span></li><li><span class="th">กลุ่มสุขภาพและการแพทย์</span><span class="en" lang="en">Health and medical track</span></li></ul><p><span class="th">ล่าสุด ผมส่ง MIONEX เข้าโครงการ SiBB Business Brotherhood ส่งคลิปทีมและ pitch deck ไปแล้ว ตอนนี้รอขึ้นนำเสนอรอบจริงใน <span class="nw">พ.ย. 2026</span></span><span class="en" lang="en">Most recently, I entered MIONEX in the SiBB Business Brotherhood programme. The team video and pitch deck are submitted, and the live pitch is in November 2026.</span></p></li>
+          <li class="j-item slim rise"><time><span class="th">ปี 3</span><span class="en" lang="en">Year 3</span></time><h4><span class="th">ตามอาจารย์ไปงานประชุม IEEE ที่ญี่ปุ่น</span><span class="en" lang="en">An IEEE conference in Japan</span></h4><p><span class="th">ติดตามอาจารย์ไปงานประชุมวิชาการ IEEE ที่ญี่ปุ่น ไปฟังและดูงาน ไม่ได้นำเสนอผลงานเอง</span><span class="en" lang="en">I went with my professor to an IEEE conference in Japan as an observer. I didn't present.</span></p></li>
+          <li class="j-item slim rise"><time><span class="th">เป็นระยะ</span><span class="en" lang="en">Ongoing</span></time><h4><span class="th">สอนแทนอาจารย์</span><span class="en" lang="en">Covering classes for my professor</span></h4><p><span class="th">ช่วงที่อาจารย์ไม่ว่าง ผมช่วยสอนนักเรียนแทนเป็นครั้งคราว</span><span class="en" lang="en">When my professor is away, I step in and teach the class.</span></p></li>
+          <li class="j-item rise now"><time><span class="th">ก.ย. 2026–ปัจจุบัน</span><span class="en" lang="en">Sep 2026 to now</span></time><h4><span class="th">SiBB 2026</span><span class="en" lang="en">SiBB 2026</span></h4><ul class="j-tags"><li><span class="th">MIONEX</span><span class="en" lang="en">MIONEX</span></li><li><span class="th">กลุ่มสุขภาพและการแพทย์</span><span class="en" lang="en">Health and medical track</span></li></ul><p><span class="th">ล่าสุด ผมพา MIONEX เข้าร่วมโครงการ SiBB Business Brotherhood ส่งคลิปแนะนำทีมและ pitch deck เรียบร้อยแล้ว และกำลังเตรียมขึ้นพิตช์รอบจริงใน <span class="nw">พ.ย. 2026</span></span><span class="en" lang="en">Most recently, I entered MIONEX in the SiBB Business Brotherhood programme. The team video and pitch deck are submitted, and the live pitch is in November 2026.</span></p></li>
         </ol>
       </div>
     </section>
@@ -853,10 +966,10 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
       <a class="mail" id="mail" href="mailto:apipath.san@gmail.com">apipath.san@gmail.com</a>
       <div class="contact-actions">
         <button class="btn btn-copper" id="copy" type="button" data-magnet><span class="th">คัดลอกอีเมล</span><span class="en" lang="en">Copy email</span><span class="btn-ico" aria-hidden="true">⧉</span></button>
-        <a class="btn btn-ghost" href="https://github.com/Qil159753" target="_blank" rel="noopener" data-magnet>GitHub ↗</a>
+        <a class="btn btn-ghost" href="https://github.com/Qil159753" target="_blank" rel="noopener" data-magnet>GitHub ↗<span class="sr-only"><span class="th"> (เปิดแท็บใหม่)</span><span class="en" lang="en"> (opens in a new tab)</span></span></a>
         <span class="note" id="status" role="status" aria-live="polite"></span>
-        <template id="copied"><span class="th">คัดลอกแล้ว</span><span class="en" lang="en">Copied</span></template>
-        <template id="selected"><span class="th">เลือกอีเมลไว้ให้แล้ว คัดลอกจากตรงนี้ได้เลย</span><span class="en" lang="en">Email selected. Press Ctrl+C or ⌘C to copy.</span></template>
+        <template id="copied"><span class="ack" aria-hidden="true">ACK</span><span class="th">คัดลอกแล้ว</span><span class="en" lang="en">Copied</span></template>
+        <template id="selected"><span class="th">เลือกอีเมลไว้ให้แล้ว กด Ctrl+C หรือ ⌘C เพื่อคัดลอก</span><span class="en" lang="en">Email selected. Press Ctrl+C or ⌘C to copy.</span></template>
       </div>
     </div>
   </section>
@@ -864,8 +977,11 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
 
 <footer class="page foot">
   <span><span class="th">© 2026 <span class="nw">อภิภัทร สันทัสนะโชค</span></span><span class="en" lang="en">© 2026 Apipath Santasnachok</span></span>
+  <span class="fw" data-fw></span>
+  <span class="keys-hint"><span class="th">กด</span><span class="en" lang="en">Press</span> <kbd>?</kbd> <span class="th">ดูคีย์ลัด</span><span class="en" lang="en">for shortcuts</span></span>
   <a href="#top"><span class="th">กลับขึ้นด้านบน ↑</span><span class="en" lang="en">Back to top ↑</span></a>
 </footer>
+<p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
 
 <dialog class="lightbox" id="lightbox" aria-label="รูปภาพ" data-label-en="Photo">
   <form method="dialog"><button type="submit" aria-label="ปิด" data-label-en="Close">×</button></form>
@@ -889,8 +1005,10 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
       mbtn.setAttribute('aria-pressed', String(off));
       return;
     }
+    try { sessionStorage.setItem('pf-refocus', '1'); } catch (e) {}
     location.reload();
   });
+  try { if (sessionStorage.getItem('pf-refocus')) { sessionStorage.removeItem('pf-refocus'); mbtn.focus({ preventScroll: true }); } } catch (e) {}
   var finePointer = window.matchMedia('(pointer: fine)').matches;
 
   /* ---------- language ---------- */
@@ -1102,6 +1220,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
     function frame(now) {
       raf = 0;
       if (!visible || document.hidden || !traces.length) return;
+      if (!finePointer && last && now - last < 32) { raf = requestAnimationFrame(frame); return; }   /* ~30 fps on phones */
       var dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016); last = now;
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1150,7 +1269,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
         mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.on = true;
       });
       host.addEventListener('pointerleave', function () { mouse.on = false; });
-      new IntersectionObserver(function (es) { visible = es[0].isIntersecting; kick(); }).observe(canvas);
+      new IntersectionObserver(function (es) { visible = es[es.length - 1].isIntersecting; kick(); }).observe(canvas);
       document.addEventListener('visibilitychange', kick);
     }
     var rt, r0 = canvas.getBoundingClientRect(), lastW = r0.width, lastH = r0.height;
@@ -1170,7 +1289,7 @@ h1 em { font-style: normal; color: var(--copper); text-shadow: 0 0 42px rgba(236
   var hb = document.getElementById('board-hero');
   if (hb && hb.getContext) Board(hb, { grid: 26, density: 0.028, chips: 3, seed: 1907, radius: 200, maxPulses: 38 });
   var bytes = document.querySelector('.bytes');
-  if (bytes && 'IntersectionObserver' in window) new IntersectionObserver(function (es) { bytes.classList.toggle('idle', !es[0].isIntersecting); }).observe(bytes);
+  if (bytes && 'IntersectionObserver' in window) new IntersectionObserver(function (es) { bytes.classList.toggle('idle', !es[es.length - 1].isIntersecting); }).observe(bytes);
   var cb = document.getElementById('board-contact');
   if (cb && cb.getContext) Board(cb, { grid: 26, density: 0.02, chips: 2, seed: 4421, radius: 180, maxPulses: 24 });
 
@@ -1308,7 +1427,7 @@ if (want3d) try {
     camera.updateProjectionMatrix();
   };
   resize();
-  new ResizeObserver(() => { resize(); if (!running) draw(performance.now()); }).observe(canvas);
+  new ResizeObserver(() => { resize(); if (!running && !lost) draw(performance.now()); }).observe(canvas);
 
   // Drag to turn (horizontal), with a little inertia; vertical drags keep scrolling the page on touch.
   let yaw = 0, pitch = 0, vYaw = 0, dragging = false, lastX = 0, lastY = 0, hoverYaw = 0, hoverPitch = 0;
@@ -1317,7 +1436,7 @@ if (want3d) try {
     if (!dragging) return;
     const dx = e.clientX - lastX, dy = e.clientY - lastY; lastX = e.clientX; lastY = e.clientY;
     vYaw = dx * 0.012; yaw += vYaw; pitch = Math.max(-0.5, Math.min(0.5, pitch + dy * 0.006));
-    if (!running) draw(performance.now());
+    if (!running && !lost) draw(performance.now());
   });
   const release = () => { dragging = false; };
   canvas.addEventListener('pointerup', release); canvas.addEventListener('pointercancel', release);
@@ -1341,7 +1460,7 @@ if (want3d) try {
     renderer.render(scene, camera);
   };
 
-  let running = false, visible = true, raf = 0;
+  let running = false, visible = true, raf = 0, lost = false;
   let lastDraw = 0;
   const loop = (now) => {
     raf = 0; if (!running) return;
@@ -1349,11 +1468,11 @@ if (want3d) try {
     raf = requestAnimationFrame(loop);
   };
   const sync = () => {
-    const should = !reduce && visible && !document.hidden;
+    const should = !lost && !reduce && visible && !document.hidden;
     if (should && !running) { running = true; if (!raf) raf = requestAnimationFrame(loop); }
     if (!should) running = false;
   };
-  new IntersectionObserver((es) => { visible = es[0].isIntersecting; sync(); }).observe(canvas);
+  new IntersectionObserver((es) => { visible = es[es.length - 1].isIntersecting; sync(); }).observe(canvas);
   document.addEventListener('visibilitychange', sync);
 
   draw(performance.now());
@@ -1362,7 +1481,7 @@ if (want3d) try {
   document.querySelector('.cap-photo').hidden = true;
   document.querySelector('.cap-3d').hidden = false;
   canvas.addEventListener('webglcontextlost', () => {
-    running = false; arm.classList.remove('is-3d');
+    lost = true; running = false; arm.classList.remove('is-3d');
     document.querySelector('.cap-photo').hidden = false; document.querySelector('.cap-3d').hidden = true;
   });
   if (fine) { hint.hidden = false; setTimeout(() => { hint.hidden = true; }, 5000); }
@@ -1410,8 +1529,9 @@ const io = new IntersectionObserver(async (entries) => {
       e.target.classList.add('off');
     }
   }
-}, { rootMargin: '300px' });
+}, { rootMargin: '900px 0px' });
 document.querySelectorAll('[data-j3d]').forEach(el => io.observe(el));
 </script>
+<script src="js/delight.js" defer></script>
 </body>
 </html>

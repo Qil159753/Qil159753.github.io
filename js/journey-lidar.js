@@ -27,7 +27,9 @@ export async function initLidar(root) {
   const canvas = root.querySelector('canvas');
   const statEl = root.querySelector('[data-stat]');
   const btn = n => root.querySelector(`[data-act="${n}"]`);
-  const data = await (await fetch('img/j/skku-osm.json')).json();
+  const res = await fetch('img/j/skku-osm.json');
+  if (!res.ok) throw new Error(`skku-osm.json ${res.status}`);
+  const data = await res.json();
 
   // ---- walls as segments in a uniform grid (world x, y; three.js uses x, -z)
   const segs = [];            // [x0, y0, x1, y1, h]
@@ -74,11 +76,13 @@ export async function initLidar(root) {
   scene.fog = fog;
   const camera = new THREE.PerspectiveCamera(48, 1, 0.5, 1500);
   const controls = new OrbitControls(camera, canvas);
+  canvas.style.touchAction = 'pan-y'; // OrbitControls sets 'none'; keep vertical page scroll
   controls.enableDamping = true; controls.enablePan = false; controls.enableZoom = false; // keep page scroll working
   controls.maxPolarAngle = Math.PI * 0.47;
+  let dirty = true; // redraw needed while paused (resize, view or layer change)
   function resize() {
     const w = canvas.clientWidth, h = canvas.clientHeight; if (!w || !h) return;
-    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); dirty = true;
   }
   new ResizeObserver(resize).observe(canvas); resize();
 
@@ -196,13 +200,14 @@ export async function initLidar(root) {
     mapMat.needsUpdate = liveMat.needsUpdate = true;
     bot.scale.setScalar(top ? 3 : 1);
     btn('view').querySelector('[data-v]').textContent = v === 'top' ? 'TOP' : 'CHASE';
+    dirty = true;
   }
   btn('play').addEventListener('click', () => { playing = !playing; btn('play').setAttribute('aria-pressed', !playing); });
   btn('play').setAttribute('aria-pressed', !playing);
   btn('speed').addEventListener('click', () => { speed = speed === 8 ? 24 : 8; btn('speed').querySelector('[data-v]').textContent = speed === 8 ? '1×' : '3×'; });
   btn('view').addEventListener('click', () => setView(view === 'top' ? 'chase' : 'top'));
-  btn('osm').addEventListener('click', () => { ghost.visible = !ghost.visible; btn('osm').setAttribute('aria-pressed', ghost.visible); });
-  btn('clear').addEventListener('click', () => { vox.clear(); nMap = 0; mapGeo.setDrawRange(0, 0); });
+  btn('osm').addEventListener('click', () => { ghost.visible = !ghost.visible; dirty = true; btn('osm').setAttribute('aria-pressed', ghost.visible); });
+  btn('clear').addEventListener('click', () => { vox.clear(); nMap = 0; mapGeo.setDrawRange(0, 0); dirty = true; });
   setView('chase');
   live = sweep(...poseAt(0)); // one sweep up front so a paused (reduced-motion) view still shows a scan
 
@@ -220,15 +225,15 @@ export async function initLidar(root) {
       }
       scanAcc += dt;
       if (playing && scanAcc >= 1 / SCAN_HZ) { scanAcc = 0; live = sweep(x, y, yaw); }
-      controls.update();
-      renderer.render(scene, camera);
+      if (controls.update() || playing || dirty) { renderer.render(scene, camera); dirty = false; }
       statT -= dt;
       if (statT <= 0) {
         statT = 0.4;
         let best = 1e9; for (const b of names) { const d = Math.hypot(b.x - x, b.y - y); if (d < best) { best = d; near = b.n; } }
         statEl.textContent = `${live.toLocaleString('en')} pts/sweep · map ${nMap.toLocaleString('en')} pts${nMap >= MAX ? ' (full)' : ''} · ${(((s % LOOP) + LOOP) % LOOP).toFixed(0)} / ${LOOP.toFixed(0)} m${best < 60 ? ' · ' + near : ''}`;
       }
-    } catch (err) { dead = true; raf = 0; console.error('journey lidar', err); return; }
+    } catch (err) { dead = true; raf = 0; console.error('journey lidar', err); root.classList.add('off'); return; }
+    root.classList.add('ready');
     raf = requestAnimationFrame(frame);
   }
   function sync() {
@@ -236,6 +241,6 @@ export async function initLidar(root) {
     if (run && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); }
     else if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
   }
-  new IntersectionObserver(([e]) => { seen = e.isIntersecting; sync(); }, { rootMargin: '80px' }).observe(canvas);
+  new IntersectionObserver((es) => { seen = es[es.length - 1].isIntersecting; sync(); }, { rootMargin: '80px' }).observe(canvas);
   document.addEventListener('visibilitychange', sync);
 }

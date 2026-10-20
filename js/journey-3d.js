@@ -16,7 +16,7 @@ const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').match
 
 function makeStage(canvas, { fov = 32, pos = [10, 7, 12], target = [0, 2, 0], min = 8, max = 34 } = {}) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -34,6 +34,7 @@ function makeStage(canvas, { fov = 32, pos = [10, 7, 12], target = [0, 2, 0], mi
   const camera = new THREE.PerspectiveCamera(fov, 1, 0.1, 200);
   camera.position.set(...pos);
   const controls = new OrbitControls(camera, canvas);
+  canvas.style.touchAction = 'pan-y'; // OrbitControls sets 'none'; keep vertical page scroll, horizontal drag still orbits
   controls.target.set(...target);
   controls.enableDamping = true;
   controls.enablePan = false;
@@ -59,7 +60,7 @@ function loop(canvas, step) {
   let seen = false, raf = 0, last = 0, dead = false;
   function frame(now) {
     const dt = Math.min((now - last) / 1000, 0.05); last = now;
-    try { step(dt); } catch (err) { dead = true; raf = 0; console.error('journey 3d', err); return; }
+    try { step(dt); canvas.closest('.j3d')?.classList.add('ready'); } catch (err) { dead = true; raf = 0; console.error('journey 3d', err); canvas.closest('.j3d')?.classList.add('off'); return; }
     raf = requestAnimationFrame(frame);
   }
   function sync() {
@@ -67,7 +68,7 @@ function loop(canvas, step) {
     if (run && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); }
     else if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
   }
-  new IntersectionObserver(([e]) => { seen = e.isIntersecting; sync(); }, { rootMargin: '80px' }).observe(canvas);
+  new IntersectionObserver((es) => { seen = es[es.length - 1].isIntersecting; sync(); }, { rootMargin: '80px' }).observe(canvas);
   document.addEventListener('visibilitychange', sync);
 }
 
