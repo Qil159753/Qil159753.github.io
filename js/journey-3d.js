@@ -54,6 +54,13 @@ function makeStage(canvas, { fov = 32, pos = [10, 7, 12], target = [0, 2, 0], mi
   return { renderer, scene, camera, controls };
 }
 
+/* Yield, then compile shaders off the main path, so the viewer appearing doesn't freeze scrolling. */
+async function warm(renderer, scene, camera) {
+  await new Promise(r => setTimeout(r));
+  if (renderer.extensions.has('KHR_parallel_shader_compile')) await renderer.compileAsync(scene, camera);
+  else renderer.compile(scene, camera);
+}
+
 /* Run `step` only while the viewer is on screen and the tab is visible: the frame loop is started and
    stopped, not left spinning. A step that throws stops the loop once instead of failing every frame. */
 function loop(canvas, step) {
@@ -104,7 +111,7 @@ const BH_BARREL = [BH.A1, BH.A2, BH.A3];
 const bhRod = [r => add2(BH.S, rot(BH.P1, r)), s => add2(BH.T, rot(BH.H, s)), b => linkJ(b).J];
 const bhLen = (i, a) => dist2(BH_BARREL[i], bhRod[i](a));
 
-export function initBackhoe(root) {
+export async function initBackhoe(root) {
   const canvas = root.querySelector('canvas');
   const sliders = [...root.querySelectorAll('input[type=range]')];
   const digBtn = root.querySelector('[data-dig]');
@@ -364,6 +371,7 @@ export function initBackhoe(root) {
 
   const ease = t => t * t * (3 - 2 * t);
   let first = true;
+  await warm(renderer, scene, camera);
   loop(canvas, (dt) => {
     let moved = first || dirty;
     if (seq) {
@@ -389,7 +397,7 @@ export function initBackhoe(root) {
 }
 
 /* ------------------------------------------------------------------ toy truck */
-export function initTruck(root) {
+export async function initTruck(root) {
   const canvas = root.querySelector('canvas');
   const slider = root.querySelector('input[type=range]');
   const tip = root.querySelector('[data-tip]');
@@ -577,6 +585,7 @@ export function initTruck(root) {
   const ease = t => t * t * (3 - 2 * t);
   // Zoom is off, so the camera distance is ours: pull back while the parts fly apart.
   const baseLen = camera.position.distanceTo(controls.target), off = new THREE.Vector3();
+  await warm(renderer, scene, camera);
   loop(canvas, (dt) => {
     ex += (exT - ex) * Math.min(1, dt * 5);
     tilt += (tiltT - tilt) * Math.min(1, dt * 3);

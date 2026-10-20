@@ -211,6 +211,10 @@ export async function initLidar(root) {
   setView('chase');
   live = sweep(...poseAt(0)); // one sweep up front so a paused (reduced-motion) view still shows a scan
 
+  await new Promise(r => setTimeout(r));
+  // Compile before the first frame, in its own task, so the viewer appearing doesn't freeze scrolling.
+  if (renderer.extensions.has('KHR_parallel_shader_compile')) await renderer.compileAsync(scene, camera);
+  else renderer.compile(scene, camera);
   let seen = false, raf = 0, last = 0, dead = false, statT = 0;
   function frame(now) {
     const dt = Math.min((now - last) / 1000, 0.05); last = now;
