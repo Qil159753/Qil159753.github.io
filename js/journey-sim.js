@@ -175,7 +175,7 @@ export async function initRos(root) {
 
   let nav = null;      // { path, goal: {x,y,yaw|null}, i, onDone }
   let mission = null;  // { wps, cur, wait, after }
-  let scan = [], scanT = 0, click = null;
+  let scan = [], scanT = 0, click = null, scanAt = [NaN, NaN, NaN];
 
   function navigate(goal, onDone) {
     const s = w2c(bot.x, bot.y), g = w2c(goal.x, goal.y);
@@ -280,7 +280,9 @@ export async function initRos(root) {
     bot.x += Math.cos(bot.th) * bot.v * dt; bot.y += Math.sin(bot.th) * bot.v * dt;
     spread = Math.max(0.035, spread * Math.exp(-(Math.abs(bot.v) * 2.2 + Math.abs(bot.w) * 0.35) * dt));
     for (const q of parts) { q[0] = (q[0] + (Math.random() - 0.5) * 0.25) * 0.97; q[1] = (q[1] + (Math.random() - 0.5) * 0.25) * 0.97; }
-    scanT -= dt; if (scanT <= 0) { scanT = 0.1; doScan(); }
+    scanT -= dt;
+    // Rescan at 10 Hz only while the robot moves; a parked robot sees the same scan.
+    if (scanT <= 0) { scanT = 0.1; if (!scan.length || bot.x !== scanAt[0] || bot.y !== scanAt[1] || bot.th !== scanAt[2]) { doScan(); scanAt = [bot.x, bot.y, bot.th]; } }
     if (click) click.t -= dt * 0.8;
   };
 
@@ -487,13 +489,23 @@ export function initAbu(root) {
   }
 
   const NAMES = ['SOF', 'VER', 'btn', 'aux', 'vx', 'vy', 'vt', 'spd', 'lead', 'crc'];
+  // Ten byte cells built once; each tick only rewrites the text that changed.
+  const cells = NAMES.map(n => {
+    const span = document.createElement('span'), b = document.createElement('b'), small = document.createElement('small');
+    small.textContent = n; span.append(b, small); frameEl.append(span);
+    return { span, b };
+  });
   loop(canvas, dt => {
     acc += dt; while (acc >= STEP) { tick(); acc -= STEP; }
     shown += dt;
     if (shown > 0.1) {
       shown = 0;
       const live = fw.state === 'DRIVING' && ctl.link;
-      frameEl.innerHTML = Array.from(pkt, (v, i) => `<span${live ? '' : ' class="dim"'}><b>${v.toString(16).toUpperCase().padStart(2, '0')}</b><small>${NAMES[i]}</small></span>`).join('');
+      pkt.forEach((v, i) => {
+        const t = v.toString(16).toUpperCase().padStart(2, '0');
+        if (cells[i].b.textContent !== t) cells[i].b.textContent = t;
+        cells[i].span.classList.toggle('dim', !live);
+      });
     }
 
     const { ctx, w, h } = fit(canvas); if (!w) return;
