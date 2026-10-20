@@ -93,14 +93,22 @@
 
   /* ---------- 4. Keyboard shortcuts: ? shows the map ---------- */
   var toast = document.getElementById('toast'), toastT = 0;
-  function show(html) {
+  // rows: [[key, label], ...] per line; built as nodes so no string is ever parsed as HTML.
+  function show(rows) {
     if (!toast) return;
-    toast.innerHTML = html;
+    toast.replaceChildren();
+    rows.forEach(function (line, li) {
+      if (li) toast.append(document.createElement('br'));
+      line.forEach(function (kv) {
+        var k = document.createElement('kbd');
+        k.textContent = kv[0];
+        toast.append(k, ' ' + kv[1] + '  ');
+      });
+    });
     toast.hidden = false;
     clearTimeout(toastT);
     toastT = setTimeout(function () { toast.hidden = true; }, 5200);
   }
-  var K = function (k) { return '<kbd>' + k + '</kbd>'; };
   addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented) return;
     var t = e.target;
@@ -118,8 +126,8 @@
     if (e.key === 'Escape' && toast && !toast.hidden) { toast.hidden = true; return; }
     if (e.key === '?') {
       show(en()
-        ? K('w') + ' work  ' + K('j') + ' journey  ' + K('c') + ' contact<br>' + K('a') + ' drive the ABU robot  ' + K('r') + ' ROS 2  ' + K('l') + ' LiDAR<br>' + K('e') + ' copy email  ' + K('t') + ' ไทย / EN'
-        : K('w') + ' ผลงาน  ' + K('j') + ' เส้นทาง  ' + K('c') + ' ติดต่อ<br>' + K('a') + ' ขับหุ่น ABU  ' + K('r') + ' ROS 2  ' + K('l') + ' LiDAR<br>' + K('e') + ' คัดลอกอีเมล  ' + K('t') + ' ไทย / EN');
+        ? [[['w', 'work'], ['j', 'journey'], ['c', 'contact']], [['a', 'drive the ABU robot'], ['r', 'ROS 2'], ['l', 'LiDAR']], [['e', 'copy email'], ['t', 'ไทย / EN']]]
+        : [[['w', 'ผลงาน'], ['j', 'เส้นทาง'], ['c', 'ติดต่อ']], [['a', 'ขับหุ่น ABU'], ['r', 'ROS 2'], ['l', 'LiDAR']], [['e', 'คัดลอกอีเมล'], ['t', 'ไทย / EN']]]);
     }
   });
 })();

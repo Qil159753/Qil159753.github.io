@@ -489,15 +489,23 @@ export function initAbu(root) {
   }
 
   const NAMES = ['SOF', 'VER', 'btn', 'aux', 'vx', 'vy', 'vt', 'spd', 'lead', 'crc'];
-  let frameHtml = '';
+  // Ten byte cells built once; each tick only rewrites the text that changed.
+  const cells = NAMES.map(n => {
+    const span = document.createElement('span'), b = document.createElement('b'), small = document.createElement('small');
+    small.textContent = n; span.append(b, small); frameEl.append(span);
+    return { span, b };
+  });
   loop(canvas, dt => {
     acc += dt; while (acc >= STEP) { tick(); acc -= STEP; }
     shown += dt;
     if (shown > 0.1) {
       shown = 0;
       const live = fw.state === 'DRIVING' && ctl.link;
-      const html = Array.from(pkt, (v, i) => `<span${live ? '' : ' class="dim"'}><b>${v.toString(16).toUpperCase().padStart(2, '0')}</b><small>${NAMES[i]}</small></span>`).join('');
-      if (html !== frameHtml) { frameEl.innerHTML = html; frameHtml = html; }   // touch the DOM only when a byte changed
+      pkt.forEach((v, i) => {
+        const t = v.toString(16).toUpperCase().padStart(2, '0');
+        if (cells[i].b.textContent !== t) cells[i].b.textContent = t;
+        cells[i].span.classList.toggle('dim', !live);
+      });
     }
 
     const { ctx, w, h } = fit(canvas); if (!w) return;

@@ -27,6 +27,13 @@
     });
   });
 
+  function el(tag, cls, kids) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    [].concat(kids || []).forEach(function (k) { n.append(k); });
+    return n;
+  }
+
   var hex = function (v) { return '0x' + v.toString(16).toUpperCase().padStart(2, '0'); };
 
   /* ---------- crc8() from robot_firmware_v6.ino ---------- */
@@ -69,10 +76,13 @@
       var changed = bytes.some(function (b, i) { return b !== BASE[i]; });
       inputs.forEach(function (inp, i) { inp.classList.toggle('diff', bytes[i] !== BASE[i]); });
       out.className = 'crc-out ' + (ok ? 'ok' : 'bad');
-      out.innerHTML = '<span>crc8(frame, 9) = <b>' + hex(c) + '</b></span><span>' + (en() ? 'received' : 'ที่ได้รับ') + ' = <b>' + hex(rx) + '</b></span><em>' +
-        (ok ? (changed ? (en() ? 'Collision: different bytes, same CRC. About 1 in 256.' : 'ชนกันพอดี: ไบต์ต่างกัน แต่ CRC เท่ากัน โอกาสราว 1 ใน 256')
-                       : (en() ? 'Match → frame accepted' : 'ตรงกัน → รับเฟรม'))
-            : (en() ? 'Mismatch → return -1, frame dropped' : 'ไม่ตรง → return -1 ทิ้งเฟรม')) + '</em>';
+      var verdict = ok ? (changed ? (en() ? 'Collision: different bytes, same CRC. About 1 in 256.' : 'ชนกันพอดี: ไบต์ต่างกัน แต่ CRC เท่ากัน โอกาสราว 1 ใน 256')
+                                  : (en() ? 'Match → frame accepted' : 'ตรงกัน → รับเฟรม'))
+                       : (en() ? 'Mismatch → return -1, frame dropped' : 'ไม่ตรง → return -1 ทิ้งเฟรม');
+      out.replaceChildren(
+        el('span', '', ['crc8(frame, 9) = ', el('b', '', hex(c))]),
+        el('span', '', [(en() ? 'received' : 'ที่ได้รับ') + ' = ', el('b', '', hex(rx))]),
+        el('em', '', verdict));
     }
     crcBox.querySelector('[data-reset]').addEventListener('click', function () {
       bytes = BASE.slice();
@@ -89,9 +99,7 @@
   if (drBox) {
     var wEl = drBox.querySelector('[data-wheels]'), bars = [];
     ['FL', 'FR', 'BL', 'BR'].forEach(function (n) {
-      var d = document.createElement('div');
-      d.className = 'wh';
-      d.innerHTML = '<span>' + n + '</span><i><s></s></i><b></b>';
+      var d = el('div', 'wh', [el('span', '', n), el('i', '', el('s')), el('b')]);
       wEl.appendChild(d);
       bars.push(d);
     });
@@ -148,14 +156,17 @@
       var clamp = function (v) { return Math.max(-SPEED_MAX, Math.min(SPEED_MAX, v)); };
       var l = clamp(base - delta), r = clamp(base + delta);
       var bar = function (name, v) {
-        return '<div class="lt-m"><span>' + name + '</span><i><s style="width:' + Math.round(Math.abs(v) / SPEED_MAX * 100) + '%" class="' + (v < 0 ? 'rv' : 'fw') + '"></s></i><b>' + v + '</b></div>';
+        var s = el('s', v < 0 ? 'rv' : 'fw');
+        s.style.width = Math.round(Math.abs(v) / SPEED_MAX * 100) + '%';
+        return el('div', 'lt-m', [el('span', '', name), el('i', '', s), el('b', '', String(v))]);
       };
       var note = !saw ? (en() ? 'No line: keep the last error (the real robot pivots here)' : 'ไม่เห็นเส้น: ใช้ error เดิม (หุ่นจริงจะเข้าโหมด pivot)')
         : Math.abs(err) <= ERR_FAST ? (en() ? 'Centred: full speed' : 'อยู่กลาง: วิ่งเต็มความเร็ว')
         : en() ? 'Off-centre: slow down and steer ' + (err > 0 ? 'left' : 'right')
         : 'เส้นเยื้อง: ลดความเร็วแล้วเลี้ยว' + (err > 0 ? 'ซ้าย' : 'ขวา');
-      lOut.innerHTML = '<div class="lt-row"><span>err</span><b>' + err.toFixed(3) + '</b><span>base</span><b>' + base + '</b><span>Kp·err</span><b>' + delta + '</b></div>' +
-        bar('L', l) + bar('R', r) + '<em>' + note + '</em>';
+      lOut.replaceChildren(
+        el('div', 'lt-row', [el('span', '', 'err'), el('b', '', err.toFixed(3)), el('span', '', 'base'), el('b', '', String(base)), el('span', '', 'Kp·err'), el('b', '', String(delta))]),
+        bar('L', l), bar('R', r), el('em', '', note));
     }
     calc();
     new MutationObserver(calc).observe(root, { attributes: true, attributeFilter: ['data-lang'] });
