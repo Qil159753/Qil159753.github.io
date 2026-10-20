@@ -21,13 +21,25 @@
   a { color: var(--copper-ink); background: var(--copper); text-decoration: none; padding: .7em 1.3em; border-radius: 999px; font-weight: 600; }
   a.ghost { background: transparent; color: var(--ink); border: 1px solid rgba(255, 255, 255, .25); }
   a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .scope { display: block; margin: 1.4rem auto .4rem; max-width: 100%; }
+  .scope .grid { stroke: rgba(255, 255, 255, .07); }
+  .tr { stroke-dasharray: .25 1; animation: sweep 2.4s linear infinite; }
+  @keyframes sweep { to { stroke-dashoffset: -1.25; } }
+  @media (prefers-reduced-motion: reduce) { .tr { animation: none; stroke-dasharray: none; } }
+  .log { font: 400 12.5px/1.7 ui-monospace, Menlo, monospace; color: var(--muted); }
 </style>
 </head>
 <body>
 <main>
   <p class="code" aria-hidden="true">404</p>
-  <h1>ไม่พบหน้านี้</h1>
-  <p lang="en">This page doesn't exist. It may have moved.</p>
+  <h1>ไม่พบหน้านี้ · NO CARRIER</h1>
+  <p>ไม่มีหน้านี้ หรืออาจถูกย้ายไปแล้ว</p>
+  <p lang="en">Nothing lives at this address. Try the home page or jump to the work.</p>
+  <svg class="scope" viewBox="0 0 300 48" width="300" height="48" aria-hidden="true">
+    <path class="grid" d="M0 12H300M0 24H300M0 36H300M60 0V48M120 0V48M180 0V48M240 0V48" fill="none"/>
+    <path class="tr" d="M0 24H130l6-16 6 32 6-16H300" fill="none" stroke="#ec9a5a" stroke-width="2" pathLength="1"/>
+  </svg>
+  <p class="log" lang="en">[FAIL-SAFE] link lost &gt; 1.5 s · motors safed · re-pairing…</p>
   <nav>
     <a href="/">กลับหน้าแรก · <span lang="en">Home</span></a>
     <a class="ghost" href="/#work">ผลงาน · <span lang="en">Work</span></a>

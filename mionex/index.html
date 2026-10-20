@@ -34,7 +34,8 @@ img{max-width:100%;display:block}a{color:inherit}
 .topbar{position:sticky;top:0;z-index:20;background:rgba(10,27,54,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:54px}
 .brand{font-weight:800;letter-spacing:.14em;font-size:18px}.brand b{color:var(--teal)}
-.tb-cta{font-size:13px;font-weight:700;letter-spacing:.03em;text-decoration:none;background:var(--teal);color:#062018;padding:9px 15px;border-radius:999px}
+.tb-cta{font-size:13px;font-weight:700;letter-spacing:.03em;text-decoration:none;background:var(--teal);color:#062018;padding:9px 15px;border-radius:999px;display:inline-flex;align-items:center;min-height:38px}
+@media (pointer:coarse){.tb-cta{min-height:44px}}
 .hero{padding:36px 0 10px;text-align:center;background:radial-gradient(120% 90% at 50% -10%,#173a70 0%,var(--navy) 62%)}
 .eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--teal2);font-weight:700}
 .hero h1{font-size:clamp(30px,8.5vw,46px);line-height:1.04;font-weight:800;margin:.4em 0 .25em;text-wrap:balance;letter-spacing:-.01em}
@@ -118,7 +119,7 @@ a:focus-visible,.tb-cta:focus-visible{outline:2px solid var(--teal2);outline-off
   <div class="gallery">
     <div class="shot"><img src="img/mionex-finished.jpg" width="560" height="315" alt="Finished MIONEX arm"><div class="cap">Finished arm — 0.65 kg PA12 nylon</div></div>
     <div class="shot"><img src="img/mionex-cad-hand.jpg" width="560" height="350" alt="CAD hand assembly"><div class="cap">Hand assembly, engineered in CAD</div></div>
-    <div class="shot"><img src="img/mionex-limb-scan.jpg" width="560" height="350" alt="3D-scanned residual limb"><div class="cap">3D scan for a perfect socket fit</div></div>
+    <div class="shot"><img src="img/mionex-limb-scan.jpg" width="560" height="350" alt="3D-scanned residual limb"><div class="cap">3D scan of the residual limb, used to shape the socket</div></div>
   </div>
 </div></section>
 
@@ -140,10 +141,10 @@ a:focus-visible,.tb-cta:focus-visible{outline:2px solid var(--teal2);outline-off
   <p class="k">Why MIONEX</p>
   <h2>Light, smart, and fitted to you</h2>
   <div class="cards">
-    <div class="bcard"><h3>Lightweight</h3><p>PA12 nylon, 0.65 kg — the lightest myoelectric arm in its category.</p></div>
-    <div class="bcard"><h3>Smart EMG control</h3><p>Single-channel muscle sensing drives one reliable grip — intuitive and instant.</p></div>
+    <div class="bcard"><h3>Lightweight</h3><p>PA12 nylon, 0.65 kg, against roughly 1.6 kg for a conventional myoelectric arm.</p></div>
+    <div class="bcard"><h3>Smart EMG control</h3><p>Single-channel muscle sensing drives one grip. Users rated its accuracy 4.33 out of 5.</p></div>
     <div class="bcard"><h3>Custom-fitted</h3><p>A 3D-scanned socket built to your residual limb for all-day comfort.</p></div>
-    <div class="bcard"><h3>Validated &amp; protected</h3><p>Thai petty patent granted. IEC 60601-1 &amp; 60601-1-2 submitted for testing.</p></div>
+    <div class="bcard"><h3>Patented, in certification</h3><p>Thai petty patent No. 26191 granted. IEC 60601-1 and 60601-1-2 testing submitted.</p></div>
   </div>
 </div></section>
 
@@ -159,7 +160,7 @@ a:focus-visible,.tb-cta:focus-visible{outline:2px solid var(--teal2);outline-off
 </div></section>
 
 <section class="paper"><div class="wrap">
-  <p class="k">Validated by the people who wear it</p>
+  <p class="k">Rated by the people who wear it</p>
   <h2>Rated by all six fitted users</h2>
   <div class="proof">
     <div><b>4.33</b><span>EMG accuracy /5</span></div>
@@ -170,8 +171,8 @@ a:focus-visible,.tb-cta:focus-visible{outline:2px solid var(--teal2);outline-off
 </div></section>
 
 <section><div class="wrap">
-  <p class="k">Credibility &amp; track record</p>
-  <h2>The receipts</h2>
+  <p class="k">Track record</p>
+  <h2>On the record</h2>
   <div class="badges">
     <span class="badge">Petty patent No. 26191</span>
     <span class="badge">IEC 60601-1 / -1-2 submitted</span>
@@ -185,7 +186,7 @@ a:focus-visible,.tb-cta:focus-visible{outline:2px solid var(--teal2);outline-off
   <p class="k">Get in touch</p>
   <h2>Talk to us</h2>
   <a class="row" href="mailto:apipath.san@gmail.com"><span class="lab">Email</span><span class="val">apipath.san@gmail.com</span></a>
-  <a class="row" href="https://github.com/Qil159753" target="_blank" rel="noopener"><span class="lab">GitHub</span><span class="val">Qil159753</span></a>
+  <a class="row" href="https://github.com/Qil159753" target="_blank" rel="noopener"><span class="lab">GitHub</span><span class="val">Qil159753<span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"> (opens in a new tab)</span></span></a>
   <div class="partners">Clinical partner: <b>Paolo Hospital</b> · Strategic partner: <b>EASTPark BUU</b></div>
 </div></section>
 
