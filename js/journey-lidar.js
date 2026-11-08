@@ -13,6 +13,7 @@ const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').match
 const CH = 64, FOV_V = [-16.6, 16.6];        // Ouster OS1-64-like vertical layout, degrees
 const COLS = 512, RANGE = 70, SENSOR_Z = 1.9;  // columns per sweep, metres, mount height
 const SCAN_HZ = 5, CELL = 16, VOX = 0.6;
+const SCAN_STEP = 2.4;                         // metres of scrubbed drive per sweep
 const ELEV = Array.from({ length: CH }, (_, i) => Math.tan((FOV_V[0] + (FOV_V[1] - FOV_V[0]) * i / (CH - 1)) * Math.PI / 180));
 
 /* Height colour ramp: ground slate → blue → copper → pale gold on the tallest walls. */
@@ -186,6 +187,8 @@ export async function initLidar(root) {
 
   // ---- UI
   let s = 0, speed = 8, playing = !reducedMotion(), view = 'chase', scanAcc = 1, live = 0, near = '';
+  // Story mode (js/story.js): scroll owns the drive and the camera until free() hands them back.
+  let held = false, goal = 0, fly = 0, swept = 0;
   const camOff = new THREE.Vector3(-46, 38, 46);
   function setView(v) {
     view = v;
@@ -195,6 +198,7 @@ export async function initLidar(root) {
     else { controls.target.set(x, 2, -y); camera.position.copy(controls.target).add(camOff); }
     // From 560 m up, fog would hide everything and world-sized points shrink below a pixel.
     scene.fog = top ? null : fog;
+    fog.near = 160; fog.far = 520;
     mapMat.sizeAttenuation = liveMat.sizeAttenuation = !top;
     mapMat.size = top ? 1.6 : 0.5; liveMat.size = top ? 1.6 : 0.32;
     mapMat.needsUpdate = liveMat.needsUpdate = true;
@@ -202,10 +206,10 @@ export async function initLidar(root) {
     btn('view').querySelector('[data-v]').textContent = v === 'top' ? 'TOP' : 'CHASE';
     dirty = true;
   }
-  btn('play').addEventListener('click', () => { playing = !playing; btn('play').setAttribute('aria-pressed', !playing); });
+  btn('play').addEventListener('click', () => { if (held) return; playing = !playing; btn('play').setAttribute('aria-pressed', !playing); });
   btn('play').setAttribute('aria-pressed', !playing);
   btn('speed').addEventListener('click', () => { speed = speed === 8 ? 24 : 8; btn('speed').querySelector('[data-v]').textContent = speed === 8 ? '1×' : '3×'; });
-  btn('view').addEventListener('click', () => setView(view === 'top' ? 'chase' : 'top'));
+  btn('view').addEventListener('click', () => { if (!held) setView(view === 'top' ? 'chase' : 'top'); });
   btn('osm').addEventListener('click', () => { ghost.visible = !ghost.visible; dirty = true; btn('osm').setAttribute('aria-pressed', ghost.visible); });
   btn('clear').addEventListener('click', () => { vox.clear(); nMap = 0; mapGeo.setDrawRange(0, 0); dirty = true; });
   setView('chase');
@@ -220,16 +224,26 @@ export async function initLidar(root) {
     const dt = Math.min((now - last) / 1000, 0.05); last = now;
     try {
       const prev = poseAt(s);
-      if (playing) s += speed * dt;
+      if (held) {
+        // Catch up with the scroll a few sweeps per frame, so a fast flick doesn't stall the page.
+        if (goal < s) { s = goal; swept = s; dirty = true; }
+        for (let n = 0; n < 4 && s < goal; n++) {
+          s = Math.min(goal, s + SCAN_STEP);
+          if (s - swept >= SCAN_STEP || s === goal) { swept = s; live = sweep(...poseAt(s)); }
+          dirty = true;
+        }
+      } else if (playing) s += speed * dt;
       const [x, y, yaw] = poseAt(s);
       bot.position.set(x, 0, -y); bot.rotation.y = yaw;
-      if (view === 'chase') {
+      if (held) {
+        aim(x, y);
+      } else if (view === 'chase') {
         const dxp = x - prev[0], dyp = y - prev[1];
         controls.target.x += dxp; controls.target.z -= dyp; camera.position.x += dxp; camera.position.z -= dyp;
       }
       scanAcc += dt;
-      if (playing && scanAcc >= 1 / SCAN_HZ) { scanAcc = 0; live = sweep(x, y, yaw); }
-      if (controls.update() || playing || dirty) { renderer.render(scene, camera); dirty = false; }
+      if (playing && !held && scanAcc >= 1 / SCAN_HZ) { scanAcc = 0; live = sweep(x, y, yaw); }
+      if ((!held && controls.update()) || (playing && !held) || dirty) { renderer.render(scene, camera); dirty = false; }
       statT -= dt;
       if (statT <= 0) {
         statT = 0.4;
@@ -240,6 +254,38 @@ export async function initLidar(root) {
     root.classList.add('ready');
     raf = requestAnimationFrame(frame);
   }
+  // Chase camera blended toward a high oblique view of the whole campus. Point sizes scale with
+  // distance so the map keeps the same on-screen density on the way up.
+  const OVER_T = new THREE.Vector3(-20, 0, -70), OVER_OFF = new THREE.Vector3(-200, 260, 200);
+  const CHASE_D = camOff.length(), tgt = new THREE.Vector3(), pos = new THREE.Vector3();
+  function aim(x, y) {
+    const k = fly * fly * (3 - 2 * fly);
+    tgt.set(x, 2, -y).lerp(OVER_T, k);
+    pos.copy(camOff).lerp(OVER_OFF, k).add(tgt);
+    controls.target.copy(tgt); camera.position.copy(pos); camera.lookAt(tgt);
+    const f = pos.distanceTo(tgt) / CHASE_D;
+    mapMat.size = 0.5 * f; liveMat.size = 0.32 * f; bot.scale.setScalar(Math.max(1, f * 0.6));
+    fog.near = 160 * f; fog.far = 520 * f;
+  }
+  root.lidar = {
+    LOOP,
+    scrub(p, k) {
+      if (!held) {
+        held = true; controls.enabled = false; root.classList.add('scrub');
+        if (view === 'top') setView('chase');
+      }
+      goal = Math.max(0, Math.min(1, p)) * LOOP; fly = Math.max(0, Math.min(1, k)); dirty = true;
+    },
+    free() {
+      if (!held) return;
+      held = false; controls.enabled = true; root.classList.remove('scrub');
+      playing = !reducedMotion(); btn('play').setAttribute('aria-pressed', !playing);
+      view = 'orbit'; bot.scale.setScalar(1); btn('view').querySelector('[data-v]').textContent = 'ORBIT';
+      dirty = true;
+    }
+  };
+  root.dispatchEvent(new Event('lidar-ready'));
+
   function sync() {
     const run = seen && !document.hidden && !dead;
     if (run && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); }
