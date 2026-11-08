@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'sha256-zXRYQ4sGshWOaiXS8yPP1eLk9IgSmEpBQokLWyLYqPU=' 'sha256-Maq4OAyHEFSpaDq89u3j/FQZtYX6ni/6FUx9NN8n4SQ=' 'sha256-I6xd6YBtksqIjJmKYJ3u1nYNeoT3G0k7iaAT5QRPtdE=' 'sha256-Qv0tE7KZYUndsRin9VAppU8173SRYqOd3zcqHA/VY/I=' 'sha256-JZDPbhWYQBHoiEzT1A0xlVzHpCa0cgs5Wau4AZ5h1ho=' 'sha256-R7+TVmKZkA36xfkqQmKE7bYZktICV8jf4WDqqeWoUQI='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'sha256-zXRYQ4sGshWOaiXS8yPP1eLk9IgSmEpBQokLWyLYqPU=' 'sha256-Maq4OAyHEFSpaDq89u3j/FQZtYX6ni/6FUx9NN8n4SQ=' 'sha256-Bzv8AA/dpiMyuNtTld0qxp1OVzzPOVBDW/n7y0Hsztw=' 'sha256-Qv0tE7KZYUndsRin9VAppU8173SRYqOd3zcqHA/VY/I=' 'sha256-JZDPbhWYQBHoiEzT1A0xlVzHpCa0cgs5Wau4AZ5h1ho=' 'sha256-R7+TVmKZkA36xfkqQmKE7bYZktICV8jf4WDqqeWoUQI='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="อภิภัทร สันทัสนะโชค (คิว) นักศึกษาวิศวกรรมระบบสมองกลฝังตัว ม.บูรพา ทำเฟิร์มแวร์ หุ่นยนต์แข่ง แขนเทียม MIONEX และระบบเว็บสำหรับร้านค้า">
@@ -484,6 +484,121 @@ h1 em { font-style: normal; color: var(--copper); }
 /* In-page "pause motion" switch (WCAG 2.2.2). JS reads the same flag and skips every loop. */
 :root[data-motion="off"] *, :root[data-motion="off"] *::before, :root[data-motion="off"] *::after { animation: none !important; transition-duration: 0s !important; }
 :root[data-motion="off"] { scroll-behavior: auto !important; }
+
+/* ---------- journey story: a plain stack of chapters; .on (js/story.js) pins and scrubs it ---------- */
+.story { position: relative; margin-top: clamp(48px, 6vw, 80px); }
+.st-skip { position: absolute; top: 0; left: 0; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.st-skip:focus-visible { width: auto; height: auto; clip-path: none; z-index: 6; padding: 8px 14px; border-radius: 999px; background: var(--panel-2); color: var(--ink); font: 500 13px/1.4 var(--mono); }
+.st-rail { display: none; }
+.st-chs { display: grid; gap: clamp(64px, 9vw, 112px); }
+.st-ch { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(24px, 4vw, 56px); align-items: center; }
+.st-copy { min-width: 0; }
+.st-copy h3 { margin-top: 10px; font-size: clamp(1.7rem, 3vw, 2.6rem); line-height: 1.15; letter-spacing: -.01em; }
+.st-copy > p { margin-top: 16px; max-width: 46ch; }
+.st-beats { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 8px; }
+.st-beats a { display: block; padding: 10px 16px 11px; border-left: 2px solid var(--line-2); border-radius: 0 10px 10px 0; text-decoration: none; color: var(--text);
+              transition: border-color .4s var(--ease), color .4s var(--ease), background-color .4s var(--ease); }
+.st-beats a:hover, .st-beats li.on a { border-color: var(--copper); color: var(--ink); background: var(--copper-soft); }
+.st-beats time { display: block; font: 500 12px/1.6 var(--mono); color: var(--copper); }
+.st-more { font: 500 13px/1.5 var(--mono); }
+.st-copy > .st-more { margin-top: 14px; }
+.st-more a { color: var(--copper); text-decoration: none; }
+.st-more a:hover { text-decoration: underline; }
+.st-vis { position: relative; min-width: 0; aspect-ratio: 600 / 440; border-radius: var(--r-lg); border: 1px solid var(--line-2); overflow: hidden;
+          background: radial-gradient(90% 70% at 70% 20%, rgba(236, 154, 90, .07), transparent 60%), var(--panel); }
+.st-vis:has(> .j3d) { aspect-ratio: auto; border: 0; background: none; border-radius: 0; overflow: visible; }
+.st-vis > .j3d { margin: 0; }
+/* Without the scroll timeline each picture shows only its last scene. */
+.story:not(.on) .beat:not(:last-of-type) { display: none; }
+.st-vis svg { display: block; width: 100%; height: 100%; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.st-vis text { font: 500 11px var(--mono); fill: var(--muted); stroke: none; letter-spacing: .06em; }
+.st-vis text.hl { fill: var(--copper); font-size: 12px; }
+.st-vis text.big { font: 700 64px var(--display); fill: rgba(255, 255, 255, .07); letter-spacing: -.02em; }
+.st-vis text.chip { fill: var(--ink); font-size: 10px; letter-spacing: 0; }
+.st-vis .cu { fill: var(--copper-hi); } .st-vis .bl { fill: #6aa7d8; }
+.st-vis .ln, .st-vis .trace, .st-vis .water, .st-vis .lap1, .st-vis .lap2, .st-vis .route { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.st-vis .ln { stroke: var(--copper); stroke-width: 2; }
+.st-vis .ln.dim { stroke: var(--line-2); }
+.st-vis .ground, .st-vis .tick path { stroke: var(--line-2); stroke-width: 1.5; }
+.st-vis .node circle { fill: var(--bg); stroke: var(--copper); stroke-width: 2.5; }
+.st-vis .node text { fill: var(--text); }
+.st-vis .syr rect { stroke: var(--text); stroke-width: 1.5; fill: rgba(255, 255, 255, .03); }
+.st-vis .water { stroke: #6aa7d8; stroke-width: 2; opacity: .85; }
+.st-vis .arm { stroke: var(--copper); stroke-width: 10; opacity: .9; }
+.st-vis .joint { fill: var(--bg); stroke: var(--copper-hi); stroke-width: 2.5; }
+.st-vis .hdr { stroke: var(--copper); stroke-width: 9; stroke-dasharray: 0 26.28; }
+.st-vis .pins { fill: var(--panel-2); stroke: var(--copper); stroke-width: 7; stroke-dasharray: 2 5; }
+.st-vis .trace { stroke: var(--copper-hi); stroke-width: 3; }
+.st-vis .trace.bot { stroke: #6aa7d8; stroke-width: 2.5; opacity: .8; }
+.st-vis .spot { fill: rgba(236, 154, 90, .09); }
+.st-vis .pod rect { fill: var(--panel-2); stroke: var(--line-2); transition: fill .4s var(--ease), stroke .4s var(--ease); }
+.st-vis .pod text { font: 700 40px var(--display); fill: var(--muted); }
+.st-vis .pod.on rect { fill: var(--copper-soft); stroke: var(--copper); }
+.st-vis .pod.on text { fill: var(--copper-hi); }
+.st-vis .dot { fill: rgba(255, 255, 255, .16); }
+.st-vis .dot.pick { fill: var(--copper); }
+.st-vis .city, .st-vis .plane { fill: var(--copper); }
+.st-vis .plane { fill: var(--copper-hi); }
+.st-vis .faint { opacity: .5; }
+.st-vis .track { stroke: rgba(255, 255, 255, .1); stroke-width: 20; }
+.st-vis .lap1 { stroke: var(--muted); stroke-width: 2; }
+.st-vis .lap2 { stroke: var(--copper); stroke-width: 3.5; }
+.st-vis .mark { stroke: var(--ink); stroke-width: 3; }
+.st-vis .bot rect { fill: var(--ink); }
+.st-vis .bot path { stroke: var(--copper); stroke-width: 3; }
+.st-vis .pad rect, .st-vis .pad circle { stroke: var(--text); stroke-width: 1.5; }
+.st-vis .wave { stroke: var(--copper); stroke-width: 2; opacity: .7; }
+.st-vis .frame rect { fill: var(--copper); }
+.st-vis .frame text { fill: var(--copper-ink); font-size: 9px; letter-spacing: 0; }
+.st-vis .mecanum > rect:first-child { fill: var(--panel-2); stroke: var(--copper); stroke-width: 2; }
+.st-vis .wheel { fill: #0c0f14; stroke: var(--text); stroke-width: 1.5; }
+.st-vis .roll { stroke: var(--muted); stroke-width: 1.5; }
+.st-vis .vec { stroke: var(--copper-hi); stroke-width: 3; }
+.st-vis .bar { fill: rgba(255, 255, 255, .05); }
+.st-vis .fillbar { fill: var(--copper); }
+.st-vis .cell { fill: rgba(255, 255, 255, .06); }
+.st-vis .cell.w { fill: var(--text); }
+.st-vis .cell.o { fill: rgba(236, 154, 90, .45); }
+.st-vis .route { stroke: var(--copper-hi); stroke-width: 3; }
+.st-vis .stn circle { fill: var(--bg); stroke: var(--copper); stroke-width: 2; }
+.st-vis .stn text { fill: var(--ink); font-size: 11px; }
+.st-vis .robot { fill: #4fd18b; }
+.st-skills { margin-top: clamp(48px, 7vw, 80px); display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px 32px; }
+.st-g b { display: block; margin-bottom: 10px; font: 500 12.5px/1.4 var(--mono); color: var(--muted); }
+.st-g ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.st-g li { font: 400 12.5px/1 var(--mono); padding: 8px 11px; border-radius: 6px; border: 1px solid var(--line-2); color: var(--text); background: rgba(255, 255, 255, .025);
+           transition: border-color .4s var(--ease), color .4s var(--ease), background-color .4s var(--ease); }
+.st-g li.seen { border-color: rgba(236, 154, 90, .35); color: var(--ink); }
+.st-g li.on { border-color: var(--copper); background: var(--copper-soft); color: var(--copper-hi); }
+.st-tl { margin-top: clamp(72px, 9vw, 120px); font-size: clamp(1.4rem, 2.2vw, 1.9rem); }
+.story.on .st-stage { position: relative; height: 100vh; height: 100svh; padding: 92px 0 28px; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 20px; }
+.story.on .st-rail { display: block; }
+.st-rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.st-rail a { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); font: 500 12px/1 var(--mono); color: var(--muted); text-decoration: none;
+             transition: border-color .4s var(--ease), color .4s var(--ease), background-color .4s var(--ease); }
+.st-rail a:hover { color: var(--ink); }
+.st-rail a.done b { color: var(--copper); }
+.st-rail a.on { color: var(--ink); border-color: var(--copper); background: var(--copper-soft); }
+.st-rail a.on b { color: var(--copper-hi); }
+.story.on .st-chs { position: relative; display: block; }
+.story.on .st-ch { position: absolute; inset: 0; align-items: stretch; visibility: hidden; opacity: 0; pointer-events: none; }
+.story.on .st-ch > * { pointer-events: auto; }
+.story.on .st-copy { align-self: start; padding-top: clamp(8px, 3vh, 40px); }
+.story.on .st-vis { aspect-ratio: auto; height: 100%; }
+.story.on .st-vis > .j3d { height: 100%; display: flex; flex-direction: column; }
+.story.on .st-vis > .j3d canvas { flex: 1; height: auto; min-height: 0; }
+.story.on .st-vis .j3d-ui { position: absolute; left: 0; right: 0; bottom: 0; transition: opacity .5s var(--ease), visibility .5s; }
+.story.on .j3d.scrub .j3d-ui, .story.on .j3d.scrub .j3d-hint { opacity: 0; visibility: hidden; }
+.story.on .j3d.scrub canvas { cursor: default; }
+.story.on .st-skills { position: absolute; left: 0; bottom: 28px; width: calc(45% - 32px); margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.story.on .st-skills:not(.sum) .st-g, .story.on .st-skills:not(.sum) .st-g ul { display: contents; }
+.story.on .st-skills:not(.sum) .st-g b { display: none; }
+.story.on .st-skills:not(.sum) li { font-size: 11px; padding: 6px 8px; }
+.story.on .st-skills.sum { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; animation: stSum .6s var(--ease) both; }
+@keyframes stSum { from { opacity: 0; transform: translateY(12px); } }
+@media (max-width: 960px) {
+  .st-ch { grid-template-columns: minmax(0, 1fr); }
+}
 
 /* ---------- layout switches ---------- */
 @media (min-width: 961px) and (min-height: 760px) and (max-height: 860px) {
@@ -1084,6 +1199,267 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
         <h2 class="h2"><span class="th">เส้นทาง</span><span class="en" lang="en">Journey</span></h2>
         <p><span class="th">สามปี เรียงจากเก่าไปใหม่ ตั้งแต่แขนขุดดินจากไซริงค์ ไปจนถึงไต้หวัน ญี่ปุ่น และเกาหลี ห้างานในนี้ลองเล่นได้จริง</span><span class="en" lang="en">Three years, oldest first: from a syringe-powered digger to Taiwan, Japan and Korea. Five of these you can play with.</span></p>
       </div>
+      <div class="story" id="story">
+        <a class="st-skip" href="#timeline"><span class="th">ข้ามไปไทม์ไลน์เต็ม ↓</span><span class="en" lang="en">Skip to the full timeline ↓</span></a>
+        <div class="st-stage">
+          <nav class="st-rail" aria-label="บทในเรื่องเล่า" data-label-en="Story chapters"><ol>
+            <li><a href="#st-intro" data-go="0"><b>00</b><span class="th">เริ่ม</span><span class="en" lang="en">Start</span></a></li>
+            <li><a href="#st-build" data-go="1"><b>01</b><span class="th">สร้าง</span><span class="en" lang="en">Build</span></a></li>
+            <li><a href="#st-pitch" data-go="2"><b>02</b><span class="th">ขึ้นเวที</span><span class="en" lang="en">Pitch</span></a></li>
+            <li><a href="#st-compete" data-go="3"><b>03</b><span class="th">ลงสนาม</span><span class="en" lang="en">Compete</span></a></li>
+            <li><a href="#st-nav" data-go="4"><b>04</b><span class="th">นำทาง</span><span class="en" lang="en">Navigate</span></a></li>
+            <li><a href="#st-lidar" data-go="5"><b>05</b><span class="th">มองเห็น</span><span class="en" lang="en">See</span></a></li>
+            <li><a href="#st-skills" data-go="6"><b>★</b><span class="th">ทักษะ</span><span class="en" lang="en">Skills</span></a></li>
+          </ol></nav>
+          <div class="st-chs">
+
+            <article class="st-ch" id="st-intro" aria-labelledby="st-h0">
+              <div class="st-copy">
+                <span class="kicker"><span class="th">เรื่องเล่า · บทนำ</span><span class="en" lang="en">The story · Prologue</span></span>
+                <h3 id="st-h0"><span class="th">สามปี จากไซริงค์ถึง LiDAR</span><span class="en" lang="en">Three years, from syringes to LiDAR</span></h3>
+                <p><span class="th">เลื่อนลงเพื่อดูทีละบท สร้างของด้วยมือ ขึ้นเวทีพิตช์ ลงสนามแข่ง สอนหุ่นให้นำทางเอง แล้วจบที่แคมปัสในเกาหลีผ่านสายตา LiDAR</span><span class="en" lang="en">Scroll through it one chapter at a time: building by hand, pitching on stage, racing robots, teaching one to find its way, and ending on a Korean campus seen through a LiDAR.</span></p>
+              </div>
+              <div class="st-vis">
+                <svg viewBox="0 0 600 440" role="img" aria-label="เส้นเวลาสามปี แบ่งเป็นห้าบท" data-label-en="A three-year timeline in five chapters">
+                  <path class="ln dim" pathLength="1" d="M60 220H556"/>
+                  <path class="ln" pathLength="1" d="M60 220H556" data-k="line"/>
+                  <g class="tick"><path d="M148 208v24M368 208v24"/><text x="148" y="256" text-anchor="middle">2025</text><text x="368" y="256" text-anchor="middle">2026</text></g>
+                  <g class="node"><circle cx="126" cy="220" r="9"/><text x="126" y="186" text-anchor="middle"><tspan class="th">01 สร้าง</tspan><tspan class="en">01 BUILD</tspan></text></g>
+                  <g class="node"><circle cx="229" cy="220" r="9"/><text x="229" y="282" text-anchor="middle"><tspan class="th">02 ขึ้นเวที</tspan><tspan class="en">02 PITCH</tspan></text></g>
+                  <g class="node"><circle cx="280" cy="220" r="9"/><text x="280" y="156" text-anchor="middle"><tspan class="th">03 ลงสนาม</tspan><tspan class="en">03 COMPETE</tspan></text></g>
+                  <g class="node"><circle cx="324" cy="220" r="9"/><text x="324" y="312" text-anchor="middle"><tspan class="th">04 นำทาง</tspan><tspan class="en">04 NAVIGATE</tspan></text></g>
+                  <g class="node"><circle cx="544" cy="220" r="9"/><text x="544" y="186" text-anchor="middle"><tspan class="th">05 มองเห็น</tspan><tspan class="en">05 SEE</tspan></text></g>
+                  <text class="big" x="60" y="120">2024</text><text class="big" x="556" y="380" text-anchor="end">2026</text>
+                </svg>
+              </div>
+            </article>
+
+            <article class="st-ch" id="st-build" aria-labelledby="st-h1">
+              <div class="st-copy">
+                <span class="kicker"><span class="th">บทที่ 1 · สร้าง</span><span class="en" lang="en">Chapter 1 · Build</span></span>
+                <h3 id="st-h1"><span class="th">เริ่มจากของที่จับต้องได้</span><span class="en" lang="en">It started with things I could hold</span></h3>
+                <ol class="st-beats">
+                  <li><a href="#j-digger"><time><span class="th">ปี 1</span><span class="en" lang="en">Year 1</span></time><span class="th">แขนขุดดินที่ขยับด้วยน้ำในไซริงค์</span><span class="en" lang="en">A digger arm driven by water in syringes</span></a></li>
+                  <li><a href="#j-truck"><time><span class="th">ก.พ.–มี.ค. 2025</span><span class="en" lang="en">Feb–Mar 2025</span></time><span class="th">รถของเล่น 11 ชิ้น วัดด้วยเวอร์เนียร์ แล้วขึ้นโมเดลใน SolidWorks</span><span class="en" lang="en">A toy truck in 11 parts, measured with calipers and modelled in SolidWorks</span></a></li>
+                  <li><a href="#j-nano"><time><span class="th">ก.พ. 2026</span><span class="en" lang="en">Feb 2026</span></time><span class="th">บอร์ด Arduino Nano ของผมเอง ATmega328P สองเลเยอร์ ออกแบบใน EasyEDA</span><span class="en" lang="en">My own Arduino Nano board: ATmega328P on two layers, laid out in EasyEDA</span></a></li>
+                </ol>
+              </div>
+              <div class="st-vis">
+                <svg viewBox="0 0 600 440" role="img" aria-label="ภาพลายเส้น แขนขุดดิน รถของเล่นแบบแยกชิ้น และแผ่นวงจรบอร์ด Nano" data-label-en="Line drawings: the digger arm, the truck taken apart, and the Nano circuit board">
+                  <g class="beat" data-b="0">
+                    <path class="ground" d="M40 372H560"/>
+                    <rect class="ln" pathLength="1" x="100" y="320" width="200" height="40" rx="20"/>
+                    <circle class="ln" pathLength="1" cx="124" cy="340" r="12"/><circle class="ln" pathLength="1" cx="200" cy="340" r="12"/><circle class="ln" pathLength="1" cx="276" cy="340" r="12"/>
+                    <path class="ln" pathLength="1" d="M116 320V246H226V214H286V320Z"/>
+                    <g class="syr"><rect x="132" y="262" width="14" height="44" rx="3"/><rect x="160" y="262" width="14" height="44" rx="3"/><rect x="188" y="262" width="14" height="44" rx="3"/></g>
+                    <path class="water" pathLength="1" d="M139 262C139 196 230 200 300 226"/>
+                    <path class="water" pathLength="1" d="M167 262C170 170 290 130 360 150"/>
+                    <path class="water" pathLength="1" d="M195 262C210 150 380 120 430 184"/>
+                    <g data-k="boom">
+                      <path class="arm" d="M284 236L404 150"/>
+                      <g data-k="stick">
+                        <path class="arm" d="M404 150L470 262"/>
+                        <g data-k="bucket"><path class="ln" pathLength="1" d="M470 262l30 8l-6 34q-34 8-48-22z"/></g>
+                        <circle class="joint" cx="470" cy="262" r="6"/>
+                      </g>
+                      <circle class="joint" cx="404" cy="150" r="6"/>
+                    </g>
+                    <circle class="joint" cx="284" cy="236" r="7"/>
+                    <text x="100" y="404"><tspan class="th">ไซริงค์ + ท่อน้ำ</tspan><tspan class="en">SYRINGES + WATER LINES</tspan></text>
+                  </g>
+                  <g class="beat" data-b="1">
+                    <g class="part" data-dx="0" data-dy="-74"><path class="ln" pathLength="1" d="M150 268L162 196H356V268Z"/></g>
+                    <g class="part" data-dx="70" data-dy="-46"><path class="ln" pathLength="1" d="M372 268V198H428L462 236V268Z"/><path class="ln" pathLength="1" d="M386 210H424L446 234H386Z"/></g>
+                    <g class="part" data-dx="0" data-dy="0"><rect class="ln" pathLength="1" x="140" y="268" width="330" height="18" rx="4"/></g>
+                    <g class="part" data-dx="-40" data-dy="62"><circle class="ln" pathLength="1" cx="214" cy="300" r="32"/></g>
+                    <g class="part" data-dx="40" data-dy="62"><circle class="ln" pathLength="1" cx="404" cy="300" r="32"/></g>
+                    <g class="part" data-dx="-96" data-dy="62"><circle class="ln" pathLength="1" cx="214" cy="300" r="15"/></g>
+                    <g class="part" data-dx="96" data-dy="62"><circle class="ln" pathLength="1" cx="404" cy="300" r="15"/></g>
+                    <g class="part" data-dx="-150" data-dy="40"><path class="ln" pathLength="1" d="M200 300H228"/></g>
+                    <g class="part" data-dx="150" data-dy="40"><path class="ln" pathLength="1" d="M390 300H418"/></g>
+                    <g class="part" data-dx="-120" data-dy="100"><circle class="ln" pathLength="1" cx="214" cy="300" r="4"/></g>
+                    <g class="part" data-dx="120" data-dy="100"><circle class="ln" pathLength="1" cx="404" cy="300" r="4"/></g>
+                    <text x="300" y="110" text-anchor="middle" class="hl">11 PARTS · SOLIDWORKS</text>
+                  </g>
+                  <g class="beat" data-b="2">
+                    <rect class="ln" pathLength="1" x="90" y="140" width="420" height="180" rx="14"/>
+                    <path class="hdr" d="M118 160H486M118 300H486"/>
+                    <rect class="ln" pathLength="1" x="74" y="206" width="40" height="48" rx="10"/>
+                    <rect class="pins" x="160" y="200" width="54" height="60" rx="3"/>
+                    <rect class="pins" x="268" y="190" width="80" height="80" rx="4"/>
+                    <rect class="ln" pathLength="1" x="384" y="196" width="34" height="16" rx="8"/>
+                    <rect class="ln" pathLength="1" x="430" y="236" width="44" height="34" rx="3"/>
+                    <path class="trace" pathLength="1" d="M114 222H140L160 214"/>
+                    <path class="trace" pathLength="1" d="M114 238H146L160 246"/>
+                    <path class="trace" pathLength="1" d="M214 214H240L268 204"/>
+                    <path class="trace" pathLength="1" d="M214 246H244L268 256"/>
+                    <path class="trace" pathLength="1" d="M348 204H384"/>
+                    <path class="trace" pathLength="1" d="M308 190V176L322 160"/>
+                    <path class="trace" pathLength="1" d="M290 190V172L270 160"/>
+                    <path class="trace" pathLength="1" d="M308 270V284L330 300"/>
+                    <path class="trace" pathLength="1" d="M348 252H430"/>
+                    <path class="trace bot" pathLength="1" d="M94 254V330H452V270"/>
+                    <path class="trace bot" pathLength="1" d="M452 236V180L470 160"/>
+                    <text x="308" y="236" text-anchor="middle" class="chip">ATmega328P</text>
+                    <text x="187" y="284" text-anchor="middle">CH340G</text>
+                    <text x="94" y="196" text-anchor="middle">USB-C</text>
+                    <text x="401" y="186" text-anchor="middle">16 MHz</text>
+                    <text x="452" y="229" text-anchor="middle">3.3 V</text>
+                    <text x="90" y="372"><tspan class="cu"><tspan class="th">ทองแดงชั้นบน</tspan><tspan class="en">TOP COPPER</tspan></tspan> · <tspan class="bl"><tspan class="th">ชั้นล่าง</tspan><tspan class="en">BOTTOM LAYER</tspan></tspan></text>
+                  </g>
+                </svg>
+              </div>
+            </article>
+
+            <article class="st-ch" id="st-pitch" aria-labelledby="st-h2">
+              <div class="st-copy">
+                <span class="kicker"><span class="th">บทที่ 2 · ขึ้นเวที</span><span class="en" lang="en">Chapter 2 · On stage</span></span>
+                <h3 id="st-h2"><span class="th">แล้วก็ต้องเล่าให้คนอื่นเชื่อ</span><span class="en" lang="en">Then I had to make other people believe in it</span></h3>
+                <ol class="st-beats">
+                  <li><a href="#j-stl"><time><span class="th">พ.ค.–มิ.ย. 2025</span><span class="en" lang="en">May–Jun 2025</span></time><span class="th">Startup Thailand League เวทีพิตช์ครั้งแรก ได้ที่ 3 รอบมหาวิทยาลัย</span><span class="en" lang="en">Startup Thailand League, my first pitch: third in the university round</span></a></li>
+                  <li><a href="#j-pyip"><time><span class="th">มิ.ย. 2025</span><span class="en" lang="en">Jun 2025</span></time><span class="th">Pitch Your IP ชนะเลิศกับ MIONEX</span><span class="en" lang="en">Pitch Your IP: first place with MIONEX</span></a></li>
+                  <li><a href="#j-elp4"><time><span class="th">พ.ค.–ต.ค. 2026</span><span class="en" lang="en">May–Oct 2026</span></time><span class="th">ELP4 เป็น 1 ใน 9 จาก 540 คน ได้ไปดูงานที่ SKKU เกาหลีใต้</span><span class="en" lang="en">ELP4: one of 9 from 540 applicants, off to SKKU in South Korea</span></a></li>
+                </ol>
+              </div>
+              <div class="st-vis">
+                <svg viewBox="0 0 600 440" role="img" aria-label="โพเดียมอันดับ 3 และอันดับ 1 จุด 540 จุดที่เหลือ 9 และเส้นทางจากชลบุรีไปซูวอน" data-label-en="A podium for third and first place, 540 dots narrowing to 9, and a route from Chonburi to Suwon">
+                  <g class="beat" data-b="0">
+                    <path class="spot" data-k="spot" d="M400 40L340 340H460Z"/>
+                    <g class="pod" data-p="2"><rect x="150" y="230" width="100" height="110"/><text x="200" y="290" text-anchor="middle">2</text></g>
+                    <g class="pod" data-p="1"><rect x="250" y="180" width="100" height="160"/><text x="300" y="250" text-anchor="middle">1</text></g>
+                    <g class="pod" data-p="3"><rect x="350" y="260" width="100" height="80"/><text x="400" y="310" text-anchor="middle">3</text></g>
+                    <path class="ground" d="M100 340H500"/>
+                    <text class="hl" x="300" y="390" text-anchor="middle" data-k="pod3">STARTUP THAILAND LEAGUE · 3RD</text>
+                    <text class="hl" x="300" y="390" text-anchor="middle" data-k="pod1">PITCH YOUR IP · 1ST · MIONEX</text>
+                  </g>
+                  <g class="beat" data-b="1">
+                    <g data-k="dots"></g>
+                    <text class="big" x="90" y="72" data-k="count">540</text>
+                    <circle class="city" cx="164" cy="346" r="6"/><circle class="city faint" cx="451" cy="230" r="4"/><circle class="city" cx="528" cy="107" r="6"/>
+                    <path class="ln dim" pathLength="1" d="M164 346Q250 110 528 107" data-k="arcdim"/>
+                    <path class="ln" pathLength="1" d="M164 346Q250 110 528 107" data-k="arc"/>
+                    <circle class="plane" r="7" cx="528" cy="107" data-k="plane"/>
+                    <g data-k="labels"><text x="164" y="378" text-anchor="middle">CHONBURI · TH</text><text x="451" y="258" text-anchor="middle" class="faint">TAIPEI</text><text x="528" y="84" text-anchor="end">SUWON · KR · SKKU</text></g>
+                  </g>
+                </svg>
+              </div>
+            </article>
+
+            <article class="st-ch" id="st-compete" aria-labelledby="st-h3">
+              <div class="st-copy">
+                <span class="kicker"><span class="th">บทที่ 3 · ลงสนาม</span><span class="en" lang="en">Chapter 3 · Compete</span></span>
+                <h3 id="st-h3"><span class="th">หุ่นที่ต้องวิ่งได้จริงในวันแข่ง</span><span class="en" lang="en">Robots that have to work on the day</span></h3>
+                <ol class="st-beats">
+                  <li><a href="#j-tmirc"><time><span class="th">ส.ค. 2025</span><span class="en" lang="en">Aug 2025</span></time><span class="th">TMIRC ไต้หวัน ในนามประเทศไทย ประเภท Robotrace หุ่นจำเส้นทางรอบแรก แล้ววิ่งทำเวลารอบสอง</span><span class="en" lang="en">TMIRC, Taiwan, for Thailand: Robotrace, where the robot learns the course, then races it</span></a></li>
+                  <li><a href="#j-abu"><time><span class="th">พ.ค.–มิ.ย. 2026</span><span class="en" lang="en">May–Jun 2026</span></time><span class="th">ABU Robocon 2026 เขียนซอฟต์แวร์ทั้งหมดของหุ่นและคอนโทรลเลอร์ ได้อันดับ 8 ระดับมหาวิทยาลัย</span><span class="en" lang="en">ABU Robocon 2026: all the software for my robot and its controller, 8th among universities</span></a></li>
+                </ol>
+              </div>
+              <div class="st-vis">
+                <svg viewBox="0 0 600 440" role="img" aria-label="สนาม Robotrace ที่หุ่นวิ่งสองรอบ และหุ่นล้อเมคานัมที่รับคำสั่งทางวิทยุ" data-label-en="A Robotrace course run twice, and a mecanum robot taking radio commands">
+                  <g class="beat" data-b="0">
+                    <path class="track" d="M140 300C100 300 90 240 120 210S200 160 240 120S360 80 420 110S520 180 490 240S400 260 380 300S300 360 240 340S180 300 140 300Z" data-k="track"/>
+                    <path class="lap1" pathLength="1" d="M140 300C100 300 90 240 120 210S200 160 240 120S360 80 420 110S520 180 490 240S400 260 380 300S300 360 240 340S180 300 140 300Z"/>
+                    <path class="lap2" pathLength="1" d="M140 300C100 300 90 240 120 210S200 160 240 120S360 80 420 110S520 180 490 240S400 260 380 300S300 360 240 340S180 300 140 300Z"/>
+                    <path class="mark" d="M140 284V316"/>
+                    <g class="bot" data-k="tracer" transform="translate(140 300)"><rect x="-12" y="-9" width="24" height="18" rx="4"/><path d="M12 -11V11"/></g>
+                    <text class="hl" x="60" y="400" data-k="lap1"><tspan class="th">รอบ 1 · จำเส้นทาง</tspan><tspan class="en">LAP 1 · LEARN THE COURSE</tspan></text>
+                    <text class="hl" x="60" y="400" data-k="lap2"><tspan class="th">รอบ 2 · วิ่งทำเวลา</tspan><tspan class="en">LAP 2 · RACE IT</tspan></text>
+                  </g>
+                  <g class="beat" data-b="1">
+                    <g class="pad"><rect x="60" y="176" width="74" height="104" rx="18"/><circle cx="84" cy="206" r="8"/><circle cx="112" cy="250" r="8"/></g>
+                    <path class="wave" d="M150 200q18 28 0 56M168 188q28 40 0 80M186 176q38 52 0 104"/>
+                    <g class="frame" data-k="frame" transform="translate(196 228)"><rect x="0" y="-12" width="34" height="24" rx="4"/><rect x="38" y="-12" width="14" height="24" rx="4"/><rect x="56" y="-12" width="34" height="24" rx="4"/><text x="17" y="4" text-anchor="middle">SOF</text><text x="73" y="4" text-anchor="middle">CRC</text></g>
+                    <g class="mecanum" data-k="mec" transform="translate(420 228)">
+                      <rect x="-80" y="-80" width="160" height="160" rx="18"/>
+                      <rect class="wheel" x="-104" y="-76" width="22" height="50" rx="5"/><rect class="wheel" x="82" y="-76" width="22" height="50" rx="5"/>
+                      <rect class="wheel" x="-104" y="26" width="22" height="50" rx="5"/><rect class="wheel" x="82" y="26" width="22" height="50" rx="5"/>
+                      <path class="roll" d="M-100 -66l14 10M-100 -52l14 10M-100 -38l14 10M86 -56l14 -10M86 -42l14 -10M86 -28l14 -10M-100 46l14 -10M-100 60l14 -10M-100 74l14 -10M86 36l14 10M86 50l14 10M86 64l14 10"/>
+                      <path class="vec" d="M0 0L38 -38M38 -38h-16M38 -38v16"/>
+                    </g>
+                    <text class="hl" x="300" y="410" text-anchor="middle"><tspan class="th">อันดับ 8 มหาวิทยาลัย · อันดับ 13 ประเทศ</tspan><tspan class="en">8TH UNIVERSITIES · 13TH NATIONAL</tspan></text>
+                  </g>
+                </svg>
+              </div>
+            </article>
+
+            <article class="st-ch" id="st-nav" aria-labelledby="st-h4">
+              <div class="st-copy">
+                <span class="kicker"><span class="th">บทที่ 4 · นำทาง</span><span class="en" lang="en">Chapter 4 · Navigate</span></span>
+                <h3 id="st-h4"><span class="th">สอนหุ่นให้รู้ว่าตัวเองอยู่ตรงไหน</span><span class="en" lang="en">Teaching a robot where it is</span></h3>
+                <ol class="st-beats">
+                  <li><a href="#j-mara"><time><span class="th">ต.ค. 2025–ม.ค. 2026</span><span class="en" lang="en">Oct 2025–Jan 2026</span></time><span class="th">อบรม ROS ที่ MARA สองหลักสูตร รวม 60 ชั่วโมง</span><span class="en" lang="en">Two ROS courses at MARA, 60 hours in all</span></a></li>
+                  <li><a href="#j-ros"><time><span class="th">มิ.ย. 2026</span><span class="en" lang="en">Jun 2026</span></time><span class="th">BATLY R1 ทำ SLAM สร้างแผนที่ นำทางด้วย Nav2 + AMCL แล้วเขียน node ให้วน A → B → C สองรอบ</span><span class="en" lang="en">BATLY R1: a SLAM map, Nav2 + AMCL, and my node that loops A → B → C twice</span></a></li>
+                </ol>
+              </div>
+              <div class="st-vis">
+                <svg viewBox="0 0 600 440" role="img" aria-label="แถบชั่วโมงอบรม ROS และแผนที่ตารางที่หุ่นสร้างแล้ววิ่งผ่านสถานี A B C" data-label-en="ROS training hours, then a grid map the robot builds and drives through stations A, B and C">
+                  <g class="beat" data-b="0">
+                    <text x="90" y="150">AUTONOMOUS MOBILE ROBOT · 30 H</text>
+                    <rect class="bar" x="90" y="164" width="420" height="20" rx="10"/><rect class="fillbar" x="90" y="164" width="420" height="20" rx="10" data-k="bar1"/>
+                    <text x="90" y="240">BASIC ROS · 30 H</text>
+                    <rect class="bar" x="90" y="254" width="420" height="20" rx="10"/><rect class="fillbar" x="90" y="254" width="420" height="20" rx="10" data-k="bar2"/>
+                    <text class="big" x="510" y="350" text-anchor="end">60 H</text>
+                  </g>
+                  <g class="beat" data-b="1">
+                    <g data-k="cells"></g>
+                    <path class="route" pathLength="1" data-k="route" d=""/>
+                    <g class="stn"><circle cx="153" cy="143" r="11"/><text x="153" y="147" text-anchor="middle">A</text></g>
+                    <g class="stn"><circle cx="447" cy="143" r="11"/><text x="447" y="147" text-anchor="middle">B</text></g>
+                    <g class="stn"><circle cx="307" cy="311" r="11"/><text x="307" y="315" text-anchor="middle">C</text></g>
+                    <circle class="robot" r="8" cx="153" cy="143" data-k="robot"/>
+                    <text class="hl" x="90" y="400" data-k="loop">SLAM</text>
+                  </g>
+                </svg>
+              </div>
+            </article>
+
+            <article class="st-ch" id="st-lidar" aria-labelledby="st-h5">
+              <div class="st-copy">
+                <span class="kicker"><span class="th">บทที่ 5 · มองเห็น</span><span class="en" lang="en">Chapter 5 · See</span></span>
+                <h3 id="st-h5"><span class="th">แคมปัส SKKU ในสายตา LiDAR</span><span class="en" lang="en">SKKU's campus through a LiDAR</span></h3>
+                <p><span class="th">อาคารและถนนจริงจาก OpenStreetMap กับรถจำลองที่ติดเซนเซอร์ 64 เส้น เลื่อนลงเพื่อขับ ทุกรอบที่กวาดจะสะสมเป็นแผนที่ 3 มิติ แล้วกล้องจะลอยขึ้นให้เห็นทั้งแคมปัส</span><span class="en" lang="en">Real buildings and roads from OpenStreetMap, and a simulated car with a 64-channel sensor. Scroll to drive it. Every sweep stacks into a 3D map, then the camera rises over the whole campus.</span></p>
+                <p class="st-more"><a href="#j-lidar"><span class="th">ที่มาของงานนี้ ↓</span><span class="en" lang="en">How I built it ↓</span></a></p>
+                <p class="j3d-note"><span class="th">ข้อมูลแผนที่ © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> (ODbL) ความสูงอาคารใช้ค่าจาก OSM ถ้ามี ถ้าไม่มีจะประมาณจากขนาดอาคาร เซนเซอร์และเส้นทางเป็นการจำลอง ไม่ใช่ข้อมูลที่เก็บจริง และแผนที่สะสมจากตำแหน่งที่แม่นยำสมบูรณ์ จึงไม่มีความคลาดเคลื่อนแบบ SLAM จริง</span><span class="en" lang="en">Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> (ODbL). Building heights come from OSM where tagged and are estimated from footprint size otherwise. The sensor and drive are simulated, not recorded, and the map is stacked from perfect poses, so there is none of the drift a real SLAM run has.</span></p>
+              </div>
+              <div class="st-vis">
+<div class="j3d" data-j3d="lidar">
+<canvas role="img" aria-label="แผนที่ point cloud 3 มิติของแคมปัส SKKU ซูวอน ที่สร้างจาก LiDAR จำลอง" data-label-en="3D point-cloud map of SKKU&#39;s Suwon campus, built by a simulated LiDAR"></canvas>
+<span class="j3d-hint"><span class="th">ลากเพื่อหมุนมุมมอง</span><span class="en" lang="en">Drag to orbit</span></span>
+<div class="j3d-ui"><button class="chip-btn" type="button" data-act="play" aria-pressed="false"><span class="th">หยุด</span><span class="en" lang="en">Pause</span></button><button class="chip-btn" type="button" data-act="speed"><span class="th">ความเร็ว</span><span class="en" lang="en">Speed</span> <b data-v>1×</b></button><button class="chip-btn" type="button" data-act="view"><span class="th">มุมกล้อง</span><span class="en" lang="en">View</span> <b data-v>CHASE</b></button><button class="chip-btn" type="button" data-act="osm" aria-pressed="false"><span class="th">แสดงอาคาร OSM</span><span class="en" lang="en">Show OSM buildings</span></button><button class="chip-btn" type="button" data-act="clear"><span class="th">ล้างแผนที่</span><span class="en" lang="en">Clear map</span></button><span class="sim-stat" data-stat aria-hidden="true"></span></div>
+<p class="j3d-fallback"><span class="th">เบราว์เซอร์นี้แสดงโมเดล 3 มิติไม่ได้</span><span class="en" lang="en">This browser can&#39;t show the 3D model.</span></p>
+</div>
+              </div>
+            </article>
+
+            <article class="st-ch" id="st-skills" aria-labelledby="st-h6">
+              <div class="st-copy">
+                <span class="kicker"><span class="th">บทส่งท้าย</span><span class="en" lang="en">Epilogue</span></span>
+                <h3 id="st-h6"><span class="th">สิ่งที่ผมทำได้</span><span class="en" lang="en">What I can do</span></h3>
+                <p><span class="th">ทุกทักษะด้านล่างมาจากงานในห้าบทที่ผ่านมา ระหว่างนี้ลากแผนที่ LiDAR เล่นได้เลย</span><span class="en" lang="en">Every skill below came out of the five chapters you just scrolled through. The LiDAR map is yours to drag now.</span></p>
+              </div>
+            </article>
+          </div>
+
+          <div class="st-skills" aria-label="ทักษะ" data-label-en="Skills">
+            <div class="st-g"><b><span class="th">ฝังตัวและเฟิร์มแวร์</span><span class="en" lang="en">Embedded and firmware</span></b><ul>
+              <li data-ch="3">C / C++</li><li data-ch="1">Arduino · ATmega328P</li><li data-ch="3">Teensy 4.x</li><li data-ch="3">PID</li><li data-ch="3"><span class="th">โปรโตคอลวิทยุ + CRC</span><span class="en" lang="en">Radio protocol + CRC</span></li>
+            </ul></div>
+            <div class="st-g"><b><span class="th">ฮาร์ดแวร์และ CAD</span><span class="en" lang="en">Hardware and CAD</span></b><ul>
+              <li data-ch="1">SolidWorks</li><li data-ch="1">EasyEDA · PCB</li><li data-ch="1"><span class="th">ไฮดรอลิก</span><span class="en" lang="en">Hydraulics</span></li><li data-ch="3"><span class="th">เดินสายไฟ</span><span class="en" lang="en">Wiring</span></li>
+            </ul></div>
+            <div class="st-g"><b><span class="th">หุ่นยนต์</span><span class="en" lang="en">Robotics</span></b><ul>
+              <li data-ch="4">ROS 2</li><li data-ch="4">SLAM · Nav2 · AMCL</li><li data-ch="4">Python</li><li data-ch="4 5">LiDAR</li>
+            </ul></div>
+            <div class="st-g"><b><span class="th">ซอฟต์แวร์</span><span class="en" lang="en">Software</span></b><ul>
+              <li data-ch="5">JavaScript · three.js</li><li data-ch="5">OpenStreetMap</li>
+            </ul></div>
+            <div class="st-g"><b><span class="th">คนและเวที</span><span class="en" lang="en">People and stage</span></b><ul>
+              <li data-ch="2"><span class="th">การพิตช์</span><span class="en" lang="en">Pitching</span></li><li data-ch="2"><span class="th">แผนธุรกิจ</span><span class="en" lang="en">Business plans</span></li><li data-ch="1 3"><span class="th">ทำงานเป็นทีม</span><span class="en" lang="en">Teamwork</span></li>
+            </ul></div>
+          </div>
+        </div>
+      </div>
+      <h3 class="st-tl" id="timeline"><span class="th">ไทม์ไลน์เต็ม</span><span class="en" lang="en">The full timeline</span></h3>
       <div class="j-year">
         <div class="j-yl" role="heading" aria-level="3"><span class="kicker"><span class="th">ปี 1</span><span class="en" lang="en">Year 1</span></span><b>2024–25</b><small><span class="th">ปีการศึกษา 2567 (2024)</span><span class="en" lang="en">Academic year 2024</span></small></div>
         <ol class="j-list">
@@ -1139,13 +1515,7 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
         <div class="j-yl" role="heading" aria-level="3"><span class="kicker"><span class="th">ปี 3</span><span class="en" lang="en">Year 3</span></span><b>2026–27</b><small><span class="th">ปีการศึกษา 2569 (2026)</span><span class="en" lang="en">Academic year 2026</span></small></div>
         <ol class="j-list">
           <li class="j-item rise" id="j-elp4"><time><span class="th">พ.ค.–ต.ค. 2026</span><span class="en" lang="en">May–Oct 2026</span></time><h4><span class="th">ELP4 จากรอบมหาวิทยาลัยถึงเกาหลี</span><span class="en" lang="en">ELP4, from campus to Korea</span></h4><ul class="j-tags"><li class="win"><span class="th">1 ใน 9 จากผู้สมัคร <span class="nw">540 คน</span></span><span class="en" lang="en">1 of 9 from 540</span></li><li><span class="th">MIONEX</span><span class="en" lang="en">MIONEX</span></li></ul><p><span class="th">พา MIONEX ผ่านทุกรอบของ ELP4 ตั้งแต่รอบมหาวิทยาลัย รอบภูมิภาค จนถึงรอบระดับประเทศ และได้เป็น 1 ใน 9 คนจากผู้สมัคร <span class="nw">540 คน</span>ที่ได้ไปดูงานที่ SKKU ประเทศเกาหลีใต้ เมื่อ <span class="nw">ต.ค. 2026</span></span><span class="en" lang="en">I took MIONEX through every ELP4 round, from university to regional to national, and was one of 9 picked from 540 applicants for a study visit to SKKU, South Korea, in October 2026.</span></p><div class="j-strip"><button class="cert" type="button" data-full="img/j/cert-elp4-rep.webp"><img src="img/j/t/cert-elp4-rep.webp" width="1200" height="849" loading="lazy" decoding="async" alt="เกียรติบัตร ELP4 ผู้แทนมหาวิทยาลัยบูรพาไปแข่งรอบภูมิภาค 13 พ.ค. 2026" data-alt-en="ELP4 certificate: Burapha University representative for the regional round, 13 May 2026"></button><button class="cert" type="button" data-full="img/j/cert-elp4-fc.webp"><img src="img/j/t/cert-elp4-fc.webp" width="1200" height="849" loading="lazy" decoding="async" alt="วุฒิบัตร ELP4 The Founder's Compass ผ่านโครงการ 8 มิ.ย. 2026" data-alt-en="ELP4 certificate: The Founder's Compass, programme completed, 8 Jun 2026"></button></div></li>
-                    <li class="j-item rise" id="j-lidar"><time><span class="th">ต.ค. 2026</span><span class="en" lang="en">Oct 2026</span></time><h4><span class="th">แคมปัส SKKU ในสายตา LiDAR 3 มิติ</span><span class="en" lang="en">SKKU&#39;s campus through a 3D LiDAR</span></h4><ul class="j-tags"><li>OpenStreetMap</li><li><span class="th">LiDAR 64 เส้น (จำลอง)</span><span class="en" lang="en">64-channel LiDAR (simulated)</span></li><li>three.js</li></ul><p><span class="th">ระหว่างอยู่ที่ SKKU วิทยาเขตซูวอนกับ ELP4 ผมอยากรู้ว่าแคมปัสนี้จะดูเป็นอย่างไรในสายตาหุ่นที่ติด LiDAR 3 มิติ เลยเอารูปทรงอาคารและถนนจริงจาก OpenStreetMap มาสร้างฉาก ให้รถจำลองติดเซนเซอร์แบบ 64 เส้นขับวนรอบลานกลาง ยิงเลเซอร์ทุกรอบแล้วสะสมจุดเป็นแผนที่ 3 มิติ</span><span class="en" lang="en">While at SKKU&#39;s Suwon campus for ELP4, I wanted to see how it would look to a robot with a 3D LiDAR. I built the scene from the real building footprints and roads in OpenStreetMap, then drove a simulated car with a 64-channel sensor around the main quad, sweeping and stacking every return into a 3D map.</span></p><div class="j3d" data-j3d="lidar">
-<canvas role="img" aria-label="แผนที่ point cloud 3 มิติของแคมปัส SKKU ซูวอน ที่สร้างจาก LiDAR จำลอง" data-label-en="3D point-cloud map of SKKU&#39;s Suwon campus, built by a simulated LiDAR"></canvas>
-<span class="j3d-hint"><span class="th">ลากเพื่อหมุนมุมมอง</span><span class="en" lang="en">Drag to orbit</span></span>
-<div class="j3d-ui"><button class="chip-btn" type="button" data-act="play" aria-pressed="false"><span class="th">หยุด</span><span class="en" lang="en">Pause</span></button><button class="chip-btn" type="button" data-act="speed"><span class="th">ความเร็ว</span><span class="en" lang="en">Speed</span> <b data-v>1×</b></button><button class="chip-btn" type="button" data-act="view"><span class="th">มุมกล้อง</span><span class="en" lang="en">View</span> <b data-v>CHASE</b></button><button class="chip-btn" type="button" data-act="osm" aria-pressed="false"><span class="th">แสดงอาคาร OSM</span><span class="en" lang="en">Show OSM buildings</span></button><button class="chip-btn" type="button" data-act="clear"><span class="th">ล้างแผนที่</span><span class="en" lang="en">Clear map</span></button><span class="sim-stat" data-stat aria-hidden="true"></span></div>
-<p class="j3d-fallback"><span class="th">เบราว์เซอร์นี้แสดงโมเดล 3 มิติไม่ได้</span><span class="en" lang="en">This browser can&#39;t show the 3D model.</span></p>
-</div>
-<p class="j3d-note"><span class="th">ข้อมูลแผนที่ © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> (ODbL) ความสูงอาคารใช้ค่าจาก OSM ถ้ามี ถ้าไม่มีจะประมาณจากขนาดอาคาร เซนเซอร์และเส้นทางเป็นการจำลอง ไม่ใช่ข้อมูลที่เก็บจริง และแผนที่สะสมจากตำแหน่งที่แม่นยำสมบูรณ์ จึงไม่มีความคลาดเคลื่อนแบบ SLAM จริง</span><span class="en" lang="en">Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> (ODbL). Building heights come from OSM where tagged and are estimated from footprint size otherwise. The sensor and drive are simulated, not recorded, and the map is stacked from perfect poses, so there is none of the drift a real SLAM run has.</span></p></li>
+                    <li class="j-item rise" id="j-lidar"><time><span class="th">ต.ค. 2026</span><span class="en" lang="en">Oct 2026</span></time><h4><span class="th">แคมปัส SKKU ในสายตา LiDAR 3 มิติ</span><span class="en" lang="en">SKKU&#39;s campus through a 3D LiDAR</span></h4><ul class="j-tags"><li>OpenStreetMap</li><li><span class="th">LiDAR 64 เส้น (จำลอง)</span><span class="en" lang="en">64-channel LiDAR (simulated)</span></li><li>three.js</li></ul><p><span class="th">ระหว่างอยู่ที่ SKKU วิทยาเขตซูวอนกับ ELP4 ผมอยากรู้ว่าแคมปัสนี้จะดูเป็นอย่างไรในสายตาหุ่นที่ติด LiDAR 3 มิติ เลยเอารูปทรงอาคารและถนนจริงจาก OpenStreetMap มาสร้างฉาก ให้รถจำลองติดเซนเซอร์แบบ 64 เส้นขับวนรอบลานกลาง ยิงเลเซอร์ทุกรอบแล้วสะสมจุดเป็นแผนที่ 3 มิติ</span><span class="en" lang="en">While at SKKU&#39;s Suwon campus for ELP4, I wanted to see how it would look to a robot with a 3D LiDAR. I built the scene from the real building footprints and roads in OpenStreetMap, then drove a simulated car with a 64-channel sensor around the main quad, sweeping and stacking every return into a 3D map.</span></p><p class="st-more"><a href="#st-lidar"><span class="th">ขับ LiDAR ตัวนี้ได้ในบทที่ 5 ด้านบน ↑</span><span class="en" lang="en">Drive this LiDAR in chapter 5 above ↑</span></a></p></li>
           <li class="j-item slim rise"><time><span class="th">ปี 3</span><span class="en" lang="en">Year 3</span></time><h4><span class="th">ตามอาจารย์ไปงานประชุม IEEE ที่ญี่ปุ่น</span><span class="en" lang="en">An IEEE conference in Japan</span></h4><p><span class="th">ติดตามอาจารย์ไปงานประชุมวิชาการ IEEE ที่ญี่ปุ่น ไปฟังและดูงาน ไม่ได้นำเสนอผลงานเอง</span><span class="en" lang="en">I went with my professor to an IEEE conference in Japan as an observer. I didn't present.</span></p></li>
           <li class="j-item slim rise"><time><span class="th">เป็นระยะ</span><span class="en" lang="en">Ongoing</span></time><h4><span class="th">สอนแทนอาจารย์</span><span class="en" lang="en">Covering classes for my professor</span></h4><p><span class="th">ช่วงที่อาจารย์ไม่ว่าง ผมช่วยสอนนักเรียนแทนเป็นครั้งคราว</span><span class="en" lang="en">When my professor is away, I step in and teach the class.</span></p></li>
           <li class="j-item rise now"><time><span class="th">ก.ย. 2026–ปัจจุบัน</span><span class="en" lang="en">Sep 2026 to now</span></time><h4><span class="th">SiBB 2026</span><span class="en" lang="en">SiBB 2026</span></h4><ul class="j-tags"><li><span class="th">MIONEX</span><span class="en" lang="en">MIONEX</span></li><li><span class="th">กลุ่มสุขภาพและการแพทย์</span><span class="en" lang="en">Health and medical track</span></li></ul><p><span class="th">ล่าสุด ผมพา MIONEX เข้าร่วมโครงการ SiBB Business Brotherhood ส่งคลิปแนะนำทีมและ pitch deck เรียบร้อยแล้ว และกำลังเตรียมขึ้นพิตช์รอบจริงใน <span class="nw">พ.ย. 2026</span></span><span class="en" lang="en">Most recently, I entered MIONEX in the SiBB Business Brotherhood programme. The team video and pitch deck are submitted, and the live pitch is in November 2026.</span></p></li>
@@ -1562,6 +1932,7 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
           .to(card.querySelector('.card-dim'), { opacity: 0.6, ease: 'none' }, 0);
       });
     });
+    import('./js/story.js').then(function (m) { m.initStory(STACK_MQ); }, function (err) { console.warn('story stays static', err); });
   }
   stack();
   stackMq.addEventListener('change', stack);
@@ -1728,6 +2099,7 @@ const io = new IntersectionObserver(async (entries) => {
 }, { rootMargin: '900px 0px' });
 document.querySelectorAll('[data-j3d]').forEach(el => io.observe(el));
 </script>
+<script type="module" src="js/story.js"></script>
 <script src="js/delight.js" defer></script>
 <script src="js/code.js" defer></script>
 </body>
