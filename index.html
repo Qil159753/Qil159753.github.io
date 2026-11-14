@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'sha256-zXRYQ4sGshWOaiXS8yPP1eLk9IgSmEpBQokLWyLYqPU=' 'sha256-Maq4OAyHEFSpaDq89u3j/FQZtYX6ni/6FUx9NN8n4SQ=' 'sha256-Bzv8AA/dpiMyuNtTld0qxp1OVzzPOVBDW/n7y0Hsztw=' 'sha256-lFjYwJl8lDCGTWEKrY5SOBP/u4e+EmdThnpNbjNp2+k=' 'sha256-JZDPbhWYQBHoiEzT1A0xlVzHpCa0cgs5Wau4AZ5h1ho=' 'sha256-R7+TVmKZkA36xfkqQmKE7bYZktICV8jf4WDqqeWoUQI='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'sha256-zXRYQ4sGshWOaiXS8yPP1eLk9IgSmEpBQokLWyLYqPU=' 'sha256-yxIA5/sNvuFhlGEgVxOb4BNfNNZ4GvIXYBMDAJU+dm0=' 'sha256-lFjYwJl8lDCGTWEKrY5SOBP/u4e+EmdThnpNbjNp2+k=' 'sha256-R7+TVmKZkA36xfkqQmKE7bYZktICV8jf4WDqqeWoUQI='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="อภิภัทร สันทัสนะโชค (คิว) นักศึกษาวิศวกรรมระบบสมองกลฝังตัว ม.บูรพา ทำเฟิร์มแวร์ หุ่นยนต์แข่ง แขนเทียม MIONEX และระบบเว็บสำหรับร้านค้า">
@@ -352,20 +352,6 @@ h1 em { font-style: normal; color: var(--copper); }
   filter: blur(8px);
 }
 .arm { position: relative; transition: transform .8s var(--ease); will-change: transform; }
-/* Procedural 3D model (js/mionex-hero.js). The photo cut-out stays as the first frame and the
-   fallback; the canvas fades in over it once the model has built. */
-.arm-3d {
-  position: absolute; left: -8%; top: -22%; width: 116%; height: 144%; display: block;
-  opacity: 0; transition: opacity 1s var(--ease); cursor: grab; touch-action: pan-y;
-}
-.arm-3d:active { cursor: grabbing; }
-.arm img { transition: opacity 1s var(--ease); }
-.arm.is-3d img { opacity: 0; animation: none; filter: none; }
-.arm.is-3d .arm-3d { opacity: 1; }
-.arm-hint {
-  position: absolute; right: 0; bottom: -6px; font: 400 11.5px/1 var(--mono); color: var(--muted);
-  padding: 7px 10px; border-radius: 999px; border: 1px solid var(--line); background: rgba(16, 20, 26, .7);
-}
 .arm img {
   width: 100%;
   filter: drop-shadow(0 0 28px rgba(236, 154, 90, .28)) drop-shadow(0 46px 40px rgba(0, 0, 0, .85));
@@ -621,7 +607,7 @@ h1 em { font-style: normal; color: var(--copper); }
   .cta { animation-delay: .4s; }
   .hero-art { animation: fadeUp 1.2s var(--ease) .25s both; }
   .arm img { animation: hover 7s ease-in-out 1.4s infinite; }
-  @keyframes hover { 50% { transform: translateY(-14px) rotate(-1deg); } }
+  @keyframes hover { 50% { transform: translateY(-8px); } }
   @keyframes lineUp { from { transform: translateY(110%); } }
   @keyframes fadeUp { from { opacity: .001; transform: translateY(24px); } }
   /* Bytes light up in order, over and over: a frame on the wire. */
@@ -707,32 +693,31 @@ h1 em { font-style: normal; color: var(--copper); }
 .story.on .st-skills:not(.sum) li { font-size: 11px; padding: 6px 8px; }
 .story.on .st-skills.sum { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; animation: stSum .6s var(--ease) both; }
 @keyframes stSum { from { opacity: 0; transform: translateY(12px); } }
-.st-vis.film { aspect-ratio: 16 / 9; }
-.st-film { display: none; }
-.st-poster { width: 100%; height: 100%; object-fit: cover; }
-.st-tag .t-live, .st-tag.live .t-film { display: none; }
-.st-tag.live .t-live { display: inline; }
-.st-tag { position: absolute; left: 14px; bottom: 12px; padding: 4px 9px; border-radius: 6px; background: rgba(7, 9, 12, .62); font: 500 11px/1.4 var(--mono); color: var(--muted); }
-.st-photos { grid-column: 1 / -1; display: flex; gap: 12px; }
-.st-photos figure { margin: 0; flex: 1 1 0; max-width: 240px; }
-.st-photos img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; border: 1px solid var(--line-2); }
-.st-photos .fit img { object-fit: contain; background: #d9d6cf; padding: 4px; }
-.st-photos figcaption { margin-top: 6px; font: 500 11px/1.4 var(--mono); color: var(--muted); }
-main { overflow-x: clip; }   /* the full-bleed story film may not widen the page */
-.story.on .st-rail, .story.on .st-skills { z-index: 2; }
-.story.on .st-rail { position: relative; }
-.story.on .st-copy { position: relative; z-index: 1; }
-/* Film chapters: the Blender render fills the screen behind the copy; scroll picks the frame. */
-.story.on .is-film .st-vis.film { position: absolute; z-index: 0; inset: -146px calc(50% - 50vw) -28px; height: auto; aspect-ratio: auto; border: 0; border-radius: 0; background: var(--bg); }
-.story.on .st-film { display: block; width: 100%; height: 100%; }
-.story.on .is-film .st-poster { display: none; }
-.story.on .is-film .st-vis.film::after { content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(90deg, var(--bg) calc(50% - 560px), rgba(7, 9, 12, .7) calc(50% - 140px), rgba(7, 9, 12, 0) calc(50% + 80px)),
-              linear-gradient(0deg, var(--bg), rgba(7, 9, 12, 0) 26%), linear-gradient(180deg, var(--bg), rgba(7, 9, 12, 0) 20%); }
-.story.on .is-film .st-tag { left: auto; right: max(16px, calc(50vw - 640px + 48px)); top: 146px; bottom: auto; z-index: 1; }
-.story.on .st-photos { position: absolute; z-index: 1; right: 0; bottom: 64px; width: 220px; display: block; }
-.story.on .st-photos figure { position: absolute; right: 0; bottom: 0; width: 100%; max-width: none; visibility: hidden; }
-.story.on .st-photos img { box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .9); }
+/* Photo reels (chapters 1-4): the real photos, one at a time. Stacked: a two-up grid of them.
+   Sticky: they share the panel, cross-fade beat by beat and drift slowly with scroll. */
+.st-vis.reel { aspect-ratio: auto; border: 0; background: none; overflow: visible; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.st-vis.reel figure { margin: 0; min-width: 0; }
+.st-vis.reel img, .st-vis.reel video { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; border: 1px solid var(--line-2); background: var(--panel-2); }
+.st-vis.reel .fit img { object-fit: contain; }
+.st-vis.reel .vid video { object-fit: contain; background: #000; }
+.st-vis.reel figcaption { margin-top: 6px; font: 500 11px/1.4 var(--mono); color: var(--muted); }
+.st-map { position: relative; aspect-ratio: 249 / 287; max-height: 100%; margin: 0 auto; background: #0b0e13; }
+.st-vis.reel .st-map img { position: absolute; inset: 0; height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; image-rendering: pixelated; object-fit: fill; }
+.st-map svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.st-map .route { fill: none; stroke: var(--copper-hi); stroke-width: .7; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.st-map .stn circle { fill: var(--bg); stroke: var(--copper-hi); stroke-width: .5; }
+.st-map .stn text { font: 600 4px var(--mono); fill: var(--ink); stroke: none; letter-spacing: 0; }
+.st-map .bot { fill: #4fd18b; stroke: var(--bg); stroke-width: .4; }
+.st-vis.reel .map { grid-column: 1 / -1; }
+.st-vis.reel .map .st-map { max-width: 340px; }
+.story.on .st-vis.reel { display: block; position: relative; overflow: hidden; border-radius: var(--r-lg); border: 1px solid var(--line-2); background: var(--panel); }
+.story.on .st-vis.reel figure { position: absolute; inset: 0; visibility: hidden; opacity: 0; overflow: hidden; }
+.story.on .st-vis.reel figure:first-child { visibility: visible; opacity: 1; }
+.story.on .st-vis.reel img, .story.on .st-vis.reel video { width: 100%; height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; will-change: transform; }
+.story.on .st-vis.reel .fit img { padding: 24px; background: var(--panel-2); }
+.story.on .st-vis.reel figcaption { position: absolute; left: 14px; bottom: 12px; margin: 0; padding: 5px 10px; border-radius: 6px; background: rgba(7, 9, 12, .72); color: var(--text); }
+.story.on .st-vis.reel .map { background: #0b0e13; }
+.story.on .st-vis.reel .st-map { height: 100%; max-width: none; will-change: transform, clip-path; }
 @media (max-width: 960px) {
   .st-ch { grid-template-columns: minmax(0, 1fr); }
 }
@@ -1024,8 +1009,8 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
         </h1>
         <p class="lead"><span class="th">ผมเขียนเฟิร์มแวร์ สร้างหุ่นยนต์แข่ง และทำระบบเว็บ ทั้งงานฮาร์ดแวร์และซอฟต์แวร์ ผมทำเองได้ครบจบในคนเดียว</span><span class="en" lang="en">I write firmware, build competition robots and build full web systems. From the bare board to the screen, I build both halves myself.</span></p>
         <div class="cta">
-          <a class="btn btn-copper" href="#work" data-magnet><span class="th">ดูผลงาน</span><span class="en" lang="en">See the work</span><span class="btn-ico" aria-hidden="true">↓</span></a>
-          <a class="btn btn-ghost" href="#contact" data-magnet><span class="th">ติดต่อ</span><span class="en" lang="en">Contact</span></a>
+          <a class="btn btn-copper" href="#work"><span class="th">ดูผลงาน</span><span class="en" lang="en">See the work</span><span class="btn-ico" aria-hidden="true">↓</span></a>
+          <a class="btn btn-ghost" href="#contact"><span class="th">ติดต่อ</span><span class="en" lang="en">Contact</span></a>
         </div>
         <nav class="range" aria-label="สิ่งที่ผมสร้าง ลิงก์ไปยังงานจริง" data-label-en="What I build, linked to the real work">
           <p class="range-t"><span class="th">สิ่งที่ผมสร้าง · กดเพื่อดูงานจริง</span><span class="en" lang="en">What I build · each one links to the real work</span></p>
@@ -1048,12 +1033,9 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
                sizes="(min-width: 961px) 36vw, 90vw"
                alt="แขนเทียม MIONEX สีขาว นิ้วกลไกห้านิ้ว ลอยอยู่เหนือลายวงจร"
                data-alt-en="The white MIONEX prosthetic arm with five mechanical fingers, floating over the circuit board">
-          <canvas class="arm-3d" id="arm-3d" aria-hidden="true"></canvas>
-          <span class="arm-hint" id="arm-hint" hidden><span class="th">ลากเพื่อหมุนโมเดล 3 มิติ</span><span class="en" lang="en">Drag to rotate the 3D model</span></span>
         </div>
         <figcaption>
           <span class="cap-photo"><span class="th">แขนเทียม MIONEX ตัวจริง ตอนนี้มีคนใส่อยู่ 6 คน</span><span class="en" lang="en">The real MIONEX arm. Six people wear it today.</span></span>
-          <span class="cap-3d" hidden><span class="th">แขน MIONEX ที่มีคนใส่ใช้งานจริง 6 คน สร้างเป็นโมเดล 3 มิติด้วยโค้ด อิงสัดส่วนจากแขนจริง · ลากเพื่อหมุน</span><span class="en" lang="en">The MIONEX arm six people wear, as a live 3D model built in code to its real proportions · drag to rotate</span></span>
         </figcaption>
       </figure>
     </div>
@@ -1374,7 +1356,7 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
               </div>
             </article>
 
-            <article class="st-ch is-film" id="st-build" aria-labelledby="st-h1">
+            <article class="st-ch is-reel" id="st-build" aria-labelledby="st-h1">
               <div class="st-copy">
                 <span class="kicker"><span class="th">บทที่ 1 · สร้าง</span><span class="en" lang="en">Chapter 1 · Build</span></span>
                 <h3 id="st-h1"><span class="th">เริ่มจากของที่จับต้องได้</span><span class="en" lang="en">It started with things I could hold</span></h3>
@@ -1384,18 +1366,16 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
                   <li><a href="#j-nano"><time><span class="th">ก.พ. 2026</span><span class="en" lang="en">Feb 2026</span></time><span class="th">บอร์ด Arduino Nano ของผมเอง ATmega328P สองเลเยอร์ ออกแบบใน EasyEDA</span><span class="en" lang="en">My own Arduino Nano board: ATmega328P on two layers, laid out in EasyEDA</span></a></li>
                 </ol>
               </div>
-              <div class="st-vis film">
-                <img class="st-poster" src="img/story/build/poster.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ภาพ 3 มิติที่เรนเดอร์ใน Blender แขนขุดดินไซริงค์ รถของเล่นแยกชิ้น และบอร์ด Nano" data-alt-en="Blender render of the syringe digger, the toy truck in parts and the Nano board">
-                <canvas class="st-film" data-film="img/story/build/" data-n="96" data-avif aria-hidden="true"></canvas>
-                <span class="st-tag"><span class="th">ภาพ 3 มิติ สร้างและเรนเดอร์ใน Blender</span><span class="en" lang="en">3D scene, modelled and rendered in Blender</span></span>
-              </div>
-              <div class="st-photos">
-                <figure data-b="1"><img src="img/j/t/car-parts.webp" width="1200" height="863" loading="lazy" decoding="async" alt="ชิ้นส่วนรถของเล่นทั้ง 11 ชิ้น วางเรียงพร้อมหมายเลข" data-alt-en="All 11 parts of the toy truck laid out and numbered"><figcaption><span class="th">ภาพจริง · 11 ชิ้นที่วัดและขึ้นโมเดล</span><span class="en" lang="en">Real photo · the 11 parts we measured</span></figcaption></figure>
-                <figure data-b="2"><img src="img/j/t/nano-layout.webp" width="750" height="1000" loading="lazy" decoding="async" alt="ลายวงจรสองชั้นของบอร์ด Nano clone ใน EasyEDA" data-alt-en="The two-layer Nano clone layout in EasyEDA"><figcaption><span class="th">ลายวงจรจริงใน EasyEDA</span><span class="en" lang="en">The real layout in EasyEDA</span></figcaption></figure>
+              <div class="st-vis reel">
+                <figure data-b="0"><img src="img/story/digger.webp" width="1200" height="672" loading="lazy" decoding="async" alt="โมเดล 3 มิติของแขนขุดดินที่ขยับด้วยไซริงค์และน้ำ" data-alt-en="3D model of the digger arm driven by syringes and water"><figcaption><span class="th">โมเดล 3 มิติ · หมุนดูได้ใน Journey ด้านล่าง</span><span class="en" lang="en">3D model · spin it in the journey below</span></figcaption></figure>
+                <figure data-b="1"><img src="img/j/car-front.webp" width="856" height="1000" loading="lazy" decoding="async" alt="ด้านหน้ารถ เห็นกันชนสีเทาและน็อตรูปกากบาท" data-alt-en="The front, with the grey bumper and cross-head screw"><figcaption><span class="th">ภาพจริง · รถของเล่นที่เราวัด</span><span class="en" lang="en">Real photo · the toy truck we measured</span></figcaption></figure>
+                <figure data-b="1"><img src="img/j/car-parts.webp" width="1200" height="863" loading="lazy" decoding="async" alt="ชิ้นส่วนรถของเล่นทั้ง 11 ชิ้น วางเรียงพร้อมหมายเลข" data-alt-en="All 11 parts of the toy truck laid out and numbered"><figcaption><span class="th">ภาพจริง · 11 ชิ้นที่วัดและขึ้นโมเดล</span><span class="en" lang="en">Real photo · the 11 parts we measured</span></figcaption></figure>
+                <figure data-b="2" class="fit"><img src="img/j/nano-3d.webp" width="750" height="1000" loading="lazy" decoding="async" alt="มุมมอง 3 มิติของบอร์ด Nano clone สีน้ำเงิน" data-alt-en="3D view of the blue Nano clone board"><figcaption><span class="th">บอร์ด Nano ของผม · มุมมอง 3 มิติใน EasyEDA</span><span class="en" lang="en">My Nano board · 3D view in EasyEDA</span></figcaption></figure>
+                <figure data-b="2" class="fit"><img src="img/j/nano-layout.webp" width="750" height="1000" loading="lazy" decoding="async" alt="ลายวงจรสองชั้นของบอร์ด Nano clone ใน EasyEDA" data-alt-en="The two-layer Nano clone layout in EasyEDA"><figcaption><span class="th">ลายวงจรจริงใน EasyEDA</span><span class="en" lang="en">The real layout in EasyEDA</span></figcaption></figure>
               </div>
             </article>
 
-            <article class="st-ch is-film" id="st-pitch" aria-labelledby="st-h2">
+            <article class="st-ch is-reel" id="st-pitch" aria-labelledby="st-h2">
               <div class="st-copy">
                 <span class="kicker"><span class="th">บทที่ 2 · ขึ้นเวที</span><span class="en" lang="en">Chapter 2 · On stage</span></span>
                 <h3 id="st-h2"><span class="th">แล้วก็ต้องเล่าให้คนอื่นเชื่อ</span><span class="en" lang="en">Then I had to make other people believe in it</span></h3>
@@ -1405,19 +1385,18 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
                   <li><a href="#j-elp4"><time><span class="th">พ.ค.–ต.ค. 2026</span><span class="en" lang="en">May–Oct 2026</span></time><span class="th">ELP4 เป็น 1 ใน 9 จาก 540 คน ได้ไปดูงานที่ SKKU เกาหลีใต้</span><span class="en" lang="en">ELP4: one of 9 from 540 applicants, off to SKKU in South Korea</span></a></li>
                 </ol>
               </div>
-              <div class="st-vis film">
-                <img class="st-poster" src="img/story/pitch/poster.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ภาพ 3 มิติที่เรนเดอร์ใน Blender โพเดียมใต้สปอตไลต์ และจุด 540 จุดที่เหลือ 9 จุดบินไปเกาหลี" data-alt-en="Blender render: a podium under a spotlight, and 540 beads narrowing to 9 that fly to Korea">
-                <canvas class="st-film" data-film="img/story/pitch/" data-n="96" data-avif aria-hidden="true"></canvas>
-                <span class="st-tag"><span class="th">ภาพ 3 มิติ สร้างและเรนเดอร์ใน Blender</span><span class="en" lang="en">3D scene, modelled and rendered in Blender</span></span>
-              </div>
-              <div class="st-photos">
-                <figure data-b="0"><img src="img/j/t/stl-pitch.webp" width="784" height="523" loading="lazy" decoding="async" alt="อภิภัทรถือไมโครโฟนพิตช์บนเวที Startup Thailand League" data-alt-en="Apipath pitching with a microphone at Startup Thailand League"><figcaption><span class="th">ภาพจริง · Startup Thailand League</span><span class="en" lang="en">Real photo · Startup Thailand League</span></figcaption></figure>
-                <figure data-b="1"><img src="img/j/t/pyip-stage.webp" width="1200" height="675" loading="lazy" decoding="async" alt="อภิภัทรพิตช์บนเวที Pitch Your IP หน้าจอใหญ่ที่เขียนว่า CHANCE" data-alt-en="Apipath pitching at Pitch Your IP in front of a screen reading CHANCE"><figcaption><span class="th">ภาพจริง · Pitch Your IP</span><span class="en" lang="en">Real photo · Pitch Your IP</span></figcaption></figure>
-                <figure data-b="2" class="fit"><img src="img/j/t/cert-elp4-rep.webp" width="1200" height="849" loading="lazy" decoding="async" alt="เกียรติบัตร ELP4 ผู้แทนมหาวิทยาลัยบูรพาไปแข่งรอบภูมิภาค 13 พ.ค. 2026" data-alt-en="ELP4 certificate: Burapha University representative for the regional round, 13 May 2026"><figcaption><span class="th">เกียรติบัตรจริง · ELP4</span><span class="en" lang="en">The real certificate · ELP4</span></figcaption></figure>
+              <div class="st-vis reel">
+                <figure data-b="0"><img src="img/j/stl-pitch.webp" width="784" height="523" loading="lazy" decoding="async" alt="อภิภัทรถือไมโครโฟนพิตช์บนเวที Startup Thailand League" data-alt-en="Apipath pitching with a microphone at Startup Thailand League"><figcaption><span class="th">ภาพจริง · Startup Thailand League</span><span class="en" lang="en">Real photo · Startup Thailand League</span></figcaption></figure>
+                <figure data-b="0"><img src="img/j/stl-award.webp" width="1200" height="675" loading="lazy" decoding="async" alt="ทีม Mini moo รับรางวัลรองชนะเลิศอันดับ 2 บนเวที" data-alt-en="Team Mini moo receiving the third-place award on stage"><figcaption><span class="th">ภาพจริง · ได้ที่ 3 รอบมหาวิทยาลัย</span><span class="en" lang="en">Real photo · third in the university round</span></figcaption></figure>
+                <figure data-b="1"><img src="img/j/pyip-stage.webp" width="1200" height="675" loading="lazy" decoding="async" alt="อภิภัทรพิตช์บนเวที Pitch Your IP หน้าจอใหญ่ที่เขียนว่า CHANCE" data-alt-en="Apipath pitching at Pitch Your IP in front of a screen reading CHANCE"><figcaption><span class="th">ภาพจริง · Pitch Your IP</span><span class="en" lang="en">Real photo · Pitch Your IP</span></figcaption></figure>
+                <figure data-b="1"><img src="img/j/pyip-group.webp" width="1200" height="800" loading="lazy" decoding="async" alt="ผู้เข้าร่วมและทีมงาน Pitch Your IP ถ่ายรูปรวมหน้าเวที" data-alt-en="Pitch Your IP participants and staff in a group photo"><figcaption><span class="th">ภาพจริง · Pitch Your IP</span><span class="en" lang="en">Real photo · Pitch Your IP</span></figcaption></figure>
+                <figure data-b="2"><img src="img/story/mionex-stage.webp" width="1400" height="1050" loading="lazy" decoding="async" alt="อภิภัทรถือไมโครโฟนพูดบนเวที หน้าสไลด์ MIONEX ที่เขียนว่า Returning movement. Returning life." data-alt-en="Apipath speaking on stage in front of a MIONEX slide reading Returning movement. Returning life."><figcaption><span class="th">ภาพจริง · พิตช์ MIONEX ก.ค. 2026</span><span class="en" lang="en">Real photo · pitching MIONEX, Jul 2026</span></figcaption></figure>
+                <figure data-b="2"><img src="img/story/mionex-demo.webp" width="1400" height="1050" loading="lazy" decoding="async" alt="การสาธิต MIONEX ผู้ร่วมงานสวมแถบเซนเซอร์ที่แขนเพื่อสั่งมือเทียมที่ติดอยู่บนแท่น" data-alt-en="Demonstrating MIONEX: a visitor wears the sensor band on their forearm to drive the arm on its stand"><figcaption><span class="th">ภาพจริง · สาธิต MIONEX ก.ค. 2026</span><span class="en" lang="en">Real photo · demonstrating MIONEX, Jul 2026</span></figcaption></figure>
+                <figure data-b="2" class="fit"><img src="img/j/cert-elp4-rep.webp" width="1200" height="849" loading="lazy" decoding="async" alt="เกียรติบัตร ELP4 ผู้แทนมหาวิทยาลัยบูรพาไปแข่งรอบภูมิภาค 13 พ.ค. 2026" data-alt-en="ELP4 certificate: Burapha University representative for the regional round, 13 May 2026"><figcaption><span class="th">เกียรติบัตรจริง · ELP4</span><span class="en" lang="en">The real certificate · ELP4</span></figcaption></figure>
               </div>
             </article>
 
-            <article class="st-ch is-film" id="st-compete" aria-labelledby="st-h3">
+            <article class="st-ch is-reel" id="st-compete" aria-labelledby="st-h3">
               <div class="st-copy">
                 <span class="kicker"><span class="th">บทที่ 3 · ลงสนาม</span><span class="en" lang="en">Chapter 3 · Compete</span></span>
                 <h3 id="st-h3"><span class="th">หุ่นที่ต้องวิ่งได้จริงในวันแข่ง</span><span class="en" lang="en">Robots that have to work on the day</span></h3>
@@ -1426,18 +1405,16 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
                   <li><a href="#j-abu"><time><span class="th">พ.ค.–มิ.ย. 2026</span><span class="en" lang="en">May–Jun 2026</span></time><span class="th">ABU Robocon 2026 เขียนซอฟต์แวร์ทั้งหมดของหุ่นและคอนโทรลเลอร์ ได้อันดับ 8 ระดับมหาวิทยาลัย</span><span class="en" lang="en">ABU Robocon 2026: all the software for my robot and its controller, 8th among universities</span></a></li>
                 </ol>
               </div>
-              <div class="st-vis film">
-                <img class="st-poster" src="img/story/compete/poster.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ภาพ 3 มิติที่เรนเดอร์ใน Blender หุ่นวิ่งตามเส้นบนสนาม Robotrace และหุ่นล้อเมคานัม" data-alt-en="Blender render: a line robot on a Robotrace course, and a mecanum robot">
-                <canvas class="st-film" data-film="img/story/compete/" data-n="96" data-avif aria-hidden="true"></canvas>
-                <span class="st-tag"><span class="th">ภาพ 3 มิติ สร้างและเรนเดอร์ใน Blender</span><span class="en" lang="en">3D scene, modelled and rendered in Blender</span></span>
-              </div>
-              <div class="st-photos">
-                <figure data-b="0"><img src="img/j/t/robotracer.webp" width="1200" height="900" loading="lazy" decoding="async" alt="ทีมไทยสามคนยืนหน้าเวที TMIRC 2025 ถือป้ายหมายเลข 114" data-alt-en="Team Thailand, three people, in front of the TMIRC 2025 stage holding number 114"><figcaption><span class="th">ภาพจริง · TMIRC 2025 ไต้หวัน</span><span class="en" lang="en">Real photo · TMIRC 2025, Taiwan</span></figcaption></figure>
-                <figure data-b="1"><img src="img/abu-pit-800.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ทีม ABU Robocon ช่วยกันประกอบหุ่นในพื้นที่เตรียมหุ่นก่อนลงแข่ง" data-alt-en="The ABU Robocon team assembling robots in the pit before a match"><figcaption><span class="th">ภาพจริง · ทีม ABU Robocon 2026</span><span class="en" lang="en">Real photo · the ABU Robocon 2026 team</span></figcaption></figure>
+              <div class="st-vis reel">
+                <figure data-b="0"><img src="img/j/robotracer.webp" width="1200" height="900" loading="lazy" decoding="async" alt="ทีมไทยสามคนยืนหน้าเวที TMIRC 2025 ถือป้ายหมายเลข 114" data-alt-en="Team Thailand, three people, in front of the TMIRC 2025 stage holding number 114"><figcaption><span class="th">ภาพจริง · TMIRC 2025 ไต้หวัน</span><span class="en" lang="en">Real photo · TMIRC 2025, Taiwan</span></figcaption></figure>
+                <figure data-b="0"><img src="img/tmirc-2025.webp" width="1400" height="1050" loading="lazy" decoding="async" alt="ทีมไทยสี่คนยืนบนเวทีหน้าป้ายงาน TMIRC 2025 ที่ไต้หวัน" data-alt-en="Team Thailand, four people, on stage in front of the TMIRC 2025 banner in Taiwan"><figcaption><span class="th">ภาพจริง · TMIRC 2025 ไต้หวัน</span><span class="en" lang="en">Real photo · TMIRC 2025, Taiwan</span></figcaption></figure>
+                <figure data-b="1" class="vid"><video muted playsinline loop preload="none" poster="video/abu-2026.webp" width="1280" height="720" aria-label="วิดีโอ: ผู้ควบคุมพาหุ่นลงสนาม ABU Robocon 2026 แล้วหุ่นทำงานที่กล่องคะแนน" data-label-en="Video: operators bring the robot onto the ABU Robocon 2026 field, and it works at the scoring blocks"><source src="video/abu-2026.mp4" type="video/mp4"></video><figcaption><span class="th">วิดีโอจริง · ABU Robocon 2026 (จากคลิปสรุปของทีม)</span><span class="en" lang="en">Real footage · ABU Robocon 2026 (from the team recap)</span></figcaption></figure>
+                <figure data-b="1"><img src="img/abu-pit-1280.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ทีม ABU Robocon ช่วยกันประกอบหุ่นในพื้นที่เตรียมหุ่นก่อนลงแข่ง" data-alt-en="The ABU Robocon team assembling robots in the pit before a match"><figcaption><span class="th">ภาพจริง · ทีม ABU Robocon 2026</span><span class="en" lang="en">Real photo · the ABU Robocon 2026 team</span></figcaption></figure>
+                <figure data-b="1"><img src="img/story/abu-team.webp" width="1400" height="1050" loading="lazy" decoding="async" alt="ทีม ABU Robocon 2026 ยืนกับหุ่นสองตัวและป้าย THANK YOU" data-alt-en="The ABU Robocon 2026 team standing with both robots and a THANK YOU banner"><figcaption><span class="th">ภาพจริง · ทีมและหุ่นทั้งสองตัว ABU Robocon 2026</span><span class="en" lang="en">Real photo · the team and both robots, ABU Robocon 2026</span></figcaption></figure>
               </div>
             </article>
 
-            <article class="st-ch is-film" id="st-nav" aria-labelledby="st-h4">
+            <article class="st-ch is-reel" id="st-nav" aria-labelledby="st-h4">
               <div class="st-copy">
                 <span class="kicker"><span class="th">บทที่ 4 · นำทาง</span><span class="en" lang="en">Chapter 4 · Navigate</span></span>
                 <h3 id="st-h4"><span class="th">สอนหุ่นให้รู้ว่าตัวเองอยู่ตรงไหน</span><span class="en" lang="en">Teaching a robot where it is</span></h3>
@@ -1446,14 +1423,10 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
                   <li><a href="#j-ros"><time><span class="th">มิ.ย. 2026</span><span class="en" lang="en">Jun 2026</span></time><span class="th">BATLY R1 ทำ SLAM สร้างแผนที่ นำทางด้วย Nav2 + AMCL แล้วเขียน node ให้วน A → B → C สองรอบ</span><span class="en" lang="en">BATLY R1: a SLAM map, Nav2 + AMCL, and my node that loops A → B → C twice</span></a></li>
                 </ol>
               </div>
-              <div class="st-vis film">
-                <img class="st-poster" src="img/story/nav/poster.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ภาพ 3 มิติที่เรนเดอร์ใน Blender แผนที่ตารางที่ค่อย ๆ ขึ้นรอบหุ่น และเส้นทาง A B C" data-alt-en="Blender render: a grid map rising around the robot, and the A, B, C route">
-                <canvas class="st-film" data-live="nav" aria-hidden="true"></canvas>
-                <span class="st-tag"><span class="t-film"><span class="th">ภาพ 3 มิติ สร้างและเรนเดอร์ใน Blender</span><span class="en" lang="en">3D scene, modelled and rendered in Blender</span></span><span class="t-live"><span class="th">3 มิติแบบเรียลไทม์ (three.js) · ลากเพื่อหมุนดู</span><span class="en" lang="en">Real-time 3D (three.js) · drag to orbit</span></span></span>
-              </div>
-              <div class="st-photos">
-                <figure data-b="0" class="fit"><img src="img/j/t/cert-mara-ros.webp" width="849" height="1200" loading="lazy" decoding="async" alt="วุฒิบัตรหลักสูตรการใช้ ROS ขั้นพื้นฐาน 30 ชั่วโมง กรมพัฒนาฝีมือแรงงาน" data-alt-en="Certificate, Basic ROS, 30 hours, Department of Skill Development"><figcaption><span class="th">วุฒิบัตรจริง · MARA</span><span class="en" lang="en">The real certificate · MARA</span></figcaption></figure>
-                <figure data-b="1" class="fit"><img src="img/j/batly-map.png" width="249" height="287" loading="lazy" decoding="async" alt="แผนที่ SLAM ของห้องที่หุ่น BATLY R1 สร้างขึ้นจริง" data-alt-en="The SLAM map BATLY R1 actually built of the room"><figcaption><span class="th">แผนที่ SLAM จริงจากการรัน</span><span class="en" lang="en">The real SLAM map from my run</span></figcaption></figure>
+              <div class="st-vis reel">
+                <figure data-b="0" class="fit"><img src="img/j/cert-mara-ros.webp" width="849" height="1200" loading="lazy" decoding="async" alt="วุฒิบัตรหลักสูตรการใช้ ROS ขั้นพื้นฐาน 30 ชั่วโมง กรมพัฒนาฝีมือแรงงาน" data-alt-en="Certificate, Basic ROS, 30 hours, Department of Skill Development"><figcaption><span class="th">วุฒิบัตรจริง · MARA</span><span class="en" lang="en">The real certificate · MARA</span></figcaption></figure>
+                <figure data-b="1" class="vid"><video muted playsinline loop preload="none" poster="video/batly-loop.webp" width="1280" height="720" aria-label="วิดีโอ: หุ่น BATLY R1 วิ่งวนระหว่างสถานีในห้องทดสอบ" data-label-en="Video: BATLY R1 driving its station loop in the test room"><source src="video/batly-loop.mp4" type="video/mp4"></video><figcaption><span class="th">วิดีโอจริง · BATLY R1 วิ่งวนระหว่างสถานี · เร่ง 3 เท่า</span><span class="en" lang="en">Real footage · BATLY R1 driving its station loop · 3× speed</span></figcaption></figure>
+                <figure data-b="1" class="map" data-w="2"><div class="st-map"><img src="img/story/nav-map.png" width="996" height="1148" loading="lazy" decoding="async" alt="แผนที่ SLAM ของห้องที่หุ่น BATLY R1 สร้างขึ้นจริง พร้อมเส้นทาง A B C" data-alt-en="The SLAM map BATLY R1 actually built of the room, with the A, B, C route"><svg viewBox="0 0 249 287" aria-hidden="true"><path class="route" pathLength="1" d="M147.4 134.05 L131.8 146.39 L130.22 156.32 Z"/><g class="stn"><circle cx="147.4" cy="134.05" r="1.6"/><text x="150" y="133">A</text></g><g class="stn"><circle cx="131.8" cy="146.39" r="1.6"/><text x="125.6" y="145.4">B</text></g><g class="stn"><circle cx="130.22" cy="156.32" r="1.6"/><text x="124" y="160">C</text></g><circle class="bot" cx="147.4" cy="134.05" r="1.9"/></svg></div><figcaption><span class="th">แผนที่ SLAM จริงจากการรัน · ตำแหน่งสถานีโดยประมาณ</span><span class="en" lang="en">The real SLAM map from my run · station positions approximate</span></figcaption></figure>
               </div>
             </article>
 
@@ -1575,8 +1548,8 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
       <p class="lead rise"><span class="th">เล่าสั้น ๆ ว่าอยากได้อะไร งบเท่าไร และต้องเสร็จเมื่อไร ผมจะตอบกลับพร้อมแนวทางและราคา</span><span class="en" lang="en">Tell me what you need, your budget and your deadline. I'll reply with an approach and a price.</span></p>
       <a class="mail" id="mail" href="mailto:apipath.san@gmail.com">apipath.san@gmail.com</a>
       <div class="contact-actions">
-        <button class="btn btn-copper" id="copy" type="button" data-magnet><span class="th">คัดลอกอีเมล</span><span class="en" lang="en">Copy email</span><span class="btn-ico" aria-hidden="true">⧉</span></button>
-        <a class="btn btn-ghost" href="https://github.com/Qil159753" target="_blank" rel="noopener" data-magnet>GitHub ↗<span class="sr-only"><span class="th"> (เปิดแท็บใหม่)</span><span class="en" lang="en"> (opens in a new tab)</span></span></a>
+        <button class="btn btn-copper" id="copy" type="button"><span class="th">คัดลอกอีเมล</span><span class="en" lang="en">Copy email</span><span class="btn-ico" aria-hidden="true">⧉</span></button>
+        <a class="btn btn-ghost" href="https://github.com/Qil159753" target="_blank" rel="noopener">GitHub ↗<span class="sr-only"><span class="th"> (เปิดแท็บใหม่)</span><span class="en" lang="en"> (opens in a new tab)</span></span></a>
         <span class="note" id="status" role="status" aria-live="polite"></span>
         <template id="copied"><span class="ack" aria-hidden="true">ACK</span><span class="th">คัดลอกแล้ว</span><span class="en" lang="en">Copied</span></template>
         <template id="selected"><span class="th">เลือกอีเมลไว้ให้แล้ว กด Ctrl+C หรือ ⌘C เพื่อคัดลอก</span><span class="en" lang="en">Email selected. Press Ctrl+C or ⌘C to copy.</span></template>
@@ -1682,6 +1655,7 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
     var DIRS = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
     var LABELS = ['R12', 'C7', 'TP4', 'J2', 'D1', 'R4', 'C21', 'L2', 'Q5', 'R33'];
     var CU = '236,154,90';
+    var still = reduce || o.still;
 
     function rng(seed) {
       var s = seed % 2147483647; if (s <= 0) s += 2147483646;
@@ -1868,10 +1842,10 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
       }
       raf = requestAnimationFrame(frame);
     }
-    function kick() { if (!reduce && visible && !document.hidden && !raf) { last = 0; raf = requestAnimationFrame(frame); } }
+    function kick() { if (!still && visible && !document.hidden && !raf) { last = 0; raf = requestAnimationFrame(frame); } }
 
     build();
-    if (!reduce) {
+    if (!still) {
       var host = canvas.parentElement;
       host.addEventListener('pointermove', function (e) {
         if (e.pointerType !== 'mouse') return;
@@ -1897,28 +1871,20 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
   }
 
   var hb = document.getElementById('board-hero');
-  if (hb && hb.getContext) Board(hb, { grid: 26, density: 0.028, chips: 3, seed: 1907, radius: 200, maxPulses: 38 });
+  if (hb && hb.getContext) Board(hb, { still: true, grid: 26, density: 0.028, chips: 3, seed: 1907, radius: 200, maxPulses: 38 });
   var bytes = document.querySelector('.bytes');
   if (bytes && 'IntersectionObserver' in window) new IntersectionObserver(function (es) { bytes.classList.toggle('idle', !es[es.length - 1].isIntersecting); }).observe(bytes);
   var cb = document.getElementById('board-contact');
-  if (cb && cb.getContext) Board(cb, { grid: 26, density: 0.02, chips: 2, seed: 4421, radius: 180, maxPulses: 24 });
+  if (cb && cb.getContext) Board(cb, { still: true, grid: 26, density: 0.02, chips: 2, seed: 4421, radius: 180, maxPulses: 24 });
 
-  /* ---------- hero tilt + magnetic buttons ---------- */
+  /* ---------- hero tilt ---------- */
   if (!reduce && finePointer) {
     var hero = document.querySelector('.hero'), tilt = document.getElementById('tilt-in');
     hero.addEventListener('pointermove', function (e) {
-      if (tilt.classList.contains('is-3d')) { tilt.style.transform = ''; return; }
       var px = e.clientX / window.innerWidth - 0.5, py = e.clientY / window.innerHeight - 0.5;
-      tilt.style.transform = 'rotateY(' + (px * 14).toFixed(2) + 'deg) rotateX(' + (-py * 10).toFixed(2) + 'deg)';
+      tilt.style.transform = 'rotateY(' + (px * 6).toFixed(2) + 'deg) rotateX(' + (-py * 4).toFixed(2) + 'deg)';
     });
     hero.addEventListener('pointerleave', function () { tilt.style.transform = ''; });
-    document.querySelectorAll('[data-magnet]').forEach(function (el) {
-      el.addEventListener('pointermove', function (e) {
-        var r = el.getBoundingClientRect();
-        el.style.transform = 'translate(' + ((e.clientX - r.left - r.width / 2) * 0.2).toFixed(1) + 'px,' + ((e.clientY - r.top - r.height / 2) * 0.3).toFixed(1) + 'px)';
-      });
-      el.addEventListener('pointerleave', function () { el.style.transform = ''; });
-    });
   }
 
   /* ---------- spotlight borders ---------- */
@@ -1984,123 +1950,6 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
 </script>
 
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js","three/examples/jsm/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/","@mediapipe/tasks-vision":"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.1.1/vision_bundle.mjs"},"integrity":{"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.1.1/vision_bundle.mjs":"sha384-YN1WLhNpIcHS4MxTu2oyTBQ8z8VQ1hRWCjNtxtbIsyaMxAuPG4sATYsdYCCb5gIe","https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js":"sha384-IDC7sAMAIMB/TZ6dgKKPPAKZ2bXXXP8+FBMBC8cU319eBhKITx+PaalhfDkDNH28","https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/controls/OrbitControls.js":"sha384-aJoe4qqS/DgF2jh9njAuvA6QIveJYoCuYOfYjdFY8P3eawzmc9bEQ40jq2TvOyuP","https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/environments/RoomEnvironment.js":"sha384-9ItPPH2vgKbkvgrqTKq7ptGYe+WuAnqlZtlqleJW4/CJjnM5R7C+efD6iS7ADPJ9","https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/geometries/RoundedBoxGeometry.js":"sha384-S52/WAm3DaIIFna675h5dmavqea/akLlPFtPdnzgWWhnz+/nMqR6PPsSXPOd8Gpw"}}</script>
-<script type="module">
-/* Hero 3D: a designed procedural MIONEX arm (js/mionex-hero.js). Proportions come from the
-   img2threejs reconstruction of the real arm; finishes and extra hardware are design. The cut-out
-   photo stays underneath as the first frame and the fallback if anything here fails. */
-const arm = document.getElementById('tilt-in');
-const canvas = document.getElementById('arm-3d');
-const hint = document.getElementById('arm-hint');
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.motion === 'off';
-const fine = matchMedia('(pointer: fine)').matches;
-
-const want3d = matchMedia('(min-width: 700px)').matches && !(navigator.connection && navigator.connection.saveData);
-if (want3d) await new Promise((r) => (window.requestIdleCallback || setTimeout)(r, { timeout: 2500 }));
-if (want3d) try {
-  const THREE = await import('three');
-  const { RoomEnvironment } = await import('three/examples/jsm/environments/RoomEnvironment.js');
-  const { createMionexArm } = await import('./js/mionex-hero.js');
-
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-  renderer.setClearColor(0x000000, 0);
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
-
-  const scene = new THREE.Scene();
-  const pmrem = new THREE.PMREMGenerator(renderer), room = new RoomEnvironment();
-  scene.environment = pmrem.fromScene(room, 0.04).texture;
-  pmrem.dispose(); room.dispose();
-  scene.environmentIntensity = 0.35;
-  const key = new THREE.DirectionalLight(0xfff4e8, 2.4); key.position.set(-1.5, 5, 3.5); scene.add(key);
-  scene.add(new THREE.HemisphereLight(0xdde6f0, 0x1a1d22, 0.6));
-  const rim = new THREE.DirectionalLight(0xec9a5a, 2.2); rim.position.set(3, 1, -4); scene.add(rim);
-  const rimLow = new THREE.DirectionalLight(0xec9a5a, 1.1); rimLow.position.set(-3, -1.5, -3); scene.add(rimLow);
-
-  const A = createMionexArm(), model = A.group;
-  const center = new THREE.Box3().setFromObject(model).getCenter(new THREE.Vector3());
-  model.position.sub(center);
-  const tiltGroup = new THREE.Group();   // matches the photo's diagonal: fingers up-left
-  tiltGroup.rotation.z = -0.4;
-  const spin = new THREE.Group();        // drag / hover rotation
-  const roll = new THREE.Group();        // slow roll about the arm's long axis: palm, top, dorsal plate, underside
-  roll.add(model); spin.add(roll); tiltGroup.add(spin); scene.add(tiltGroup);
-
-  const camera = new THREE.PerspectiveCamera(30, 1, 0.05, 50);
-  camera.position.set(0, 0, 5.5);
-  const resize = () => {
-    const w = canvas.clientWidth, h = canvas.clientHeight;
-    if (!w || !h) return;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h;
-    camera.position.z = Math.max(5.5, 7.4 / camera.aspect);   // keep fingertips and brim inside narrow (phone) canvases
-    camera.updateProjectionMatrix();
-  };
-  resize();
-  new ResizeObserver(() => { resize(); if (!running && !lost) draw(performance.now()); }).observe(canvas);
-
-  // Drag to turn (horizontal), with a little inertia; vertical drags keep scrolling the page on touch.
-  let yaw = 0, pitch = 0, vYaw = 0, dragging = false, lastX = 0, lastY = 0, hoverYaw = 0, hoverPitch = 0;
-  canvas.addEventListener('pointerdown', (e) => { dragging = true; lastX = e.clientX; lastY = e.clientY; canvas.setPointerCapture(e.pointerId); hint.hidden = true; });
-  canvas.addEventListener('pointermove', (e) => {
-    if (!dragging) return;
-    const dx = e.clientX - lastX, dy = e.clientY - lastY; lastX = e.clientX; lastY = e.clientY;
-    vYaw = dx * 0.012; yaw += vYaw; pitch = Math.max(-0.5, Math.min(0.5, pitch + dy * 0.006));
-    if (!running && !lost) draw(performance.now());
-  });
-  const release = () => { dragging = false; };
-  canvas.addEventListener('pointerup', release); canvas.addEventListener('pointercancel', release);
-  if (fine) document.querySelector('.hero').addEventListener('pointermove', (e) => {
-    hoverYaw = (e.clientX / innerWidth - 0.5) * 0.5; hoverPitch = (e.clientY / innerHeight - 0.5) * 0.25;
-  });
-
-  const draw = (now) => {
-    const t = now / 1000;
-    if (!dragging) { yaw += vYaw; vYaw *= 0.92; }
-    // Roll about the long axis instead of a turntable spin: the arm never goes end-on, and the dorsal
-    // MIONEX plate still comes round every ~25 s.
-    roll.rotation.x = reduce ? 0 : t * 0.25;
-    spin.rotation.y = yaw + hoverYaw + (reduce ? 0 : Math.sin(t * 0.21) * 0.32);
-    spin.rotation.x = pitch + hoverPitch * 0.6 + (reduce ? 0 : Math.sin(t * 0.33) * 0.06);
-    tiltGroup.position.y = reduce ? 0 : Math.sin(t * 0.8) * 0.05;
-    // Grip cycle: open, close to a soft fist, open -- what a myoelectric hand does.
-    const g = reduce ? 0.3 : 0.12 + Math.pow(Math.max(0, Math.sin(t * 0.9)), 1.6) * 0.75;
-    A.setPose(g, reduce ? 0 : Math.sin(t * 0.5) * 0.18);
-    A.update(t);
-    renderer.render(scene, camera);
-  };
-
-  let running = false, visible = true, raf = 0, lost = false;
-  let lastDraw = 0;
-  const loop = (now) => {
-    raf = 0; if (!running) return;
-    if (dragging || now - lastDraw >= 30) { draw(now); lastDraw = now; }
-    raf = requestAnimationFrame(loop);
-  };
-  const sync = () => {
-    const should = !lost && !reduce && visible && !document.hidden;
-    if (should && !running) { running = true; if (!raf) raf = requestAnimationFrame(loop); }
-    if (!should) running = false;
-  };
-  new IntersectionObserver((es) => { visible = es[es.length - 1].isIntersecting; sync(); }).observe(canvas);
-  document.addEventListener('visibilitychange', sync);
-
-  draw(performance.now());
-  arm.classList.add('is-3d');
-  arm.style.transform = '';
-  document.querySelector('.cap-photo').hidden = true;
-  document.querySelector('.cap-3d').hidden = false;
-  canvas.addEventListener('webglcontextlost', () => {
-    lost = true; running = false; arm.classList.remove('is-3d');
-    document.querySelector('.cap-photo').hidden = false; document.querySelector('.cap-3d').hidden = true;
-  });
-  if (fine) { hint.hidden = false; setTimeout(() => { hint.hidden = true; }, 5000); }
-  sync();
-} catch (err) {
-  console.warn('3D model unavailable, keeping the photo:', err);
-}
-</script>
 
 <script type="module">
 /* Journey: lightbox for the photo strips, and the two 3D models (js/journey-3d.js), started only
