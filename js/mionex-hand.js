@@ -15,6 +15,16 @@ const BONES = [[0, 1], [1, 2], [2, 3], [3, 4], [0, 5], [5, 9], [9, 13], [13, 17]
 // joint limits of the model (radians) so a tight fist doesn't push links through each other
 const LIMIT = [1.45, 1.6, 1.15];
 const REST = 0.08;
+// Grip presets, as a multi-grip myoelectric hand switches between them. Fingers index..little as
+// [MCP, PIP, DIP] in radians, thumb 0..1.
+const CURL = [1.35, 1.5, 1.0];
+const GRIPS = {
+  open: { th: 'แบมือ', en: 'Open', j: [[0.05, 0.05, 0.05], [0.05, 0.05, 0.05], [0.05, 0.05, 0.05], [0.05, 0.05, 0.05]], thumb: 0 },
+  power: { th: 'กำ', en: 'Power grip', j: [CURL, CURL, CURL, CURL], thumb: 0.9 },
+  tripod: { th: 'หยิบสามนิ้ว', en: 'Tripod pinch', j: [[0.75, 0.8, 0.35], [0.8, 0.85, 0.4], CURL, CURL], thumb: 0.72 },
+  key: { th: 'จับกุญแจ', en: 'Key grip', j: [[1.1, 1.3, 0.8], [1.2, 1.4, 0.9], CURL, CURL], thumb: 0.3 },
+  point: { th: 'ชี้', en: 'Point', j: [[0.05, 0.05, 0.05], CURL, CURL, CURL], thumb: 0.85 },
+};
 
 const tx = (th, en) => `<span class="th">${th}</span><span class="en" lang="en">${en}</span>`;
 const MSG = {
@@ -81,6 +91,10 @@ export async function mountHand(host, { compact = false } = {}) {
       <p class="mh-status" aria-live="polite">${MSG.idle}</p>
       <ul class="mh-meters">${NAMES.map(([th, en]) => `<li><span class="mh-name">${tx(th, en)}</span><span class="mh-bar"><i></i></span><span class="mh-pct">0%</span></li>`).join('')}
         <li class="mh-wrist"><span class="mh-name">${tx('ข้อมือ', 'wrist')}</span><span class="mh-bar"><i></i></span><span class="mh-pct">0°</span></li></ul>
+      <div class="mh-grips" role="group" aria-label="${document.documentElement.dataset.lang === 'en' ? 'Grips' : 'ท่ามือ'}">
+        ${Object.entries(GRIPS).map(([k, g]) => `<button type="button" class="mh-grip" data-grip="${k}" aria-pressed="false">${tx(g.th, g.en)}</button>`).join('')}
+        <p>${tx('ท่ามือที่มือเทียมแบบหลายท่ามักมี กดได้โดยไม่ต้องเปิดกล้อง ถ้ากล้องเห็นมือ มือคุณจะคุมแทน', "Grips multi-grip prosthetic hands commonly switch between. They work without the camera; when the camera sees your hand, your hand takes over.")}</p>
+      </div>
       <p class="mh-note">${tx('MIONEX ตัวจริงอ่านสัญญาณไฟฟ้าจากกล้ามเนื้อแขนส่วนที่เหลือ แล้วสั่งให้มือกำและแบ เดโมนี้ใช้กล้องแทน และให้ทุกนิ้วขยับตามคุณ โมเดลสร้างด้วยโค้ดตามสัดส่วนแขนจริง',
         'The real MIONEX reads muscle signals from the remaining forearm to open and close the hand. This demo uses your webcam instead and moves every finger with yours. The model is built in code to the real arm\'s proportions.')}</p>
       <button type="button" class="mh-btn mh-off" hidden>${tx('ปิดกล้อง', 'Turn off camera')}</button>
@@ -137,7 +151,12 @@ export async function mountHand(host, { compact = false } = {}) {
 
   // smoothed joint state
   const cur = { j: CHAINS.map(() => [REST, REST, REST]), thumb: 0, twist: 0 };
-  let target = null, lastSeen = 0;
+  let target = null, lastSeen = 0, grip = null;
+  const gripBtns = [...root.querySelectorAll('.mh-grip')];
+  gripBtns.forEach((b) => b.addEventListener('click', () => {
+    grip = grip === b.dataset.grip ? null : b.dataset.grip;   // a second press lets go
+    gripBtns.forEach((o) => o.setAttribute('aria-pressed', String(o.dataset.grip === grip)));
+  }));
 
   function idleTarget(t) {
     if (reduce) return { j: CHAINS.map(() => [REST, REST, REST]), thumb: 0.1, twist: 0 };
@@ -224,8 +243,8 @@ export async function mountHand(host, { compact = false } = {}) {
     raf = 0;
     const dt = Math.min(0.1, (now - last) / 1000); last = now;
     track(now);
-    const want = target || (tracking ? { j: CHAINS.map(() => [REST, REST, REST]), thumb: 0.05, twist: 0 } : idleTarget(now / 1000));
-    const k = 1 - Math.exp(-dt * (target ? 16 : 6));
+    const want = target || (grip ? { ...GRIPS[grip], twist: 0 } : tracking ? { j: CHAINS.map(() => [REST, REST, REST]), thumb: 0.05, twist: 0 } : idleTarget(now / 1000));
+    const k = 1 - Math.exp(-dt * (target ? 16 : grip ? 8 : 6));
     cur.j.forEach((f, i) => f.forEach((v, n) => { f[n] = v + (want.j[i][n] - v) * k; }));
     cur.thumb += (want.thumb - cur.thumb) * k;
     cur.twist = wrap(cur.twist + wrap(want.twist - cur.twist) * k);   // the short way round through ±π
