@@ -2,8 +2,8 @@
 
 Each chapter script does `from common import *`, builds its scene with these helpers, calls
 camera() with its shots, then render(). Run a chapter with:
-  blender -b --python tools/blender/<chapter>.py -- OUT_DIR [--frames 1,40,80] [--samples 40]
-then encode with:  for f in OUT_DIR/f*.png; do ffmpeg -i "$f" -c:v libwebp -quality 68 img/story/<chapter>/$(basename "${f%.png}").webp; done
+  blender -b --python tools/blender/<chapter>.py -- OUT_DIR [--frames 1,40,80] [--samples 40] [--width 1920]
+then encode with tools/blender/encode.sh OUT_DIR img/story/<chapter> (AVIF at 1920 and 1280, WebP fallback).
 """
 import sys, math
 import bpy
@@ -11,10 +11,11 @@ from mathutils import Vector
 
 argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 OUT = argv[0] if argv else '/tmp/film'
-FRAMES, SAMPLES = None, 40
+FRAMES, SAMPLES, WIDTH = None, 40, 1280
 for i, a in enumerate(argv):
     if a == '--frames': FRAMES = [int(x) for x in argv[i + 1].split(',')]
     if a == '--samples': SAMPLES = int(argv[i + 1])
+    if a == '--width': WIDTH = int(argv[i + 1])
 
 BG = (0.0021, 0.0027, 0.0037)   # page background #07090c in linear light (Standard view transform)
 COPPER = (0.93, 0.6, 0.35)
@@ -22,7 +23,7 @@ COPPER = (0.93, 0.6, 0.35)
 bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
 sc.render.engine = 'BLENDER_EEVEE'
-sc.render.resolution_x, sc.render.resolution_y = 1280, 720
+sc.render.resolution_x, sc.render.resolution_y = WIDTH, WIDTH * 9 // 16
 sc.view_settings.view_transform = 'Standard'
 for attr in ('use_raytracing', 'use_shadows', 'use_gtao'):
     if hasattr(sc.eevee, attr): setattr(sc.eevee, attr, True)
