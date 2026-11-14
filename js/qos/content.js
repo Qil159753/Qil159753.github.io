@@ -38,15 +38,15 @@ Tools: Teensy 4.x, ESP32, STM32, Arduino · C, C++, Python, JS · ROS 2`,
 // a genre with an empty list just shows the genre.
 export const MUSIC = [
   { genre: { th: 'ป๊อปไทย / T-pop', en: 'Thai pop / T-pop' }, level: 0.9, picks: [] },
-  { genre: { th: 'ร็อก / อินดี้', en: 'Rock / indie' }, level: 0.8, picks: [] },
+  { genre: { th: 'ร็อก / อินดี้', en: 'Rock / indie' }, level: 0.8, picks: ['Linkin Park', 'Three Days Grace', 'Polyphia'] },
   { genre: { th: 'J-pop / เพลงอนิเมะ', en: 'J-pop / anime OST' }, level: 0.85, picks: [] },
-  { genre: { th: 'R&B / แจ๊ส', en: 'R&B / jazz' }, level: 0.75, picks: [] },
+  { genre: { th: 'R&B / แจ๊ส', en: 'R&B / jazz' }, level: 0.75, picks: ['Giveon', 'Joji', 'keshi', 'RINI'] },
 ];
 export const MUSIC_ERA = { th: 'ฟังยุค 2000s–2010s เป็นหลัก', en: 'Mostly the 2000s and 2010s' };
 
 // Same idea: put game titles or projects in `picks` to list them.
 export const GAMES = [
-  { kind: { th: 'เกม PC / คอนโซล', en: 'PC / console games' }, picks: [] },
+  { kind: { th: 'เกม PC / คอนโซล', en: 'PC / console games' }, picks: ['League of Legends', 'Monster Hunter (World: Iceborne, Rise: Sunbreak, Generations Ultimate, Wilds)', 'Dark Souls III', 'Elden Ring', 'Sekiro', 'Clair Obscur: Expedition 33', 'Sifu', 'Hyper Light Drifter', 'NieR:Automata'] },
   { kind: { th: 'เกมมือถือ', en: 'Mobile games' }, picks: [] },
   { kind: { th: 'สร้างของเล่น ๆ: หุ่น บอร์ด พิมพ์ 3 มิติ', en: 'Building things for fun: robots, boards, 3D prints' }, picks: [] },
 ];
