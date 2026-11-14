@@ -8,31 +8,56 @@ const $ = (sel, root = story) => root.querySelector(sel);
 const $$ = (sel, root = story) => [...root.querySelectorAll(sel)];
 const key = (root, k) => root.querySelector(`[data-k="${k}"]`);
 
-// A pre-rendered Blender sequence drawn to a canvas; set(p) shows the frame at progress p, or the
-// nearest one already loaded, so scrubbing works while the rest stream in.
+// AVIF where the browser decodes it (a third smaller than the WebP at the same quality), WebP otherwise.
+const avif = new Promise(res => {
+  const im = new Image();
+  im.onload = () => res(im.width > 0); im.onerror = () => res(false);
+  im.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUEAAADrbWV0YQAAAAAAAAAhaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAAAAAAAOcGl0bQAAAAAAAQAAAB5pbG9jAAAAAEQAAAEAAQAAAAEAAAETAAAAHwAAAChpaW5mAAAAAAABAAAAGmluZmUCAAAAAAEAAGF2MDFDb2xvcgAAAABqaXBycAAAAEtpcGNvAAAAFGlzcGUAAAAAAAAAAgAAAAIAAAAQcGl4aQAAAAADCAgIAAAADGF2MUOBIAAAAAAAE2NvbHJuY2x4AAEADQAGgAAAABdpcG1hAAAAAAAAAAEAAQQBAoMEAAAAJ21kYXQSAAoHOAA2kBDQaTISHYJixO4444FlYACQNiCb1+tk';
+});
+
+// A pre-rendered Blender sequence drawn to a canvas. set(p) shows progress p, cross-fading the two
+// frames either side of it so slow scrolling never steps; until those load it shows the nearest
+// loaded frame, so scrubbing works while the rest stream in. Wide screens get the 1920 px set.
 function film(canvas) {
   const n = +canvas.dataset.n, base = canvas.dataset.film, imgs = new Array(n), ctx = canvas.getContext('2d');
-  let want = 0, shown = -1, started = false;
-  function draw() {
-    let i = want; while (i > 0 && !imgs[i]) i--;
-    const im = imgs[i];
-    if (!im || i === shown || !canvas.width) return;
-    shown = i;
+  let want = 0, shown = '', started = false, settle = 0;
+  const near = i => { let a = i, b = i; while (a > 0 && !imgs[a]) a--; while (b < n - 1 && !imgs[b]) b++; return imgs[a] ? a : imgs[b] ? b : -1; };
+  function paint(im, alpha) {
     const W = canvas.width, H = canvas.height, k = Math.max(W / im.naturalWidth, H / im.naturalHeight);
     const w = im.naturalWidth * k, h = im.naturalHeight * k;
-    ctx.fillStyle = '#07090c'; ctx.fillRect(0, 0, W, H);
+    ctx.globalAlpha = alpha;
     ctx.drawImage(im, (W - w) / 2, (H - h) / 2, w, h);
+  }
+  function draw() {
+    if (!canvas.width) return;
+    const i0 = Math.floor(want), i1 = Math.min(n - 1, i0 + 1);
+    const frac = Math.round((want - i0) * 12) / 12;           // 12 blend steps per frame is smooth enough
+    let id, a, b = -1;
+    if (imgs[i0] && imgs[i1]) { a = i0; b = frac > 0 ? i1 : -1; id = i0 + ':' + frac; }
+    else { a = near(Math.round(want)); id = a + ':0'; }
+    if (a < 0 || id === shown) return;
+    shown = id;
+    ctx.globalAlpha = 1; ctx.fillStyle = '#07090c'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    paint(imgs[a], 1);
+    if (b >= 0) paint(imgs[b], frac);
+    ctx.globalAlpha = 1;
   }
   function fit() {
     const d = Math.min(devicePixelRatio || 1, 2);
     canvas.width = Math.round(canvas.clientWidth * d); canvas.height = Math.round(canvas.clientHeight * d);
-    shown = -1; draw();
+    shown = ''; draw();
   }
   const ro = new ResizeObserver(fit); ro.observe(canvas);
   return {
-    set(p) { want = Math.max(0, Math.min(n - 1, Math.round(p * (n - 1)))); draw(); },
-    load() {
+    // blend while scrolling; once it settles, land on the nearest whole frame so nothing rests ghosted
+    set(p) {
+      want = Math.max(0, Math.min(n - 1, p * (n - 1))); draw();
+      clearTimeout(settle); settle = setTimeout(() => { want = Math.round(want); draw(); }, 150);
+    },
+    async load() {
       if (started) return; started = true;
+      const ext = canvas.dataset.avif !== undefined && await avif ? 'avif' : 'webp';
+      const dir = ext === 'avif' && canvas.width > 1400 ? base + 'hd/' : base;
       // every 8th frame first, then 4th, 2nd, the rest: the whole range is scrubbable early
       const order = [];
       for (const step of [8, 4, 2, 1]) for (let i = 0; i < n; i += step) if (!order.includes(i)) order.push(i);
@@ -41,13 +66,32 @@ function film(canvas) {
         if (next >= order.length) return;
         const i = order[next++], im = new Image();
         im.decoding = 'async';
-        im.onload = () => { imgs[i] = im; if (shown < 0 || Math.abs(i - want) < Math.abs(shown - want)) { shown = -1; draw(); } pump(); };
+        im.onload = () => { imgs[i] = im; if (Math.abs(i - want) <= 2 || !shown) { shown = ''; draw(); } pump(); };
         im.onerror = pump;
-        im.src = `${base}f${String(i + 1).padStart(3, '0')}.webp`;
+        im.src = `${dir}f${String(i + 1).padStart(3, '0')}.${ext}`;
       };
       for (let k = 0; k < 6; k++) pump();     // six requests in flight
     },
-    stop() { ro.disconnect(); }
+    stop() { ro.disconnect(); clearTimeout(settle); }
+  };
+}
+
+// A live three.js chapter (data-live="nav") behind the same interface as film(): the scene module
+// loads with the films, and set(p) is kept until it arrives.
+function live(canvas) {
+  let scene = null, p = 0, started = false, gone = false;
+  return {
+    set(v) { p = v; scene?.set(v); },
+    load() {
+      if (started) return; started = true;
+      import('./story-nav.js').then(m => {
+        if (gone) return;
+        scene = m.navScene(canvas); scene.set(p);
+        const tag = canvas.parentElement.querySelector('.st-tag');
+        if (tag) tag.classList.add('live');
+      }).catch(e => console.error('story-nav', e));
+    },
+    stop() { gone = true; scene?.dispose(); }
   };
 }
 
@@ -72,8 +116,10 @@ export function initStory(mq) {
     function enter(i, at) {
       const prev = chs[i - 1], cur = chs[i];
       tl.addLabel('ch' + i, at);
-      tl.to($('.st-copy', prev), { autoAlpha: 0, y: -40, duration: 0.4, ease: 'power2.in' }, at)
-        .to($('.st-vis', prev), { scale: 1.06, autoAlpha: 0, duration: 0.5, ease: 'power2.in' }, at)
+      // explicit start values: a .to() records its start lazily, and after a long jump forward it can
+      // capture the already-hidden state, so scrolling back would never bring the chapter back
+      tl.fromTo($('.st-copy', prev), { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -40, duration: 0.4, ease: 'power2.in', immediateRender: false }, at)
+        .fromTo($('.st-vis', prev), { scale: 1, autoAlpha: 1 }, { scale: 1.06, autoAlpha: 0, duration: 0.5, ease: 'power2.in', immediateRender: false }, at)
         .set(prev, { autoAlpha: 0 }, at + 0.5)
         .set(cur, { autoAlpha: 1 }, at + 0.15)
         .fromTo($('.kicker', cur), { autoAlpha: 0, x: -16 }, { autoAlpha: 1, x: 0, duration: 0.3, immediateRender: false }, at + 0.2)
@@ -84,7 +130,7 @@ export function initStory(mq) {
       if (gone.length) tl.to(gone, { autoAlpha: 0, duration: 0.3 }, at);
       const vis = $('.st-vis', cur);
       if (vis.classList.contains('film'))
-        tl.fromTo(vis, { clipPath: 'inset(0 0 0 100%)', autoAlpha: 1 }, { clipPath: 'inset(0 0 0 0%)', duration: 0.6, ease: 'power3.inOut', immediateRender: false }, at + 0.1);
+        tl.fromTo(vis, { clipPath: 'inset(0 0 0 100%)', autoAlpha: 1 }, { clipPath: 'inset(0 0 0 0%)', autoAlpha: 1, duration: 0.6, ease: 'power3.inOut', immediateRender: false }, at + 0.1);
       else
         tl.fromTo(vis, { scale: 0.92, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.5, ease: 'power3.out', immediateRender: false }, at + 0.3);
       mark(at + 0.2, i, 0);
@@ -94,7 +140,7 @@ export function initStory(mq) {
     // copy, and the real photo for that beat (figure[data-b]) slides in beside the render.
     function reel(i, T, dur, beats) {
       enter(i, T);
-      const ch = chs[i], r = film($('.st-film', ch)), F = { v: 0 };
+      const ch = chs[i], cv = $('.st-film', ch), r = cv.dataset.live ? live(cv) : film(cv), F = { v: 0 };
       films.push(r);
       tl.to(F, { v: 1, duration: dur - 0.4, onUpdate: () => r.set(F.v) }, T + 0.2);
       const at = [[T + 0.2, 0], ...beats];
@@ -188,6 +234,19 @@ export function initStory(mq) {
     requestAnimationFrame(() => ScrollTrigger.refresh());
     document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
 
+    // A little depth under the pointer: the film drifts against it, the photo column with it. Both
+    // move wrappers the timeline never animates, so the two can't fight over a transform.
+    let par = null;
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      const layers = [...$$('.is-film .st-film').map(el => [el, -10, 1.03]), ...$$('.is-film .st-photos').map(el => [el, 14, 1])]
+        .map(([el, amp, s]) => { gsap.set(el, { scale: s }); return { amp, x: gsap.quickTo(el, 'x', { duration: 0.9, ease: 'power3' }), y: gsap.quickTo(el, 'y', { duration: 0.9, ease: 'power3' }) }; });
+      par = e => {
+        const nx = e.clientX / innerWidth - 0.5, ny = e.clientY / innerHeight - 0.5;
+        for (const l of layers) { l.x(nx * l.amp); l.y(ny * l.amp * 0.6); }
+      };
+      story.addEventListener('pointermove', par);
+    }
+
     // In-page links to a chapter scroll to its spot in the run instead of the stage top.
     const go = e => {
       const a = e.target.closest('a[href^="#st-"]');
@@ -204,6 +263,7 @@ export function initStory(mq) {
 
     return () => {
       document.removeEventListener('click', go);
+      if (par) story.removeEventListener('pointermove', par);
       lid.removeEventListener('lidar-ready', sync);
       story.style.removeProperty('--run');
       ro.disconnect(); clearTimeout(rt); near.disconnect(); films.forEach(f => f.stop());

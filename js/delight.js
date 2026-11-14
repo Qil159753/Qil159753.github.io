@@ -56,7 +56,8 @@
       '[  0.004] radio link: OK   crc8: OK\n' +
       '[  0.009] whoami -> Apipath (Q), Embedded Systems Eng., Burapha University\n' +
       '[  0.011] contact -> apipath.san@gmail.com | github.com/Qil159753\n' +
-      '[  0.012] > type q() for the project table',
+      '[  0.012] > type q() for the project table\n' +
+      '[  0.013] > there is a root shell on this page. type sudo (not here, on the page)',
       'font: 12px/1.6 ui-monospace, Menlo, monospace; color: #ec9a5a');
     window.q = function () {
       console.table({
@@ -129,5 +130,31 @@
         ? [[['w', 'work'], ['j', 'journey'], ['c', 'contact']], [['a', 'drive the ABU robot'], ['r', 'ROS 2'], ['l', 'LiDAR']], [['e', 'copy email'], ['t', 'ไทย / EN']]]
         : [[['w', 'ผลงาน'], ['j', 'เส้นทาง'], ['c', 'ติดต่อ']], [['a', 'ขับหุ่น ABU'], ['r', 'ROS 2'], ['l', 'LiDAR']], [['e', 'คัดลอกอีเมล'], ['t', 'ไทย / EN']]]);
     }
+  });
+
+  /* ---------- 5. qOS: type `sudo` anywhere, or tap the Q mark five times. Loaded only then. ---------- */
+  var typed = '', taps = [], booting = false;
+  function qos() {
+    if (booting) return;
+    booting = true;
+    import(new URL('js/qos/qos.js', document.baseURI).href)
+      .then(function (m) { m.boot(); })
+      .catch(function (e) { console.error('qOS failed to load', e); })
+      .finally(function () { booting = false; });
+  }
+  addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey || e.key.length !== 1) return;
+    var t = e.target;
+    if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return;
+    if (document.getElementById('qos')) return;
+    typed = (typed + e.key.toLowerCase()).slice(-4);
+    if (typed === 'sudo') { typed = ''; qos(); }
+  });
+  var mark = document.querySelector('.nav .mark');
+  if (mark) mark.addEventListener('click', function () {
+    var now = Date.now();
+    taps = taps.filter(function (x) { return now - x < 2000; });
+    taps.push(now);
+    if (taps.length >= 5) { taps = []; qos(); }
   });
 })();

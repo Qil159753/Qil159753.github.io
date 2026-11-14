@@ -554,6 +554,8 @@ h1 em { font-style: normal; color: var(--copper); }
 .st-vis.film { aspect-ratio: 16 / 9; }
 .st-film { display: none; }
 .st-poster { width: 100%; height: 100%; object-fit: cover; }
+.st-tag .t-live, .st-tag.live .t-film { display: none; }
+.st-tag.live .t-live { display: inline; }
 .st-tag { position: absolute; left: 14px; bottom: 12px; padding: 4px 9px; border-radius: 6px; background: rgba(7, 9, 12, .62); font: 500 11px/1.4 var(--mono); color: var(--muted); }
 .st-photos { grid-column: 1 / -1; display: flex; gap: 12px; }
 .st-photos figure { margin: 0; flex: 1 1 0; max-width: 240px; }
@@ -1225,7 +1227,7 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
               </div>
               <div class="st-vis film">
                 <img class="st-poster" src="img/story/build/poster.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ภาพ 3 มิติที่เรนเดอร์ใน Blender แขนขุดดินไซริงค์ รถของเล่นแยกชิ้น และบอร์ด Nano" data-alt-en="Blender render of the syringe digger, the toy truck in parts and the Nano board">
-                <canvas class="st-film" data-film="img/story/build/" data-n="96" aria-hidden="true"></canvas>
+                <canvas class="st-film" data-film="img/story/build/" data-n="96" data-avif aria-hidden="true"></canvas>
                 <span class="st-tag"><span class="th">ภาพ 3 มิติ สร้างและเรนเดอร์ใน Blender</span><span class="en" lang="en">3D scene, modelled and rendered in Blender</span></span>
               </div>
               <div class="st-photos">
@@ -1246,7 +1248,7 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
               </div>
               <div class="st-vis film">
                 <img class="st-poster" src="img/story/pitch/poster.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ภาพ 3 มิติที่เรนเดอร์ใน Blender โพเดียมใต้สปอตไลต์ และจุด 540 จุดที่เหลือ 9 จุดบินไปเกาหลี" data-alt-en="Blender render: a podium under a spotlight, and 540 beads narrowing to 9 that fly to Korea">
-                <canvas class="st-film" data-film="img/story/pitch/" data-n="96" aria-hidden="true"></canvas>
+                <canvas class="st-film" data-film="img/story/pitch/" data-n="96" data-avif aria-hidden="true"></canvas>
                 <span class="st-tag"><span class="th">ภาพ 3 มิติ สร้างและเรนเดอร์ใน Blender</span><span class="en" lang="en">3D scene, modelled and rendered in Blender</span></span>
               </div>
               <div class="st-photos">
@@ -1267,7 +1269,7 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
               </div>
               <div class="st-vis film">
                 <img class="st-poster" src="img/story/compete/poster.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ภาพ 3 มิติที่เรนเดอร์ใน Blender หุ่นวิ่งตามเส้นบนสนาม Robotrace และหุ่นล้อเมคานัม" data-alt-en="Blender render: a line robot on a Robotrace course, and a mecanum robot">
-                <canvas class="st-film" data-film="img/story/compete/" data-n="96" aria-hidden="true"></canvas>
+                <canvas class="st-film" data-film="img/story/compete/" data-n="96" data-avif aria-hidden="true"></canvas>
                 <span class="st-tag"><span class="th">ภาพ 3 มิติ สร้างและเรนเดอร์ใน Blender</span><span class="en" lang="en">3D scene, modelled and rendered in Blender</span></span>
               </div>
               <div class="st-photos">
@@ -1287,8 +1289,8 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
               </div>
               <div class="st-vis film">
                 <img class="st-poster" src="img/story/nav/poster.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ภาพ 3 มิติที่เรนเดอร์ใน Blender แผนที่ตารางที่ค่อย ๆ ขึ้นรอบหุ่น และเส้นทาง A B C" data-alt-en="Blender render: a grid map rising around the robot, and the A, B, C route">
-                <canvas class="st-film" data-film="img/story/nav/" data-n="96" aria-hidden="true"></canvas>
-                <span class="st-tag"><span class="th">ภาพ 3 มิติ สร้างและเรนเดอร์ใน Blender</span><span class="en" lang="en">3D scene, modelled and rendered in Blender</span></span>
+                <canvas class="st-film" data-live="nav" aria-hidden="true"></canvas>
+                <span class="st-tag"><span class="t-film"><span class="th">ภาพ 3 มิติ สร้างและเรนเดอร์ใน Blender</span><span class="en" lang="en">3D scene, modelled and rendered in Blender</span></span><span class="t-live"><span class="th">3 มิติแบบเรียลไทม์ (three.js) · ลากเพื่อหมุนดู</span><span class="en" lang="en">Real-time 3D (three.js) · drag to orbit</span></span></span>
               </div>
               <div class="st-photos">
                 <figure data-b="0" class="fit"><img src="img/j/t/cert-mara-ros.webp" width="849" height="1200" loading="lazy" decoding="async" alt="วุฒิบัตรหลักสูตรการใช้ ROS ขั้นพื้นฐาน 30 ชั่วโมง กรมพัฒนาฝีมือแรงงาน" data-alt-en="Certificate, Basic ROS, 30 hours, Department of Skill Development"><figcaption><span class="th">วุฒิบัตรจริง · MARA</span><span class="en" lang="en">The real certificate · MARA</span></figcaption></figure>
