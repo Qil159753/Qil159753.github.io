@@ -508,61 +508,15 @@ h1 em { font-style: normal; color: var(--copper); }
           background: radial-gradient(90% 70% at 70% 20%, rgba(236, 154, 90, .07), transparent 60%), var(--panel); }
 .st-vis:has(> .j3d) { aspect-ratio: auto; border: 0; background: none; border-radius: 0; overflow: visible; }
 .st-vis > .j3d { margin: 0; }
-/* Without the scroll timeline each picture shows only its last scene. */
-.story:not(.on) .beat:not(:last-of-type) { display: none; }
 .st-vis svg { display: block; width: 100%; height: 100%; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .st-vis text { font: 500 11px var(--mono); fill: var(--muted); stroke: none; letter-spacing: .06em; }
 .st-vis text.hl { fill: var(--copper); font-size: 12px; }
 .st-vis text.big { font: 700 64px var(--display); fill: rgba(255, 255, 255, .07); letter-spacing: -.02em; }
-.st-vis text.chip { fill: var(--ink); font-size: 10px; letter-spacing: 0; }
-.st-vis .cu { fill: var(--copper-hi); } .st-vis .bl { fill: #6aa7d8; }
-.st-vis .ln, .st-vis .trace, .st-vis .water, .st-vis .lap1, .st-vis .lap2, .st-vis .route { stroke-dasharray: 1; stroke-dashoffset: 0; }
-.st-vis .ln { stroke: var(--copper); stroke-width: 2; }
+.st-vis .ln { stroke: var(--copper); stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: 0; }
 .st-vis .ln.dim { stroke: var(--line-2); }
-.st-vis .ground, .st-vis .tick path { stroke: var(--line-2); stroke-width: 1.5; }
+.st-vis .tick path { stroke: var(--line-2); stroke-width: 1.5; }
 .st-vis .node circle { fill: var(--bg); stroke: var(--copper); stroke-width: 2.5; }
 .st-vis .node text { fill: var(--text); }
-.st-vis .syr rect { stroke: var(--text); stroke-width: 1.5; fill: rgba(255, 255, 255, .03); }
-.st-vis .water { stroke: #6aa7d8; stroke-width: 2; opacity: .85; }
-.st-vis .arm { stroke: var(--copper); stroke-width: 10; opacity: .9; }
-.st-vis .joint { fill: var(--bg); stroke: var(--copper-hi); stroke-width: 2.5; }
-.st-vis .hdr { stroke: var(--copper); stroke-width: 9; stroke-dasharray: 0 26.28; }
-.st-vis .pins { fill: var(--panel-2); stroke: var(--copper); stroke-width: 7; stroke-dasharray: 2 5; }
-.st-vis .trace { stroke: var(--copper-hi); stroke-width: 3; }
-.st-vis .trace.bot { stroke: #6aa7d8; stroke-width: 2.5; opacity: .8; }
-.st-vis .spot { fill: rgba(236, 154, 90, .09); }
-.st-vis .pod rect { fill: var(--panel-2); stroke: var(--line-2); transition: fill .4s var(--ease), stroke .4s var(--ease); }
-.st-vis .pod text { font: 700 40px var(--display); fill: var(--muted); }
-.st-vis .pod.on rect { fill: var(--copper-soft); stroke: var(--copper); }
-.st-vis .pod.on text { fill: var(--copper-hi); }
-.st-vis .dot { fill: rgba(255, 255, 255, .16); }
-.st-vis .dot.pick { fill: var(--copper); }
-.st-vis .city, .st-vis .plane { fill: var(--copper); }
-.st-vis .plane { fill: var(--copper-hi); }
-.st-vis .faint { opacity: .5; }
-.st-vis .track { stroke: rgba(255, 255, 255, .1); stroke-width: 20; }
-.st-vis .lap1 { stroke: var(--muted); stroke-width: 2; }
-.st-vis .lap2 { stroke: var(--copper); stroke-width: 3.5; }
-.st-vis .mark { stroke: var(--ink); stroke-width: 3; }
-.st-vis .bot rect { fill: var(--ink); }
-.st-vis .bot path { stroke: var(--copper); stroke-width: 3; }
-.st-vis .pad rect, .st-vis .pad circle { stroke: var(--text); stroke-width: 1.5; }
-.st-vis .wave { stroke: var(--copper); stroke-width: 2; opacity: .7; }
-.st-vis .frame rect { fill: var(--copper); }
-.st-vis .frame text { fill: var(--copper-ink); font-size: 9px; letter-spacing: 0; }
-.st-vis .mecanum > rect:first-child { fill: var(--panel-2); stroke: var(--copper); stroke-width: 2; }
-.st-vis .wheel { fill: #0c0f14; stroke: var(--text); stroke-width: 1.5; }
-.st-vis .roll { stroke: var(--muted); stroke-width: 1.5; }
-.st-vis .vec { stroke: var(--copper-hi); stroke-width: 3; }
-.st-vis .bar { fill: rgba(255, 255, 255, .05); }
-.st-vis .fillbar { fill: var(--copper); }
-.st-vis .cell { fill: rgba(255, 255, 255, .06); }
-.st-vis .cell.w { fill: var(--text); }
-.st-vis .cell.o { fill: rgba(236, 154, 90, .45); }
-.st-vis .route { stroke: var(--copper-hi); stroke-width: 3; }
-.st-vis .stn circle { fill: var(--bg); stroke: var(--copper); stroke-width: 2; }
-.st-vis .stn text { fill: var(--ink); font-size: 11px; }
-.st-vis .robot { fill: #4fd18b; }
 .st-skills { margin-top: clamp(48px, 7vw, 80px); display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px 32px; }
 .st-g b { display: block; margin-bottom: 10px; font: 500 12.5px/1.4 var(--mono); color: var(--muted); }
 .st-g ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -571,7 +525,8 @@ h1 em { font-style: normal; color: var(--copper); }
 .st-g li.seen { border-color: rgba(236, 154, 90, .35); color: var(--ink); }
 .st-g li.on { border-color: var(--copper); background: var(--copper-soft); color: var(--copper-hi); }
 .st-tl { margin-top: clamp(72px, 9vw, 120px); font-size: clamp(1.4rem, 2.2vw, 1.9rem); }
-.story.on .st-stage { position: relative; height: 100vh; height: 100svh; padding: 92px 0 28px; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 20px; }
+.story.on { height: calc(100vh + var(--run, 0px)); height: calc(100svh + var(--run, 0px)); }
+.story.on .st-stage { position: sticky; top: 0; height: 100vh; height: 100svh; padding: 92px 0 28px; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 20px; }
 .story.on .st-rail { display: block; }
 .st-rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .st-rail a { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); font: 500 12px/1 var(--mono); color: var(--muted); text-decoration: none;
@@ -596,6 +551,30 @@ h1 em { font-style: normal; color: var(--copper); }
 .story.on .st-skills:not(.sum) li { font-size: 11px; padding: 6px 8px; }
 .story.on .st-skills.sum { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; animation: stSum .6s var(--ease) both; }
 @keyframes stSum { from { opacity: 0; transform: translateY(12px); } }
+.st-vis.film { aspect-ratio: 16 / 9; }
+.st-film { display: none; }
+.st-poster { width: 100%; height: 100%; object-fit: cover; }
+.st-tag { position: absolute; left: 14px; bottom: 12px; padding: 4px 9px; border-radius: 6px; background: rgba(7, 9, 12, .62); font: 500 11px/1.4 var(--mono); color: var(--muted); }
+.st-photos { grid-column: 1 / -1; display: flex; gap: 12px; }
+.st-photos figure { margin: 0; flex: 1 1 0; max-width: 240px; }
+.st-photos img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; border: 1px solid var(--line-2); }
+.st-photos .fit img { object-fit: contain; background: #d9d6cf; padding: 4px; }
+.st-photos figcaption { margin-top: 6px; font: 500 11px/1.4 var(--mono); color: var(--muted); }
+main { overflow-x: clip; }   /* the full-bleed story film may not widen the page */
+.story.on .st-rail, .story.on .st-skills { z-index: 2; }
+.story.on .st-rail { position: relative; }
+.story.on .st-copy { position: relative; z-index: 1; }
+/* Film chapters: the Blender render fills the screen behind the copy; scroll picks the frame. */
+.story.on .is-film .st-vis.film { position: absolute; z-index: 0; inset: -146px calc(50% - 50vw) -28px; height: auto; aspect-ratio: auto; border: 0; border-radius: 0; background: var(--bg); }
+.story.on .st-film { display: block; width: 100%; height: 100%; }
+.story.on .is-film .st-poster { display: none; }
+.story.on .is-film .st-vis.film::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, var(--bg) calc(50% - 560px), rgba(7, 9, 12, .7) calc(50% - 140px), rgba(7, 9, 12, 0) calc(50% + 80px)),
+              linear-gradient(0deg, var(--bg), rgba(7, 9, 12, 0) 26%), linear-gradient(180deg, var(--bg), rgba(7, 9, 12, 0) 20%); }
+.story.on .is-film .st-tag { left: auto; right: max(16px, calc(50vw - 640px + 48px)); top: 146px; bottom: auto; z-index: 1; }
+.story.on .st-photos { position: absolute; z-index: 1; right: 0; bottom: 64px; width: 220px; display: block; }
+.story.on .st-photos figure { position: absolute; right: 0; bottom: 0; width: 100%; max-width: none; visibility: hidden; }
+.story.on .st-photos img { box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .9); }
 @media (max-width: 960px) {
   .st-ch { grid-template-columns: minmax(0, 1fr); }
 }
@@ -1234,7 +1213,7 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
               </div>
             </article>
 
-            <article class="st-ch" id="st-build" aria-labelledby="st-h1">
+            <article class="st-ch is-film" id="st-build" aria-labelledby="st-h1">
               <div class="st-copy">
                 <span class="kicker"><span class="th">บทที่ 1 · สร้าง</span><span class="en" lang="en">Chapter 1 · Build</span></span>
                 <h3 id="st-h1"><span class="th">เริ่มจากของที่จับต้องได้</span><span class="en" lang="en">It started with things I could hold</span></h3>
@@ -1244,74 +1223,18 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
                   <li><a href="#j-nano"><time><span class="th">ก.พ. 2026</span><span class="en" lang="en">Feb 2026</span></time><span class="th">บอร์ด Arduino Nano ของผมเอง ATmega328P สองเลเยอร์ ออกแบบใน EasyEDA</span><span class="en" lang="en">My own Arduino Nano board: ATmega328P on two layers, laid out in EasyEDA</span></a></li>
                 </ol>
               </div>
-              <div class="st-vis">
-                <svg viewBox="0 0 600 440" role="img" aria-label="ภาพลายเส้น แขนขุดดิน รถของเล่นแบบแยกชิ้น และแผ่นวงจรบอร์ด Nano" data-label-en="Line drawings: the digger arm, the truck taken apart, and the Nano circuit board">
-                  <g class="beat" data-b="0">
-                    <path class="ground" d="M40 372H560"/>
-                    <rect class="ln" pathLength="1" x="100" y="320" width="200" height="40" rx="20"/>
-                    <circle class="ln" pathLength="1" cx="124" cy="340" r="12"/><circle class="ln" pathLength="1" cx="200" cy="340" r="12"/><circle class="ln" pathLength="1" cx="276" cy="340" r="12"/>
-                    <path class="ln" pathLength="1" d="M116 320V246H226V214H286V320Z"/>
-                    <g class="syr"><rect x="132" y="262" width="14" height="44" rx="3"/><rect x="160" y="262" width="14" height="44" rx="3"/><rect x="188" y="262" width="14" height="44" rx="3"/></g>
-                    <path class="water" pathLength="1" d="M139 262C139 196 230 200 300 226"/>
-                    <path class="water" pathLength="1" d="M167 262C170 170 290 130 360 150"/>
-                    <path class="water" pathLength="1" d="M195 262C210 150 380 120 430 184"/>
-                    <g data-k="boom">
-                      <path class="arm" d="M284 236L404 150"/>
-                      <g data-k="stick">
-                        <path class="arm" d="M404 150L470 262"/>
-                        <g data-k="bucket"><path class="ln" pathLength="1" d="M470 262l30 8l-6 34q-34 8-48-22z"/></g>
-                        <circle class="joint" cx="470" cy="262" r="6"/>
-                      </g>
-                      <circle class="joint" cx="404" cy="150" r="6"/>
-                    </g>
-                    <circle class="joint" cx="284" cy="236" r="7"/>
-                    <text x="100" y="404"><tspan class="th">ไซริงค์ + ท่อน้ำ</tspan><tspan class="en">SYRINGES + WATER LINES</tspan></text>
-                  </g>
-                  <g class="beat" data-b="1">
-                    <g class="part" data-dx="0" data-dy="-74"><path class="ln" pathLength="1" d="M150 268L162 196H356V268Z"/></g>
-                    <g class="part" data-dx="70" data-dy="-46"><path class="ln" pathLength="1" d="M372 268V198H428L462 236V268Z"/><path class="ln" pathLength="1" d="M386 210H424L446 234H386Z"/></g>
-                    <g class="part" data-dx="0" data-dy="0"><rect class="ln" pathLength="1" x="140" y="268" width="330" height="18" rx="4"/></g>
-                    <g class="part" data-dx="-40" data-dy="62"><circle class="ln" pathLength="1" cx="214" cy="300" r="32"/></g>
-                    <g class="part" data-dx="40" data-dy="62"><circle class="ln" pathLength="1" cx="404" cy="300" r="32"/></g>
-                    <g class="part" data-dx="-96" data-dy="62"><circle class="ln" pathLength="1" cx="214" cy="300" r="15"/></g>
-                    <g class="part" data-dx="96" data-dy="62"><circle class="ln" pathLength="1" cx="404" cy="300" r="15"/></g>
-                    <g class="part" data-dx="-150" data-dy="40"><path class="ln" pathLength="1" d="M200 300H228"/></g>
-                    <g class="part" data-dx="150" data-dy="40"><path class="ln" pathLength="1" d="M390 300H418"/></g>
-                    <g class="part" data-dx="-120" data-dy="100"><circle class="ln" pathLength="1" cx="214" cy="300" r="4"/></g>
-                    <g class="part" data-dx="120" data-dy="100"><circle class="ln" pathLength="1" cx="404" cy="300" r="4"/></g>
-                    <text x="300" y="110" text-anchor="middle" class="hl">11 PARTS · SOLIDWORKS</text>
-                  </g>
-                  <g class="beat" data-b="2">
-                    <rect class="ln" pathLength="1" x="90" y="140" width="420" height="180" rx="14"/>
-                    <path class="hdr" d="M118 160H486M118 300H486"/>
-                    <rect class="ln" pathLength="1" x="74" y="206" width="40" height="48" rx="10"/>
-                    <rect class="pins" x="160" y="200" width="54" height="60" rx="3"/>
-                    <rect class="pins" x="268" y="190" width="80" height="80" rx="4"/>
-                    <rect class="ln" pathLength="1" x="384" y="196" width="34" height="16" rx="8"/>
-                    <rect class="ln" pathLength="1" x="430" y="236" width="44" height="34" rx="3"/>
-                    <path class="trace" pathLength="1" d="M114 222H140L160 214"/>
-                    <path class="trace" pathLength="1" d="M114 238H146L160 246"/>
-                    <path class="trace" pathLength="1" d="M214 214H240L268 204"/>
-                    <path class="trace" pathLength="1" d="M214 246H244L268 256"/>
-                    <path class="trace" pathLength="1" d="M348 204H384"/>
-                    <path class="trace" pathLength="1" d="M308 190V176L322 160"/>
-                    <path class="trace" pathLength="1" d="M290 190V172L270 160"/>
-                    <path class="trace" pathLength="1" d="M308 270V284L330 300"/>
-                    <path class="trace" pathLength="1" d="M348 252H430"/>
-                    <path class="trace bot" pathLength="1" d="M94 254V330H452V270"/>
-                    <path class="trace bot" pathLength="1" d="M452 236V180L470 160"/>
-                    <text x="308" y="236" text-anchor="middle" class="chip">ATmega328P</text>
-                    <text x="187" y="284" text-anchor="middle">CH340G</text>
-                    <text x="94" y="196" text-anchor="middle">USB-C</text>
-                    <text x="401" y="186" text-anchor="middle">16 MHz</text>
-                    <text x="452" y="229" text-anchor="middle">3.3 V</text>
-                    <text x="90" y="372"><tspan class="cu"><tspan class="th">ทองแดงชั้นบน</tspan><tspan class="en">TOP COPPER</tspan></tspan> · <tspan class="bl"><tspan class="th">ชั้นล่าง</tspan><tspan class="en">BOTTOM LAYER</tspan></tspan></text>
-                  </g>
-                </svg>
+              <div class="st-vis film">
+                <img class="st-poster" src="img/story/build/poster.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ภาพ 3 มิติที่เรนเดอร์ใน Blender แขนขุดดินไซริงค์ รถของเล่นแยกชิ้น และบอร์ด Nano" data-alt-en="Blender render of the syringe digger, the toy truck in parts and the Nano board">
+                <canvas class="st-film" data-film="img/story/build/" data-n="96" aria-hidden="true"></canvas>
+                <span class="st-tag"><span class="th">ภาพ 3 มิติ สร้างและเรนเดอร์ใน Blender</span><span class="en" lang="en">3D scene, modelled and rendered in Blender</span></span>
+              </div>
+              <div class="st-photos">
+                <figure data-b="1"><img src="img/j/t/car-parts.webp" width="1200" height="863" loading="lazy" decoding="async" alt="ชิ้นส่วนรถของเล่นทั้ง 11 ชิ้น วางเรียงพร้อมหมายเลข" data-alt-en="All 11 parts of the toy truck laid out and numbered"><figcaption><span class="th">ภาพจริง · 11 ชิ้นที่วัดและขึ้นโมเดล</span><span class="en" lang="en">Real photo · the 11 parts we measured</span></figcaption></figure>
+                <figure data-b="2"><img src="img/j/t/nano-layout.webp" width="750" height="1000" loading="lazy" decoding="async" alt="ลายวงจรสองชั้นของบอร์ด Nano clone ใน EasyEDA" data-alt-en="The two-layer Nano clone layout in EasyEDA"><figcaption><span class="th">ลายวงจรจริงใน EasyEDA</span><span class="en" lang="en">The real layout in EasyEDA</span></figcaption></figure>
               </div>
             </article>
 
-            <article class="st-ch" id="st-pitch" aria-labelledby="st-h2">
+            <article class="st-ch is-film" id="st-pitch" aria-labelledby="st-h2">
               <div class="st-copy">
                 <span class="kicker"><span class="th">บทที่ 2 · ขึ้นเวที</span><span class="en" lang="en">Chapter 2 · On stage</span></span>
                 <h3 id="st-h2"><span class="th">แล้วก็ต้องเล่าให้คนอื่นเชื่อ</span><span class="en" lang="en">Then I had to make other people believe in it</span></h3>
@@ -1321,31 +1244,19 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
                   <li><a href="#j-elp4"><time><span class="th">พ.ค.–ต.ค. 2026</span><span class="en" lang="en">May–Oct 2026</span></time><span class="th">ELP4 เป็น 1 ใน 9 จาก 540 คน ได้ไปดูงานที่ SKKU เกาหลีใต้</span><span class="en" lang="en">ELP4: one of 9 from 540 applicants, off to SKKU in South Korea</span></a></li>
                 </ol>
               </div>
-              <div class="st-vis">
-                <svg viewBox="0 0 600 440" role="img" aria-label="โพเดียมอันดับ 3 และอันดับ 1 จุด 540 จุดที่เหลือ 9 และเส้นทางจากชลบุรีไปซูวอน" data-label-en="A podium for third and first place, 540 dots narrowing to 9, and a route from Chonburi to Suwon">
-                  <g class="beat" data-b="0">
-                    <path class="spot" data-k="spot" d="M400 40L340 340H460Z"/>
-                    <g class="pod" data-p="2"><rect x="150" y="230" width="100" height="110"/><text x="200" y="290" text-anchor="middle">2</text></g>
-                    <g class="pod" data-p="1"><rect x="250" y="180" width="100" height="160"/><text x="300" y="250" text-anchor="middle">1</text></g>
-                    <g class="pod" data-p="3"><rect x="350" y="260" width="100" height="80"/><text x="400" y="310" text-anchor="middle">3</text></g>
-                    <path class="ground" d="M100 340H500"/>
-                    <text class="hl" x="300" y="390" text-anchor="middle" data-k="pod3">STARTUP THAILAND LEAGUE · 3RD</text>
-                    <text class="hl" x="300" y="390" text-anchor="middle" data-k="pod1">PITCH YOUR IP · 1ST · MIONEX</text>
-                  </g>
-                  <g class="beat" data-b="1">
-                    <g data-k="dots"></g>
-                    <text class="big" x="90" y="72" data-k="count">540</text>
-                    <circle class="city" cx="164" cy="346" r="6"/><circle class="city faint" cx="451" cy="230" r="4"/><circle class="city" cx="528" cy="107" r="6"/>
-                    <path class="ln dim" pathLength="1" d="M164 346Q250 110 528 107" data-k="arcdim"/>
-                    <path class="ln" pathLength="1" d="M164 346Q250 110 528 107" data-k="arc"/>
-                    <circle class="plane" r="7" cx="528" cy="107" data-k="plane"/>
-                    <g data-k="labels"><text x="164" y="378" text-anchor="middle">CHONBURI · TH</text><text x="451" y="258" text-anchor="middle" class="faint">TAIPEI</text><text x="528" y="84" text-anchor="end">SUWON · KR · SKKU</text></g>
-                  </g>
-                </svg>
+              <div class="st-vis film">
+                <img class="st-poster" src="img/story/pitch/poster.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ภาพ 3 มิติที่เรนเดอร์ใน Blender โพเดียมใต้สปอตไลต์ และจุด 540 จุดที่เหลือ 9 จุดบินไปเกาหลี" data-alt-en="Blender render: a podium under a spotlight, and 540 beads narrowing to 9 that fly to Korea">
+                <canvas class="st-film" data-film="img/story/pitch/" data-n="96" aria-hidden="true"></canvas>
+                <span class="st-tag"><span class="th">ภาพ 3 มิติ สร้างและเรนเดอร์ใน Blender</span><span class="en" lang="en">3D scene, modelled and rendered in Blender</span></span>
+              </div>
+              <div class="st-photos">
+                <figure data-b="0"><img src="img/j/t/stl-pitch.webp" width="784" height="523" loading="lazy" decoding="async" alt="อภิภัทรถือไมโครโฟนพิตช์บนเวที Startup Thailand League" data-alt-en="Apipath pitching with a microphone at Startup Thailand League"><figcaption><span class="th">ภาพจริง · Startup Thailand League</span><span class="en" lang="en">Real photo · Startup Thailand League</span></figcaption></figure>
+                <figure data-b="1"><img src="img/j/t/pyip-stage.webp" width="1200" height="675" loading="lazy" decoding="async" alt="อภิภัทรพิตช์บนเวที Pitch Your IP หน้าจอใหญ่ที่เขียนว่า CHANCE" data-alt-en="Apipath pitching at Pitch Your IP in front of a screen reading CHANCE"><figcaption><span class="th">ภาพจริง · Pitch Your IP</span><span class="en" lang="en">Real photo · Pitch Your IP</span></figcaption></figure>
+                <figure data-b="2" class="fit"><img src="img/j/t/cert-elp4-rep.webp" width="1200" height="849" loading="lazy" decoding="async" alt="เกียรติบัตร ELP4 ผู้แทนมหาวิทยาลัยบูรพาไปแข่งรอบภูมิภาค 13 พ.ค. 2026" data-alt-en="ELP4 certificate: Burapha University representative for the regional round, 13 May 2026"><figcaption><span class="th">เกียรติบัตรจริง · ELP4</span><span class="en" lang="en">The real certificate · ELP4</span></figcaption></figure>
               </div>
             </article>
 
-            <article class="st-ch" id="st-compete" aria-labelledby="st-h3">
+            <article class="st-ch is-film" id="st-compete" aria-labelledby="st-h3">
               <div class="st-copy">
                 <span class="kicker"><span class="th">บทที่ 3 · ลงสนาม</span><span class="en" lang="en">Chapter 3 · Compete</span></span>
                 <h3 id="st-h3"><span class="th">หุ่นที่ต้องวิ่งได้จริงในวันแข่ง</span><span class="en" lang="en">Robots that have to work on the day</span></h3>
@@ -1354,35 +1265,18 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
                   <li><a href="#j-abu"><time><span class="th">พ.ค.–มิ.ย. 2026</span><span class="en" lang="en">May–Jun 2026</span></time><span class="th">ABU Robocon 2026 เขียนซอฟต์แวร์ทั้งหมดของหุ่นและคอนโทรลเลอร์ ได้อันดับ 8 ระดับมหาวิทยาลัย</span><span class="en" lang="en">ABU Robocon 2026: all the software for my robot and its controller, 8th among universities</span></a></li>
                 </ol>
               </div>
-              <div class="st-vis">
-                <svg viewBox="0 0 600 440" role="img" aria-label="สนาม Robotrace ที่หุ่นวิ่งสองรอบ และหุ่นล้อเมคานัมที่รับคำสั่งทางวิทยุ" data-label-en="A Robotrace course run twice, and a mecanum robot taking radio commands">
-                  <g class="beat" data-b="0">
-                    <path class="track" d="M140 300C100 300 90 240 120 210S200 160 240 120S360 80 420 110S520 180 490 240S400 260 380 300S300 360 240 340S180 300 140 300Z" data-k="track"/>
-                    <path class="lap1" pathLength="1" d="M140 300C100 300 90 240 120 210S200 160 240 120S360 80 420 110S520 180 490 240S400 260 380 300S300 360 240 340S180 300 140 300Z"/>
-                    <path class="lap2" pathLength="1" d="M140 300C100 300 90 240 120 210S200 160 240 120S360 80 420 110S520 180 490 240S400 260 380 300S300 360 240 340S180 300 140 300Z"/>
-                    <path class="mark" d="M140 284V316"/>
-                    <g class="bot" data-k="tracer" transform="translate(140 300)"><rect x="-12" y="-9" width="24" height="18" rx="4"/><path d="M12 -11V11"/></g>
-                    <text class="hl" x="60" y="400" data-k="lap1"><tspan class="th">รอบ 1 · จำเส้นทาง</tspan><tspan class="en">LAP 1 · LEARN THE COURSE</tspan></text>
-                    <text class="hl" x="60" y="400" data-k="lap2"><tspan class="th">รอบ 2 · วิ่งทำเวลา</tspan><tspan class="en">LAP 2 · RACE IT</tspan></text>
-                  </g>
-                  <g class="beat" data-b="1">
-                    <g class="pad"><rect x="60" y="176" width="74" height="104" rx="18"/><circle cx="84" cy="206" r="8"/><circle cx="112" cy="250" r="8"/></g>
-                    <path class="wave" d="M150 200q18 28 0 56M168 188q28 40 0 80M186 176q38 52 0 104"/>
-                    <g class="frame" data-k="frame" transform="translate(196 228)"><rect x="0" y="-12" width="34" height="24" rx="4"/><rect x="38" y="-12" width="14" height="24" rx="4"/><rect x="56" y="-12" width="34" height="24" rx="4"/><text x="17" y="4" text-anchor="middle">SOF</text><text x="73" y="4" text-anchor="middle">CRC</text></g>
-                    <g class="mecanum" data-k="mec" transform="translate(420 228)">
-                      <rect x="-80" y="-80" width="160" height="160" rx="18"/>
-                      <rect class="wheel" x="-104" y="-76" width="22" height="50" rx="5"/><rect class="wheel" x="82" y="-76" width="22" height="50" rx="5"/>
-                      <rect class="wheel" x="-104" y="26" width="22" height="50" rx="5"/><rect class="wheel" x="82" y="26" width="22" height="50" rx="5"/>
-                      <path class="roll" d="M-100 -66l14 10M-100 -52l14 10M-100 -38l14 10M86 -56l14 -10M86 -42l14 -10M86 -28l14 -10M-100 46l14 -10M-100 60l14 -10M-100 74l14 -10M86 36l14 10M86 50l14 10M86 64l14 10"/>
-                      <path class="vec" d="M0 0L38 -38M38 -38h-16M38 -38v16"/>
-                    </g>
-                    <text class="hl" x="300" y="410" text-anchor="middle"><tspan class="th">อันดับ 8 มหาวิทยาลัย · อันดับ 13 ประเทศ</tspan><tspan class="en">8TH UNIVERSITIES · 13TH NATIONAL</tspan></text>
-                  </g>
-                </svg>
+              <div class="st-vis film">
+                <img class="st-poster" src="img/story/compete/poster.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ภาพ 3 มิติที่เรนเดอร์ใน Blender หุ่นวิ่งตามเส้นบนสนาม Robotrace และหุ่นล้อเมคานัม" data-alt-en="Blender render: a line robot on a Robotrace course, and a mecanum robot">
+                <canvas class="st-film" data-film="img/story/compete/" data-n="96" aria-hidden="true"></canvas>
+                <span class="st-tag"><span class="th">ภาพ 3 มิติ สร้างและเรนเดอร์ใน Blender</span><span class="en" lang="en">3D scene, modelled and rendered in Blender</span></span>
+              </div>
+              <div class="st-photos">
+                <figure data-b="0"><img src="img/j/t/robotracer.webp" width="1200" height="900" loading="lazy" decoding="async" alt="ทีมไทยสามคนยืนหน้าเวที TMIRC 2025 ถือป้ายหมายเลข 114" data-alt-en="Team Thailand, three people, in front of the TMIRC 2025 stage holding number 114"><figcaption><span class="th">ภาพจริง · TMIRC 2025 ไต้หวัน</span><span class="en" lang="en">Real photo · TMIRC 2025, Taiwan</span></figcaption></figure>
+                <figure data-b="1"><img src="img/abu-pit-800.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ทีม ABU Robocon ช่วยกันประกอบหุ่นในพื้นที่เตรียมหุ่นก่อนลงแข่ง" data-alt-en="The ABU Robocon team assembling robots in the pit before a match"><figcaption><span class="th">ภาพจริง · ทีม ABU Robocon 2026</span><span class="en" lang="en">Real photo · the ABU Robocon 2026 team</span></figcaption></figure>
               </div>
             </article>
 
-            <article class="st-ch" id="st-nav" aria-labelledby="st-h4">
+            <article class="st-ch is-film" id="st-nav" aria-labelledby="st-h4">
               <div class="st-copy">
                 <span class="kicker"><span class="th">บทที่ 4 · นำทาง</span><span class="en" lang="en">Chapter 4 · Navigate</span></span>
                 <h3 id="st-h4"><span class="th">สอนหุ่นให้รู้ว่าตัวเองอยู่ตรงไหน</span><span class="en" lang="en">Teaching a robot where it is</span></h3>
@@ -1391,25 +1285,14 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
                   <li><a href="#j-ros"><time><span class="th">มิ.ย. 2026</span><span class="en" lang="en">Jun 2026</span></time><span class="th">BATLY R1 ทำ SLAM สร้างแผนที่ นำทางด้วย Nav2 + AMCL แล้วเขียน node ให้วน A → B → C สองรอบ</span><span class="en" lang="en">BATLY R1: a SLAM map, Nav2 + AMCL, and my node that loops A → B → C twice</span></a></li>
                 </ol>
               </div>
-              <div class="st-vis">
-                <svg viewBox="0 0 600 440" role="img" aria-label="แถบชั่วโมงอบรม ROS และแผนที่ตารางที่หุ่นสร้างแล้ววิ่งผ่านสถานี A B C" data-label-en="ROS training hours, then a grid map the robot builds and drives through stations A, B and C">
-                  <g class="beat" data-b="0">
-                    <text x="90" y="150">AUTONOMOUS MOBILE ROBOT · 30 H</text>
-                    <rect class="bar" x="90" y="164" width="420" height="20" rx="10"/><rect class="fillbar" x="90" y="164" width="420" height="20" rx="10" data-k="bar1"/>
-                    <text x="90" y="240">BASIC ROS · 30 H</text>
-                    <rect class="bar" x="90" y="254" width="420" height="20" rx="10"/><rect class="fillbar" x="90" y="254" width="420" height="20" rx="10" data-k="bar2"/>
-                    <text class="big" x="510" y="350" text-anchor="end">60 H</text>
-                  </g>
-                  <g class="beat" data-b="1">
-                    <g data-k="cells"></g>
-                    <path class="route" pathLength="1" data-k="route" d=""/>
-                    <g class="stn"><circle cx="153" cy="143" r="11"/><text x="153" y="147" text-anchor="middle">A</text></g>
-                    <g class="stn"><circle cx="447" cy="143" r="11"/><text x="447" y="147" text-anchor="middle">B</text></g>
-                    <g class="stn"><circle cx="307" cy="311" r="11"/><text x="307" y="315" text-anchor="middle">C</text></g>
-                    <circle class="robot" r="8" cx="153" cy="143" data-k="robot"/>
-                    <text class="hl" x="90" y="400" data-k="loop">SLAM</text>
-                  </g>
-                </svg>
+              <div class="st-vis film">
+                <img class="st-poster" src="img/story/nav/poster.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ภาพ 3 มิติที่เรนเดอร์ใน Blender แผนที่ตารางที่ค่อย ๆ ขึ้นรอบหุ่น และเส้นทาง A B C" data-alt-en="Blender render: a grid map rising around the robot, and the A, B, C route">
+                <canvas class="st-film" data-film="img/story/nav/" data-n="96" aria-hidden="true"></canvas>
+                <span class="st-tag"><span class="th">ภาพ 3 มิติ สร้างและเรนเดอร์ใน Blender</span><span class="en" lang="en">3D scene, modelled and rendered in Blender</span></span>
+              </div>
+              <div class="st-photos">
+                <figure data-b="0" class="fit"><img src="img/j/t/cert-mara-ros.webp" width="849" height="1200" loading="lazy" decoding="async" alt="วุฒิบัตรหลักสูตรการใช้ ROS ขั้นพื้นฐาน 30 ชั่วโมง กรมพัฒนาฝีมือแรงงาน" data-alt-en="Certificate, Basic ROS, 30 hours, Department of Skill Development"><figcaption><span class="th">วุฒิบัตรจริง · MARA</span><span class="en" lang="en">The real certificate · MARA</span></figcaption></figure>
+                <figure data-b="1" class="fit"><img src="img/j/batly-map.png" width="249" height="287" loading="lazy" decoding="async" alt="แผนที่ SLAM ของห้องที่หุ่น BATLY R1 สร้างขึ้นจริง" data-alt-en="The SLAM map BATLY R1 actually built of the room"><figcaption><span class="th">แผนที่ SLAM จริงจากการรัน</span><span class="en" lang="en">The real SLAM map from my run</span></figcaption></figure>
               </div>
             </article>
 

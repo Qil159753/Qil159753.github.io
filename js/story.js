@@ -1,65 +1,59 @@
-/* Journey story: five chapters above the timeline. On its own this module only draws the parts
-   that are generated (540 ELP4 dots, the BATLY room grid and route), so phones, short screens and
-   reduced motion get a plain stack of finished pictures. initStory() is called by the GSAP loader
-   in index.html: it pins the stage and scrubs one timeline through every chapter. Chapter 5 is the
-   real LiDAR sim; js/journey-lidar.js exposes root.lidar so scroll can drive it, then free() hands
-   it back to the viewer. */
-const NS = 'http://www.w3.org/2000/svg';
+/* Journey story: five chapters above the timeline. Phones, short screens and reduced motion get a
+   plain stack: each chapter's copy, a still from its Blender film and its real photos. initStory()
+   is called by the GSAP loader in index.html: the stage sticks and one scrubbed timeline plays every
+   chapter, drawing film frames to a canvas. Chapter 5 is the real LiDAR sim; js/journey-lidar.js
+   exposes root.lidar so scroll can drive it, then free() hands it back to the viewer. */
 const story = document.getElementById('story');
 const $ = (sel, root = story) => root.querySelector(sel);
 const $$ = (sel, root = story) => [...root.querySelectorAll(sel)];
 const key = (root, k) => root.querySelector(`[data-k="${k}"]`);
-function svg(tag, attrs, parent) {
-  const n = document.createElementNS(NS, tag);
-  for (const a in attrs) n.setAttribute(a, attrs[a]);
-  return parent.appendChild(n);
+
+// A pre-rendered Blender sequence drawn to a canvas; set(p) shows the frame at progress p, or the
+// nearest one already loaded, so scrubbing works while the rest stream in.
+function film(canvas) {
+  const n = +canvas.dataset.n, base = canvas.dataset.film, imgs = new Array(n), ctx = canvas.getContext('2d');
+  let want = 0, shown = -1, started = false;
+  function draw() {
+    let i = want; while (i > 0 && !imgs[i]) i--;
+    const im = imgs[i];
+    if (!im || i === shown || !canvas.width) return;
+    shown = i;
+    const W = canvas.width, H = canvas.height, k = Math.max(W / im.naturalWidth, H / im.naturalHeight);
+    const w = im.naturalWidth * k, h = im.naturalHeight * k;
+    ctx.fillStyle = '#07090c'; ctx.fillRect(0, 0, W, H);
+    ctx.drawImage(im, (W - w) / 2, (H - h) / 2, w, h);
+  }
+  function fit() {
+    const d = Math.min(devicePixelRatio || 1, 2);
+    canvas.width = Math.round(canvas.clientWidth * d); canvas.height = Math.round(canvas.clientHeight * d);
+    shown = -1; draw();
+  }
+  const ro = new ResizeObserver(fit); ro.observe(canvas);
+  return {
+    set(p) { want = Math.max(0, Math.min(n - 1, Math.round(p * (n - 1)))); draw(); },
+    load() {
+      if (started) return; started = true;
+      // every 8th frame first, then 4th, 2nd, the rest: the whole range is scrubbable early
+      const order = [];
+      for (const step of [8, 4, 2, 1]) for (let i = 0; i < n; i += step) if (!order.includes(i)) order.push(i);
+      let next = 0;
+      const pump = () => {
+        if (next >= order.length) return;
+        const i = order[next++], im = new Image();
+        im.decoding = 'async';
+        im.onload = () => { imgs[i] = im; if (shown < 0 || Math.abs(i - want) < Math.abs(shown - want)) { shown = -1; draw(); } pump(); };
+        im.onerror = pump;
+        im.src = `${base}f${String(i + 1).padStart(3, '0')}.webp`;
+      };
+      for (let k = 0; k < 6; k++) pump();     // six requests in flight
+    },
+    stop() { ro.disconnect(); }
+  };
 }
 
-// ---- chapter 2: one dot per ELP4 applicant; the nine picks are spread out on purpose
-const pitch = $('#st-pitch');
-const DOT = i => [97 + (i % 30) * 14, 90 + ((i / 30) | 0) * 14];
-const dots = [];
-for (let i = 0; i < 540; i++) { const [x, y] = DOT(i); dots.push(svg('circle', { class: 'dot', cx: x, cy: y, r: 4 }, key(pitch, 'dots'))); }
-const PICKS = [33, 97, 151, 208, 262, 319, 377, 433, 488];
-const picks = PICKS.map(i => dots[i]), rest = dots.filter((_, i) => !PICKS.includes(i));
-picks.forEach(d => d.classList.add('pick'));
-// Static picture: the nine have already left for Korea.
-picks.forEach(d => { d.setAttribute('cx', 164); d.setAttribute('cy', 346); });
-rest.forEach(d => { d.style.opacity = 0; });
-key(pitch, 'count').textContent = '9 / 540';
-
-// ---- chapter 4: a 30 × 20 occupancy grid of the mock factory, 14 px cells from (90, 80)
-const nav = $('#st-nav');
-const COLS = 30, ROWS = 20, CS = 14, OX = 90, OY = 80;
-const BLOCKS = [[8, 8, 21, 11], [13, 2, 16, 3], [3, 14, 6, 17], [23, 14, 26, 17]]; // c0 r0 c1 r1
-const START = [4, 4];
-const cells = [];
-for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
-  const wall = r === 0 || c === 0 || r === ROWS - 1 || c === COLS - 1;
-  const obst = BLOCKS.some(([c0, r0, c1, r1]) => c >= c0 && c <= c1 && r >= r0 && r <= r1);
-  const n = svg('rect', { class: 'cell' + (wall ? ' w' : obst ? ' o' : ''), x: OX + c * CS + 1, y: OY + r * CS + 1, width: CS - 2, height: CS - 2, rx: 2 }, key(nav, 'cells'));
-  cells.push({ n, d: Math.hypot(c - START[0], r - START[1]) });
-}
-const D_MAX = Math.max(...cells.map(c => c.d));
-const WAY = [[4, 4], [25, 4], [25, 6], [23, 12], [15, 16], [7, 13], [5, 9], [4, 4]]; // A → B → C → A
-const centre = ([c, r]) => [OX + c * CS + 7, OY + r * CS + 7];
-const route = key(nav, 'route');
-route.setAttribute('d', 'M' + WAY.map(p => centre(p).join(' ')).join('L'));
-const robot = key(nav, 'robot');
-key(nav, 'loop').textContent = 'LOOP 2 / 2';
-
-// Put el at fraction u (wrapping) along path; groups also turn to face along it.
-function place(el, path, u) {
-  const len = path.getTotalLength(), s = (((u % 1) + 1) % 1) * len, p = path.getPointAtLength(s);
-  if (el.tagName === 'circle') { el.setAttribute('cx', p.x); el.setAttribute('cy', p.y); return; }
-  const q = path.getPointAtLength(Math.min(len, s + 1));
-  el.setAttribute('transform', `translate(${p.x} ${p.y}) rotate(${Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI})`);
-}
-
-// ---- the pinned, scrubbed version
+// ---- the sticky, scrubbed version
 export function initStory(mq) {
   const { gsap, ScrollTrigger } = window;
-  const stage = $('.st-stage');
   const chs = $$('.st-ch');
   const lid = $('[data-j3d="lidar"]');
   const rail = $$('.st-rail a');
@@ -69,116 +63,68 @@ export function initStory(mq) {
   gsap.matchMedia().add(mq, () => {
     story.classList.add('on');
     const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' } });
+    const films = [];
     const marks = [];       // [time, chapter, beat]: what the copy column and rail show from then on
     const mark = (t, ch, b = -1) => marks.push([t, ch, b]);
-    const draw = (els, at, dur, stagger = 0) => tl.fromTo(els, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: dur, stagger }, at);
-    const swap = (from, to, at) => tl.to(from, { autoAlpha: 0, duration: 0.3 }, at)
-      .fromTo(to, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3, immediateRender: false }, at + 0.15);
+
+    // Chapter change: the old copy lifts away and its picture pushes in; the new heading rises out of
+    // a mask, its lines follow one by one, and the picture wipes in (film) or settles from a zoom.
     function enter(i, at) {
+      const prev = chs[i - 1], cur = chs[i];
       tl.addLabel('ch' + i, at);
-      tl.to(chs[i - 1], { autoAlpha: 0, y: -24, duration: 0.4 }, at)
-        .fromTo(chs[i], { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.4, immediateRender: false }, at + 0.2);
+      tl.to($('.st-copy', prev), { autoAlpha: 0, y: -40, duration: 0.4, ease: 'power2.in' }, at)
+        .to($('.st-vis', prev), { scale: 1.06, autoAlpha: 0, duration: 0.5, ease: 'power2.in' }, at)
+        .set(prev, { autoAlpha: 0 }, at + 0.5)
+        .set(cur, { autoAlpha: 1 }, at + 0.15)
+        .fromTo($('.kicker', cur), { autoAlpha: 0, x: -16 }, { autoAlpha: 1, x: 0, duration: 0.3, immediateRender: false }, at + 0.2)
+        // the mask has headroom so Thai tone marks above the line are never clipped
+        .fromTo($('h3', cur), { clipPath: 'inset(-40% -10% 140% -10%)', y: 36 }, { clipPath: 'inset(-40% -10% -40% -10%)', y: 0, duration: 0.5, ease: 'power3.out', immediateRender: false }, at + 0.25)
+        .fromTo($$('.st-beats li, .st-copy > p', cur), { autoAlpha: 0, x: -24 }, { autoAlpha: 1, x: 0, duration: 0.35, stagger: 0.08, ease: 'power2.out', immediateRender: false }, at + 0.4);
+      const gone = $$('.st-photos figure', prev);
+      if (gone.length) tl.to(gone, { autoAlpha: 0, duration: 0.3 }, at);
+      const vis = $('.st-vis', cur);
+      if (vis.classList.contains('film'))
+        tl.fromTo(vis, { clipPath: 'inset(0 0 0 100%)', autoAlpha: 1 }, { clipPath: 'inset(0 0 0 0%)', duration: 0.6, ease: 'power3.inOut', immediateRender: false }, at + 0.1);
+      else
+        tl.fromTo(vis, { scale: 0.92, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.5, ease: 'power3.out', immediateRender: false }, at + 0.3);
       mark(at + 0.2, i, 0);
+    }
+
+    // A film chapter: the Blender frames scrub across the chapter, each beat lights its line in the
+    // copy, and the real photo for that beat (figure[data-b]) slides in beside the render.
+    function reel(i, T, dur, beats) {
+      enter(i, T);
+      const ch = chs[i], r = film($('.st-film', ch)), F = { v: 0 };
+      films.push(r);
+      tl.to(F, { v: 1, duration: dur - 0.4, onUpdate: () => r.set(F.v) }, T + 0.2);
+      const at = [[T + 0.2, 0], ...beats];
+      at.forEach(([t, b], k) => {
+        if (b) mark(t, i, b);
+        const fig = $(`.st-photos figure[data-b="${b}"]`, ch);
+        if (!fig) return;
+        const tilt = k % 2 ? -1 : 1;
+        tl.fromTo(fig, { autoAlpha: 0, y: 60, rotate: 4 * tilt }, { autoAlpha: 1, y: 0, rotate: -2 * tilt, duration: 0.5, ease: 'power3.out', immediateRender: false }, t + 0.5);
+        if (at[k + 1]) tl.to(fig, { autoAlpha: 0, y: -40, duration: 0.3 }, at[k + 1][0]);
+      });
     }
     gsap.set(chs, { autoAlpha: 0 });
     gsap.set(chs[0], { autoAlpha: 1 });
-    gsap.set($$('.st-vis .beat:not([data-b="0"])'), { autoAlpha: 0 });
+    gsap.set($$('.st-photos figure'), { autoAlpha: 0 });
 
     // 0 · prologue
     tl.addLabel('ch0', 0); mark(0, 0);
     const intro = chs[0];
-    draw(key(intro, 'line'), 0.1, 1.4);
-    tl.from($$('.node', intro), { scale: 0, transformOrigin: '50% 50%', autoAlpha: 0, duration: 0.3, stagger: 0.25, ease: 'back.out(2)' }, 0.2);
+    tl.fromTo(key(intro, 'line'), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.4 }, 0.1)
+      .from($$('.node', intro), { scale: 0, transformOrigin: '50% 50%', autoAlpha: 0, duration: 0.3, stagger: 0.25, ease: 'back.out(2)' }, 0.2);
 
-    // 1 · build: digger arm, the truck exploded into its 11 parts, Nano board traces
-    let T = 2; enter(1, T);
-    const build = chs[1], [bd, bt, bp] = $$('.beat', build);
-    draw($$('.ln', bd), T + 0.2, 0.8, 0.04);
-    draw($$('.water', bd), T + 0.7, 0.6, 0.1);
-    // Nested groups rotate about their joint in local coordinates, so the arm moves as a chain.
-    const arm = { b: 0, s: 0, k: 0 };
-    const setArm = () => {
-      key(build, 'boom').setAttribute('transform', `rotate(${arm.b} 284 236)`);
-      key(build, 'stick').setAttribute('transform', `rotate(${arm.s} 404 150)`);
-      key(build, 'bucket').setAttribute('transform', `rotate(${arm.k} 470 262)`);
-    };
-    tl.to(arm, { b: -14, s: 24, k: 38, duration: 0.9, ease: 'sine.inOut', onUpdate: setArm }, T + 1.1)
-      .to(arm, { b: 0, s: 0, k: 0, duration: 0.6, ease: 'sine.inOut', onUpdate: setArm }, T + 2.0);
-    mark(T + 2.4, 1, 1); swap(bd, bt, T + 2.4);
-    draw($$('.ln', bt), T + 2.6, 0.6, 0.02);
-    const ex = { e: 0 }, parts = $$('.part', bt);
-    tl.to(ex, { e: 1, duration: 0.9, ease: 'power2.inOut', onUpdate: () => parts.forEach(p => p.setAttribute('transform', `translate(${p.dataset.dx * ex.e} ${p.dataset.dy * ex.e})`)) }, T + 3.3);
-    mark(T + 4.4, 1, 2); swap(bt, bp, T + 4.4);
-    draw($$('.ln', bp), T + 4.6, 0.5, 0.04);
-    draw($$('.trace', bp), T + 5.0, 0.4, 0.06);
-
-    // 2 · on stage: podium (3rd, then 1st), 540 → 9, Chonburi → Suwon
-    T = 8.4; enter(2, T);
-    const pch = chs[2], [pb0, pb1] = $$('.beat', pch);
-    tl.from($$('.pod rect', pch), { scaleY: 0, transformOrigin: '50% 100%', duration: 0.5, stagger: 0.12, ease: 'power2.out' }, T + 0.3);
-    gsap.set(key(pch, 'pod1'), { autoAlpha: 0 });
-    mark(T + 1.6, 2, 1);
-    tl.to(key(pch, 'spot'), { x: -100, duration: 0.5, ease: 'power2.inOut' }, T + 1.6)
-      .to(key(pch, 'pod3'), { autoAlpha: 0, duration: 0.2 }, T + 1.6)
-      .to(key(pch, 'pod1'), { autoAlpha: 1, duration: 0.2 }, T + 1.8);
-    mark(T + 3, 2, 2); swap(pb0, pb1, T + 3);
-    const arc = key(pch, 'arc'), plane = key(pch, 'plane'), count = key(pch, 'count');
-    const after = [...$$('.city', pb1), key(pch, 'arcdim'), key(pch, 'labels'), plane];
-    gsap.set(after, { autoAlpha: 0 });
-    gsap.set(dots, { attr: { cx: i => DOT(i)[0], cy: i => DOT(i)[1] }, opacity: 0 });
-    const n = { v: 540 };
-    tl.to(dots, { opacity: 1, duration: 0.4, stagger: { amount: 0.4, from: 'random' } }, T + 3.2)
-      .to(rest, { opacity: 0.12, duration: 0.5 }, T + 4)
-      .to(n, { v: 9, duration: 0.5, ease: 'power2.in', onUpdate: () => { count.textContent = Math.round(n.v) + ' / 540'; } }, T + 4)
-      .to(picks, { attr: { cx: 164, cy: 346 }, duration: 0.6, ease: 'power2.inOut', stagger: 0.03 }, T + 4.6)
-      .to(rest, { opacity: 0, duration: 0.4 }, T + 4.8)
-      .to(after, { autoAlpha: (i, e) => e.classList.contains('faint') ? 0.5 : 1, duration: 0.3 }, T + 4.9);
-    draw(arc, T + 5.2, 0.8);
-    const fl = { u: 0 };
-    tl.to(fl, { u: 1, duration: 0.8, onUpdate: () => place(plane, arc, Math.min(fl.u, 0.9999)) }, T + 5.2);
-
-    // 3 · compete: Robotrace learns the course, then races it; ABU radio frame → mecanum strafe
-    T = 14.6; enter(3, T);
-    const cch = chs[3], [cb0, cb1] = $$('.beat', cch);
-    const lap1 = $('.lap1', cch), lap2 = $('.lap2', cch), tracer = key(cch, 'tracer');
-    gsap.set(key(cch, 'lap2'), { autoAlpha: 0 });
-    const run = { u: 0 };
-    tl.fromTo(lap1, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.6 }, T + 0.3)
-      .to(run, { u: 1, duration: 1.6, onUpdate: () => place(tracer, lap1, run.u) }, T + 0.3)
-      .to(key(cch, 'lap1'), { autoAlpha: 0, duration: 0.2 }, T + 1.9)
-      .to(key(cch, 'lap2'), { autoAlpha: 1, duration: 0.2 }, T + 2.0)
-      .fromTo(lap2, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.8 }, T + 2.0)
-      .to(run, { u: 2, duration: 0.8, onUpdate: () => place(tracer, lap1, run.u) }, T + 2.0);
-    mark(T + 3.1, 3, 1); swap(cb0, cb1, T + 3.1);
-    const fr = { x: 150 }, frame = key(cch, 'frame'), mec = key(cch, 'mec'), mv = { x: 420, y: 228, r: 0 };
-    const setFrame = () => frame.setAttribute('transform', `translate(${fr.x} 228)`);
-    const setMec = () => mec.setAttribute('transform', `translate(${mv.x} ${mv.y}) rotate(${mv.r})`);
-    gsap.set(frame, { opacity: 0 });
-    tl.to(fr, { x: 236, duration: 0.6, onUpdate: setFrame }, T + 3.4)
-      .to(frame, { opacity: 1, duration: 0.15 }, T + 3.4)
-      .to(frame, { opacity: 0, duration: 0.15 }, T + 3.85)
-      .to(mv, { x: 456, y: 192, r: -12, duration: 0.8, ease: 'power2.inOut', onUpdate: setMec }, T + 4)
-      .to(mv, { x: 420, y: 228, r: 0, duration: 0.6, ease: 'power2.inOut', onUpdate: setMec }, T + 4.8);
-
-    // 4 · navigate: 30 h + 30 h, then SLAM → A → B → C twice
-    T = 20; enter(4, T);
-    const nch = chs[4], [nb0, nb1] = $$('.beat', nch);
-    tl.from(key(nch, 'bar1'), { scaleX: 0, transformOrigin: '0% 50%', duration: 0.6, ease: 'power2.out' }, T + 0.3)
-      .from(key(nch, 'bar2'), { scaleX: 0, transformOrigin: '0% 50%', duration: 0.6, ease: 'power2.out' }, T + 0.9);
-    mark(T + 1.9, 4, 1); swap(nb0, nb1, T + 1.9);
-    const loop = key(nch, 'loop'), slam = { r: 0 }, drive = { u: 0 };
-    const reveal = () => { const r = slam.r * D_MAX; for (const c of cells) c.n.style.opacity = c.d <= r ? 1 : 0; };
-    reveal();
-    tl.to(slam, { r: 1, duration: 1.2, onUpdate: () => { reveal(); loop.textContent = 'SLAM'; } }, T + 2.1);
-    draw(route, T + 3.4, 1.4);
-    tl.to(drive, { u: 2, duration: 2.4, onUpdate: () => {
-      place(robot, route, Math.min(drive.u, 1.9999));
-      loop.textContent = `LOOP ${drive.u < 1 ? 1 : 2} / 2`;
-    } }, T + 3.4);
-    place(robot, route, 0); loop.textContent = 'SLAM';
+    // 1-4 · the Blender films; beat times line up with the cuts inside each film
+    reel(1, 2, 6.4, [[4.4, 1], [6.4, 2]]);              // digger · truck (frame 35) · Nano (frame 65)
+    reel(2, 8.4, 6.2, [[10.1, 1], [11.6, 2]]);          // 3rd · 1st (frame 25) · 540 → 9 (frame 49)
+    reel(3, 14.6, 5.4, [[17.5, 1]]);                    // Robotrace · ABU (frame 51)
+    reel(4, 20, 6.2, [[21.9, 1]]);                      // SLAM mapping · the A → B → C loop (frame 30)
 
     // 5 · LiDAR: scroll drives half a lap, then the camera rises; free() at the end
-    T = 26.2; enter(5, T);
+    let T = 26.2; enter(5, T);
     const L = { p: 0, k: 0 };
     tl.to(L, { p: 0.5, duration: 3.6 }, T + 0.4).to(L, { k: 1, duration: 1.4, ease: 'sine.inOut' }, T + 2.6);
     const T_FREE = T + 4.1;
@@ -189,8 +135,9 @@ export function initStory(mq) {
     tl.to($('.st-copy', chs[5]), { autoAlpha: 0, y: -24, duration: 0.4 }, T)
       .fromTo(chs[6], { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.4, immediateRender: false }, T + 0.2);
     mark(T + 0.2, 6);
-    tl.to({}, { duration: 1.4 }, T + 0.6);    // a beat of stillness before the stage unpins
+    tl.to({}, { duration: 1.4 }, T + 0.6);    // a beat of stillness before the stage scrolls away
     marks.sort((a, b) => a[0] - b[0]);
+    const rests = [0, ...marks.slice(1).map(m => (m[0] - 0.15) / tl.duration()), 1];
 
     let cur = '', ctl = null;
     function sync() {
@@ -202,7 +149,6 @@ export function initStory(mq) {
         cur = id;
         rail.forEach((a, i) => { a.classList.toggle('on', i === ch); a.classList.toggle('done', i < ch); a.toggleAttribute('aria-current', i === ch); });
         $$('.st-beats li', chs[ch]).forEach((li, i) => li.classList.toggle('on', i === beat));
-        $$('.pod', pitch).forEach(p => p.classList.toggle('on', ch === 2 && p.dataset.p === (beat === 0 ? '3' : '1')));
         for (const c of chips) {
           c.li.classList.toggle('on', ch < 6 && c.ch.includes(ch));
           c.li.classList.toggle('seen', ch === 6 || c.ch.some(x => x < ch));
@@ -215,17 +161,34 @@ export function initStory(mq) {
     tl.eventCallback('onUpdate', sync);
     lid.addEventListener('lidar-ready', sync);
 
+    // The stage is position: sticky inside .story, which is made exactly tall enough for the run;
+    // ScrollTrigger only maps that scroll to the timeline (no pin to measure, nothing to drift).
+    const runLen = () => Math.round(innerHeight * 0.18 * tl.duration());
+    // Start and end in plain page pixels: after a mid-page reload ScrollTrigger's own 'top top'
+    // measurement lands off by the restored scroll distance, this one cannot.
+    const top = () => story.getBoundingClientRect().top + scrollY;
     const st = ScrollTrigger.create({
-      trigger: stage, pin: true, start: 'top top', animation: tl, scrub: 0.6,
-      end: () => '+=' + Math.round(innerHeight * 0.3 * tl.duration()),
-      invalidateOnRefresh: true
+      trigger: story, start: top, end: () => top() + runLen(), animation: tl, scrub: 0.4,
+      // One flick = one step: when the scroll stops, it glides on to the next resting point, the
+      // moment just before the next beat or chapter starts, so each scene plays out by itself.
+      snap: { snapTo: rests, directional: true, inertia: false, delay: 0.2, duration: { min: 0.35, max: 1.1 }, ease: 'power1.inOut' },
+      invalidateOnRefresh: true,
+      // html has scroll-behavior: smooth; it animates each step of the snap's own scrolling, and the
+      // lag makes one flick skip a resting point. Instant inside the story, smooth everywhere else.
+      onToggle: self => { document.documentElement.style.scrollBehavior = self.isActive ? 'auto' : ''; },
+      onRefreshInit: () => story.style.setProperty('--run', runLen() + 'px')
     });
+    story.style.setProperty('--run', runLen() + 'px');
+    ScrollTrigger.refresh();
     sync();
-    // Measured while a reload is still restoring the scroll position, start can land far off; measure again.
+    // Frames load only when the story is about to be seen, coarse to fine.
+    const near = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { near.disconnect(); films.forEach(f => f.load()); } }, { rootMargin: '150% 0px' });
+    near.observe(story);
+    // Web fonts and the live panels above can still move the story down; measure again once they land.
     requestAnimationFrame(() => ScrollTrigger.refresh());
     document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
 
-    // In-page links to a chapter scroll to its spot in the pinned run instead of the stage top.
+    // In-page links to a chapter scroll to its spot in the run instead of the stage top.
     const go = e => {
       const a = e.target.closest('a[href^="#st-"]');
       if (!a) return;
@@ -235,7 +198,6 @@ export function initStory(mq) {
       scrollTo({ top: st.labelToScroll('ch' + i) + 2, behavior: 'smooth' });
     };
     document.addEventListener('click', go);
-    // Layout above the story can still move (fonts, the live code panels); keep the pin in step.
     let rt = 0;
     const ro = new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(() => ScrollTrigger.refresh(), 200); });
     ro.observe(document.querySelector('main') || document.body);
@@ -243,17 +205,10 @@ export function initStory(mq) {
     return () => {
       document.removeEventListener('click', go);
       lid.removeEventListener('lidar-ready', sync);
-      ro.disconnect(); clearTimeout(rt);
-      story.classList.remove('on');
+      story.style.removeProperty('--run');
+      ro.disconnect(); clearTimeout(rt); near.disconnect(); films.forEach(f => f.stop());
+      story.classList.remove('on'); document.documentElement.style.scrollBehavior = '';
       if (ctl) ctl.free();
-      // Back to the finished static pictures (gsap.set and tweens are reverted by matchMedia).
-      for (const c of cells) c.n.style.opacity = '';
-      [key(build, 'boom'), key(build, 'stick'), key(build, 'bucket'), ...parts].forEach(e => e.removeAttribute('transform'));
-      frame.setAttribute('transform', 'translate(196 228)'); mec.setAttribute('transform', 'translate(420 228)');
-      tracer.setAttribute('transform', 'translate(140 300)');
-      robot.setAttribute('cx', centre(START)[0]); robot.setAttribute('cy', centre(START)[1]);
-      plane.setAttribute('cx', 528); plane.setAttribute('cy', 107);
-      count.textContent = '9 / 540'; loop.textContent = 'LOOP 2 / 2';
     };
   });
 }
