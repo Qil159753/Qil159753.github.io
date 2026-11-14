@@ -29,6 +29,7 @@ const MSG = {
   nogl: tx('เบราว์เซอร์นี้แสดงโมเดล 3 มิติไม่ได้', "This browser can't show the 3D model."),
 };
 const NAMES = [['นิ้วโป้ง', 'thumb'], ['นิ้วชี้', 'index'], ['นิ้วกลาง', 'middle'], ['นิ้วนาง', 'ring'], ['นิ้วก้อย', 'little']];
+const wrap = (a) => a - Math.PI * 2 * Math.round(a / (Math.PI * 2));
 
 function loadCSS() {
   if (document.querySelector(`link[href="${CSS}"]`)) return;
@@ -45,7 +46,7 @@ const clamp01 = (v) => Math.max(0, Math.min(1, v));
 // World landmarks (metres, hand-centred) -> model joints. Each joint is the bend between the bones on
 // either side of it; MCP is measured against the wrist->knuckle line, which sits ~0.15 rad off a
 // straight finger, so that offset is taken away.
-export function solve(L) {
+export function solve(L, label) {
   const j = CHAINS.map(([m, p, d, t]) => [
     Math.min(LIMIT[0], Math.max(0, angle(sub(L[0], L[m]), sub(L[m], L[p])) - 0.15)),
     Math.min(LIMIT[1], angle(sub(L[m], L[p]), sub(L[p], L[d]))),
@@ -55,7 +56,12 @@ export function solve(L) {
   const bend = (angle(sub(L[1], L[2]), sub(L[2], L[3])) + angle(sub(L[2], L[3]), sub(L[3], L[4]))) / 1.3;
   const palm = Math.hypot(...sub(L[0], L[9])) || 1;
   const reach = 1 - clamp01((Math.hypot(...sub(L[4], L[9])) / palm - 0.45) / 0.6);
-  return { j, thumb: clamp01(Math.max(bend, reach)) };
+  // wrist roll about the forearm: 0 with the palm to the camera, + as the thumb side turns toward it,
+  // ±π for the back of the hand. The index->little knuckle line points the other way on the other hand,
+  // so MediaPipe's left/right label sets the sign (checked on photos: it names the real hand in an
+  // unmirrored frame).
+  const a = sub(L[17], L[5]), side = label === 'Right' ? -1 : 1;
+  return { j, thumb: clamp01(Math.max(bend, reach)), twist: Math.atan2(-a[2], -side * a[0]) };
 }
 
 export async function mountHand(host, { compact = false } = {}) {
@@ -73,7 +79,8 @@ export async function mountHand(host, { compact = false } = {}) {
     <div class="mh-side">
       <h3>${tx('มือ MIONEX ขยับตามคุณ', 'The MIONEX hand, following yours')}</h3>
       <p class="mh-status" aria-live="polite">${MSG.idle}</p>
-      <ul class="mh-meters">${NAMES.map(([th, en]) => `<li><span class="mh-name">${tx(th, en)}</span><span class="mh-bar"><i></i></span><span class="mh-pct">0%</span></li>`).join('')}</ul>
+      <ul class="mh-meters">${NAMES.map(([th, en]) => `<li><span class="mh-name">${tx(th, en)}</span><span class="mh-bar"><i></i></span><span class="mh-pct">0%</span></li>`).join('')}
+        <li class="mh-wrist"><span class="mh-name">${tx('ข้อมือ', 'wrist')}</span><span class="mh-bar"><i></i></span><span class="mh-pct">0°</span></li></ul>
       <p class="mh-note">${tx('MIONEX ตัวจริงอ่านสัญญาณไฟฟ้าจากกล้ามเนื้อแขนส่วนที่เหลือ แล้วสั่งให้มือกำและแบ เดโมนี้ใช้กล้องแทน และให้ทุกนิ้วขยับตามคุณ โมเดลสร้างด้วยโค้ดตามสัดส่วนแขนจริง',
         'The real MIONEX reads muscle signals from the remaining forearm to open and close the hand. This demo uses your webcam instead and moves every finger with yours. The model is built in code to the real arm\'s proportions.')}</p>
       <button type="button" class="mh-btn mh-off" hidden>${tx('ปิดกล้อง', 'Turn off camera')}</button>
@@ -82,6 +89,7 @@ export async function mountHand(host, { compact = false } = {}) {
   const $ = (s) => root.querySelector(s);
   const status = (k) => { $('.mh-status').innerHTML = MSG[k]; };
   const bars = [...root.querySelectorAll('.mh-bar i')], pcts = [...root.querySelectorAll('.mh-pct')];
+  const wristBar = bars.pop(), wristVal = pcts.pop();
 
   // ---- 3D
   const canvas = $('.mh-gl');
@@ -128,14 +136,14 @@ export async function mountHand(host, { compact = false } = {}) {
   const ro = new ResizeObserver(resize); ro.observe(canvas); resize();
 
   // smoothed joint state
-  const cur = { j: CHAINS.map(() => [REST, REST, REST]), thumb: 0 };
+  const cur = { j: CHAINS.map(() => [REST, REST, REST]), thumb: 0, twist: 0 };
   let target = null, lastSeen = 0;
 
   function idleTarget(t) {
-    if (reduce) return { j: CHAINS.map(() => [REST, REST, REST]), thumb: 0.1 };
+    if (reduce) return { j: CHAINS.map(() => [REST, REST, REST]), thumb: 0.1, twist: 0 };
     // a slow ripple across the fingers, so the hand looks alive before the camera is on
     const c = (i) => 0.12 + 0.45 * Math.max(0, Math.sin(t * 1.6 - i * 0.7)) ** 2;
-    return { j: CHAINS.map((_, i) => [c(i + 1) * 0.9, c(i + 1), c(i + 1) * 0.8]), thumb: c(0) * 0.8 };
+    return { j: CHAINS.map((_, i) => [c(i + 1) * 0.9, c(i + 1), c(i + 1) * 0.8]), thumb: c(0) * 0.8, twist: 0 };
   }
 
   // ---- camera + tracking
@@ -188,7 +196,7 @@ export async function mountHand(host, { compact = false } = {}) {
     lastVideoTime = video.currentTime;
     const r = landmarker.detectForVideo(video, now);
     if (r.worldLandmarks?.length) {
-      target = solve(r.worldLandmarks[0]); lms = r.landmarks[0]; lastSeen = now;
+      target = solve(r.worldLandmarks[0], r.handedness?.[0]?.[0]?.categoryName); lms = r.landmarks[0]; lastSeen = now;
       if (!seenState) { seenState = true; status('tracking'); }
     } else if (now - lastSeen > 500) {
       target = null; lms = null;
@@ -216,14 +224,17 @@ export async function mountHand(host, { compact = false } = {}) {
     raf = 0;
     const dt = Math.min(0.1, (now - last) / 1000); last = now;
     track(now);
-    const want = target || (tracking ? { j: CHAINS.map(() => [REST, REST, REST]), thumb: 0.05 } : idleTarget(now / 1000));
+    const want = target || (tracking ? { j: CHAINS.map(() => [REST, REST, REST]), thumb: 0.05, twist: 0 } : idleTarget(now / 1000));
     const k = 1 - Math.exp(-dt * (target ? 16 : 6));
     cur.j.forEach((f, i) => f.forEach((v, n) => { f[n] = v + (want.j[i][n] - v) * k; }));
     cur.thumb += (want.thumb - cur.thumb) * k;
-    A.setJoints(cur.j, cur.thumb);
+    cur.twist = wrap(cur.twist + wrap(want.twist - cur.twist) * k);   // the short way round through ±π
+    A.setJoints(cur.j, cur.thumb, cur.twist);
     A.update(now / 1000);
     const curls = [cur.thumb, ...cur.j.map((f) => (f[0] / LIMIT[0] + f[1] / LIMIT[1] + f[2] / LIMIT[2]) / 3)];
     curls.forEach((c, i) => { const p = Math.round(clamp01(c) * 100); bars[i].style.transform = `scaleX(${p / 100})`; pcts[i].textContent = p + '%'; });
+    const deg = Math.round(cur.twist * 180 / Math.PI);
+    wristBar.style.transform = `scaleX(${deg / 180})`; wristVal.textContent = (deg > 0 ? '+' : '') + deg + '°';
     renderer.render(scene, camera);
     sync();
   }

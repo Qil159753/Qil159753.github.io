@@ -372,10 +372,12 @@ export function createMionexArm() {
       thumb.pose(curl);
       wrist.rotation.x = twist;
     },
-    // per-joint flexion in radians, index..little as [MCP, PIP, DIP]; thumb 0..1 (the webcam demo)
-    setJoints(j, thumbCurl) {
+    // per-joint flexion in radians, index..little as [MCP, PIP, DIP]; thumb 0..1; wrist roll in
+    // radians, + turns the thumb side toward the viewer (the webcam demo)
+    setJoints(j, thumbCurl, twist = 0) {
       fingers.forEach((f, i) => f.pivots.forEach((p, k) => { p.rotation.y = j[i][k]; }));
       thumb.pose(thumbCurl);
+      wrist.rotation.x = twist;
     },
     update(t) {
       M.led.emissiveIntensity = 1.6 + Math.sin(t * 2.2) * 0.8;
