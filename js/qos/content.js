@@ -47,7 +47,8 @@ export const MUSIC_ERA = { th: 'ฟังยุค 2000s–2010s เป็นห
 // Same idea: put game titles or projects in `picks` to list them.
 export const GAMES = [
   { kind: { th: 'เกม PC / คอนโซล', en: 'PC / console games' }, picks: ['League of Legends', 'Monster Hunter (World: Iceborne, Rise: Sunbreak, Generations Ultimate, Wilds)', 'Dark Souls III', 'Elden Ring', 'Sekiro', 'Clair Obscur: Expedition 33', 'Sifu', 'Hyper Light Drifter', 'NieR:Automata'] },
-  { kind: { th: 'เกมมือถือ', en: 'Mobile games' }, picks: [] },
+  { kind: { th: 'เกมมือถือ', en: 'Mobile games' }, picks: ['RoV (Arena of Valor)', 'Granblue Fantasy'] },
+  { kind: { th: 'อนิเมะ', en: 'Anime' }, picks: ['Attack on Titan (favourite)', 'That Time I Got Reincarnated as a Slime (watching lately)', 'The Eminence in Shadow', 'Saint Seiya', 'Berserk'] },
   { kind: { th: 'สร้างของเล่น ๆ: หุ่น บอร์ด พิมพ์ 3 มิติ', en: 'Building things for fun: robots, boards, 3D prints' }, picks: [] },
 ];
 
