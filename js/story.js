@@ -9,6 +9,20 @@ const $ = (sel, root = story) => root.querySelector(sel);
 const $$ = (sel, root = story) => [...root.querySelectorAll(sel)];
 const key = (root, k) => root.querySelector(`[data-k="${k}"]`);
 
+// Real footage (figure.vid) is silent and short. Stacked, a clip plays while it is on screen; in the
+// sticky story, sync() plays it only while its shot is the one showing. With reduced motion nothing
+// starts by itself: the clip shows its poster and the player's controls.
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.motion === 'off';
+const clips = $$('.st-vis figure.vid video');
+if (reduce) clips.forEach(v => { v.controls = true; v.removeAttribute('loop'); });
+else {
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (story.classList.contains('on')) return;
+    e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause();
+  }), { threshold: 0.4 });
+  clips.forEach(v => io.observe(v));
+}
+
 // ---- the sticky, scrubbed version
 export function initStory(mq) {
   const { gsap, ScrollTrigger } = window;
@@ -23,6 +37,7 @@ export function initStory(mq) {
     const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' } });
     const marks = [];       // [time, chapter, beat]: what the copy column and rail show from then on
     const mark = (t, ch, b = -1) => marks.push([t, ch, b]);
+    const stops = [];       // extra resting points inside a beat: each later shot, once it is in
 
     // Chapter change: the old copy lifts away and its picture fades; the new heading rises out of a
     // mask, its lines follow one by one, and the new picture settles in.
@@ -52,12 +67,17 @@ export function initStory(mq) {
       at.forEach(([t, b], k) => {
         if (b) mark(t, i, b);
         const t1 = k + 1 < at.length ? at[k + 1][0] : end, figs = $$(`.st-vis figure[data-b="${b}"]`, ch);
-        figs.forEach((f, n) => shots.push([f, t + (t1 - t) * n / figs.length, t + (t1 - t) * (n + 1) / figs.length]));
+        // data-w gives a shot more of the beat (the map needs room for its animation)
+        const w = figs.map(f => +(f.dataset.w || 1)), sum = w.reduce((x, y) => x + y, 0);
+        let acc = 0;
+        figs.forEach((f, n) => { const a = t + (t1 - t) * acc / sum; acc += w[n]; shots.push([f, a, t + (t1 - t) * acc / sum]); });
       });
       shots.forEach(([f, a, z], k) => {
+        if (k) stops.push(a + 0.4);
         if (k) tl.fromTo(f, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.35, ease: 'power1.inOut', immediateRender: false }, a);
         if (k + 1 < shots.length) tl.set(f, { autoAlpha: 0 }, shots[k + 1][1] + 0.35);
         if (f.classList.contains('map')) return mapShot(f, a, z);
+        if (f.classList.contains('vid')) return;          // footage moves by itself
         const dir = k % 2 ? -1 : 1;
         tl.fromTo($('img', f), { scale: 1.07, xPercent: -1.2 * dir }, { scale: 1, xPercent: 1.2 * dir, duration: z - a + 0.35, immediateRender: false }, a);
       });
@@ -74,6 +94,7 @@ export function initStory(mq) {
         .fromTo(stns, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, stagger: 0.1, immediateRender: false }, a + d * 0.55)
         .fromTo(route, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: d * 0.2, immediateRender: false }, a + d * 0.62)
         .fromTo(B, { v: 0 }, { v: 2, duration: d * 0.36, onUpdate: place, immediateRender: false }, a + d * 0.64);
+      stops.push(a + d * 0.6);   // rest on the zoomed map; the next flick draws the loop
       gsap.set([stns, bot], { autoAlpha: 0 });
       tl.set(bot, { autoAlpha: 1 }, a + d * 0.64);
     }
@@ -90,7 +111,7 @@ export function initStory(mq) {
     reel(1, 2, 6.4, [[4.0, 1], [5.6, 2]]);              // digger · truck · Nano
     reel(2, 8.4, 6.2, [[10.4, 1], [12.4, 2]]);          // STL, 3rd · Pitch Your IP, 1st · ELP4
     reel(3, 14.6, 5.4, [[17.1, 1]]);                    // Robotrace · ABU
-    reel(4, 20, 6.2, [[21.4, 1]]);                      // MARA ROS courses · SLAM map and the A → B → C loop
+    reel(4, 20, 6.2, [[21.4, 1]]);                      // MARA ROS courses · BATLY footage, then the SLAM map and its loop
 
     // 5 · LiDAR: scroll drives half a lap, then the camera rises; free() at the end
     let T = 26.2; enter(5, T);
@@ -106,7 +127,7 @@ export function initStory(mq) {
     mark(T + 0.2, 6);
     tl.to({}, { duration: 1.4 }, T + 0.6);    // a beat of stillness before the stage scrolls away
     marks.sort((a, b) => a[0] - b[0]);
-    const rests = [0, ...marks.slice(1).map(m => (m[0] - 0.15) / tl.duration()), 1];
+    const rests = [0, ...marks.slice(1).map(m => m[0] - 0.15), ...stops].map(t => t / tl.duration()).concat(1).sort((a, b) => a - b);
 
     let cur = '', ctl = null;
     function sync() {
@@ -123,6 +144,12 @@ export function initStory(mq) {
           c.li.classList.toggle('seen', ch === 6 || c.ch.some(x => x < ch));
         }
         skills.classList.toggle('sum', ch === 6);
+      }
+      // play only the clip whose shot is showing in the current chapter
+      if (!reduce) for (const v of clips) {
+        const f = v.closest('figure'), on = ch < 6 && chs[ch].contains(f) && +gsap.getProperty(f, 'opacity') > 0.5;
+        if (on && v.paused) v.play().catch(() => {});
+        else if (!on && !v.paused) v.pause();
       }
       ctl = ctl || lid.lidar;
       if (ctl) t >= T_FREE ? ctl.free() : ctl.scrub(L.p, L.k);

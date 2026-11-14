@@ -697,8 +697,9 @@ h1 em { font-style: normal; color: var(--copper); }
    Sticky: they share the panel, cross-fade beat by beat and drift slowly with scroll. */
 .st-vis.reel { aspect-ratio: auto; border: 0; background: none; overflow: visible; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .st-vis.reel figure { margin: 0; min-width: 0; }
-.st-vis.reel img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; border: 1px solid var(--line-2); background: var(--panel-2); }
+.st-vis.reel img, .st-vis.reel video { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; border: 1px solid var(--line-2); background: var(--panel-2); }
 .st-vis.reel .fit img { object-fit: contain; }
+.st-vis.reel .vid video { object-fit: contain; background: #000; }
 .st-vis.reel figcaption { margin-top: 6px; font: 500 11px/1.4 var(--mono); color: var(--muted); }
 .st-map { position: relative; aspect-ratio: 249 / 287; max-height: 100%; margin: 0 auto; background: #0b0e13; }
 .st-vis.reel .st-map img { position: absolute; inset: 0; height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; image-rendering: pixelated; object-fit: fill; }
@@ -712,7 +713,7 @@ h1 em { font-style: normal; color: var(--copper); }
 .story.on .st-vis.reel { display: block; position: relative; overflow: hidden; border-radius: var(--r-lg); border: 1px solid var(--line-2); background: var(--panel); }
 .story.on .st-vis.reel figure { position: absolute; inset: 0; visibility: hidden; opacity: 0; overflow: hidden; }
 .story.on .st-vis.reel figure:first-child { visibility: visible; opacity: 1; }
-.story.on .st-vis.reel img { width: 100%; height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; will-change: transform; }
+.story.on .st-vis.reel img, .story.on .st-vis.reel video { width: 100%; height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; will-change: transform; }
 .story.on .st-vis.reel .fit img { padding: 24px; background: var(--panel-2); }
 .story.on .st-vis.reel figcaption { position: absolute; left: 14px; bottom: 12px; margin: 0; padding: 5px 10px; border-radius: 6px; background: rgba(7, 9, 12, .72); color: var(--text); }
 .story.on .st-vis.reel .map { background: #0b0e13; }
@@ -1405,8 +1406,8 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
               <div class="st-vis reel">
                 <figure data-b="0"><img src="img/j/robotracer.webp" width="1200" height="900" loading="lazy" decoding="async" alt="ทีมไทยสามคนยืนหน้าเวที TMIRC 2025 ถือป้ายหมายเลข 114" data-alt-en="Team Thailand, three people, in front of the TMIRC 2025 stage holding number 114"><figcaption><span class="th">ภาพจริง · TMIRC 2025 ไต้หวัน</span><span class="en" lang="en">Real photo · TMIRC 2025, Taiwan</span></figcaption></figure>
                 <figure data-b="0"><img src="img/tmirc-2025.webp" width="1400" height="1050" loading="lazy" decoding="async" alt="ทีมไทยสี่คนยืนบนเวทีหน้าป้ายงาน TMIRC 2025 ที่ไต้หวัน" data-alt-en="Team Thailand, four people, on stage in front of the TMIRC 2025 banner in Taiwan"><figcaption><span class="th">ภาพจริง · TMIRC 2025 ไต้หวัน</span><span class="en" lang="en">Real photo · TMIRC 2025, Taiwan</span></figcaption></figure>
+                <figure data-b="1" class="vid"><video muted playsinline loop preload="none" poster="video/abu-2026.webp" width="1280" height="720" aria-label="วิดีโอ: ผู้ควบคุมพาหุ่นลงสนาม ABU Robocon 2026 แล้วหุ่นทำงานที่กล่องคะแนน" data-label-en="Video: operators bring the robot onto the ABU Robocon 2026 field, and it works at the scoring blocks"><source src="video/abu-2026.mp4" type="video/mp4"></video><figcaption><span class="th">วิดีโอจริง · ABU Robocon 2026 (จากคลิปสรุปของทีม)</span><span class="en" lang="en">Real footage · ABU Robocon 2026 (from the team recap)</span></figcaption></figure>
                 <figure data-b="1"><img src="img/abu-pit-1280.webp" width="1280" height="720" loading="lazy" decoding="async" alt="ทีม ABU Robocon ช่วยกันประกอบหุ่นในพื้นที่เตรียมหุ่นก่อนลงแข่ง" data-alt-en="The ABU Robocon team assembling robots in the pit before a match"><figcaption><span class="th">ภาพจริง · ทีม ABU Robocon 2026</span><span class="en" lang="en">Real photo · the ABU Robocon 2026 team</span></figcaption></figure>
-                <figure data-b="1"><img src="img/abu-operator.webp" width="500" height="536" loading="lazy" decoding="async" alt="ผู้ควบคุมถือคอนโทรลเลอร์มือถือของทีมระหว่างการแข่งขัน" data-alt-en="An operator holding the team's handheld controller during a match"><figcaption><span class="th">ภาพจริง · คอนโทรลเลอร์ที่ผมเขียนเฟิร์มแวร์</span><span class="en" lang="en">Real photo · the controller I wrote the firmware for</span></figcaption></figure>
               </div>
             </article>
 
@@ -1421,7 +1422,8 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
               </div>
               <div class="st-vis reel">
                 <figure data-b="0" class="fit"><img src="img/j/cert-mara-ros.webp" width="849" height="1200" loading="lazy" decoding="async" alt="วุฒิบัตรหลักสูตรการใช้ ROS ขั้นพื้นฐาน 30 ชั่วโมง กรมพัฒนาฝีมือแรงงาน" data-alt-en="Certificate, Basic ROS, 30 hours, Department of Skill Development"><figcaption><span class="th">วุฒิบัตรจริง · MARA</span><span class="en" lang="en">The real certificate · MARA</span></figcaption></figure>
-                <figure data-b="1" class="map"><div class="st-map"><img src="img/story/nav-map.png" width="996" height="1148" loading="lazy" decoding="async" alt="แผนที่ SLAM ของห้องที่หุ่น BATLY R1 สร้างขึ้นจริง พร้อมเส้นทาง A B C" data-alt-en="The SLAM map BATLY R1 actually built of the room, with the A, B, C route"><svg viewBox="0 0 249 287" aria-hidden="true"><path class="route" pathLength="1" d="M147.4 134.05 L131.8 146.39 L130.22 156.32 Z"/><g class="stn"><circle cx="147.4" cy="134.05" r="1.6"/><text x="150" y="133">A</text></g><g class="stn"><circle cx="131.8" cy="146.39" r="1.6"/><text x="125.6" y="145.4">B</text></g><g class="stn"><circle cx="130.22" cy="156.32" r="1.6"/><text x="124" y="160">C</text></g><circle class="bot" cx="147.4" cy="134.05" r="1.9"/></svg></div><figcaption><span class="th">แผนที่ SLAM จริงจากการรัน · ตำแหน่งสถานีโดยประมาณ</span><span class="en" lang="en">The real SLAM map from my run · station positions approximate</span></figcaption></figure>
+                <figure data-b="1" class="vid"><video muted playsinline loop preload="none" poster="video/batly-loop.webp" width="1280" height="720" aria-label="วิดีโอ: หุ่น BATLY R1 วิ่งวนระหว่างสถานีในห้องทดสอบ" data-label-en="Video: BATLY R1 driving its station loop in the test room"><source src="video/batly-loop.mp4" type="video/mp4"></video><figcaption><span class="th">วิดีโอจริง · BATLY R1 วิ่งวนระหว่างสถานี · เร่ง 3 เท่า</span><span class="en" lang="en">Real footage · BATLY R1 driving its station loop · 3× speed</span></figcaption></figure>
+                <figure data-b="1" class="map" data-w="2"><div class="st-map"><img src="img/story/nav-map.png" width="996" height="1148" loading="lazy" decoding="async" alt="แผนที่ SLAM ของห้องที่หุ่น BATLY R1 สร้างขึ้นจริง พร้อมเส้นทาง A B C" data-alt-en="The SLAM map BATLY R1 actually built of the room, with the A, B, C route"><svg viewBox="0 0 249 287" aria-hidden="true"><path class="route" pathLength="1" d="M147.4 134.05 L131.8 146.39 L130.22 156.32 Z"/><g class="stn"><circle cx="147.4" cy="134.05" r="1.6"/><text x="150" y="133">A</text></g><g class="stn"><circle cx="131.8" cy="146.39" r="1.6"/><text x="125.6" y="145.4">B</text></g><g class="stn"><circle cx="130.22" cy="156.32" r="1.6"/><text x="124" y="160">C</text></g><circle class="bot" cx="147.4" cy="134.05" r="1.9"/></svg></div><figcaption><span class="th">แผนที่ SLAM จริงจากการรัน · ตำแหน่งสถานีโดยประมาณ</span><span class="en" lang="en">The real SLAM map from my run · station positions approximate</span></figcaption></figure>
               </div>
             </article>
 
