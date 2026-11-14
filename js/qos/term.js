@@ -8,6 +8,7 @@ const APPS = {
   robot3d: { th: 'บอร์ดรีโมตตัวจริงแบบ 3 มิติ', en: 'the real controller board in 3D' },
   drive: { th: 'ขับ BATLY ทำ SLAM เอง', en: 'drive BATLY and build the SLAM map' },
   lab: { th: 'โต๊ะแล็บ: สโคป ลอจิก PCB', en: 'lab bench: scope, logic analyzer, PCB' },
+  hand: { th: 'ขยับมือ MIONEX ด้วยกล้องของคุณ', en: 'move the MIONEX hand with your webcam' },
 };
 
 export function mountTerm(body, ctx) {
@@ -126,7 +127,7 @@ note        : simulated. The real CPU is yours: ${n} hardware threads.`;
     ['projects', { th: 'งานที่ทำ', en: 'what Q built' }],
     ['music', { th: 'เพลงที่ฟัง', en: 'what Q listens to' }],
     ['games', { th: 'เกมและงานอดิเรก', en: 'games and hobbies' }],
-    ['robot3d', APPS.robot3d], ['drive', APPS.drive], ['lab', APPS.lab],
+    ['robot3d', APPS.robot3d], ['drive', APPS.drive], ['lab', APPS.lab], ['hand', APPS.hand],
     ['neofetch', { th: 'ข้อมูลระบบ', en: 'system info' }],
     ['ls, cd, cat, tree', { th: 'เดินดูไฟล์', en: 'look around the files' }],
     ['cat /dev/xbee', { th: 'ดูเฟรมวิทยุจริงของรีโมต', en: "watch the controller's real radio frames" }],
@@ -220,6 +221,7 @@ note        : simulated. The real CPU is yours: ${n} hardware threads.`;
     robot3d() { line(['launching robot3d…', 'c-mut']); ctx.openApp('robot3d'); },
     drive() { line(['launching drive…', 'c-mut']); ctx.openApp('drive'); },
     lab(a) { line(['launching lab…', 'c-mut']); ctx.openApp('lab', a[0]); },
+    hand() { line(['launching hand…', 'c-mut']); ctx.openApp('hand'); },
     neofetch() {
       const logo = [
         '   ▄▄████████▄▄   ',
@@ -332,7 +334,7 @@ note        : simulated. The real CPU is yours: ${n} hardware threads.`;
     man(a) { if (a[0]) line(`No manual entry for ${a[0]}. Try `, run('help')); else CMDS.help(); },
     vim() { line(['you are now trapped in vim. (kidding: type exit to leave qOS)', 'c-mut']); },
   };
-  CMDS['./robot3d'] = CMDS.robot3d; CMDS['./drive'] = CMDS.drive; CMDS['./lab'] = CMDS.lab;
+  CMDS['./robot3d'] = CMDS.robot3d; CMDS['./drive'] = CMDS.drive; CMDS['./lab'] = CMDS.lab; CMDS['./hand'] = CMDS.hand;
   CMDS.ll = a => CMDS.ls(a);
 
   // cat /dev/xbee: drive frames wrapped in the XBee API frame, five a second, with a stick wiggling

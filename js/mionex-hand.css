@@ -1,0 +1,47 @@
+/* MIONEX hand demo (js/mionex-hand.js). Uses the page's tokens; the same layout sits in the main-page
+   dialog and in a qOS window (.mh-compact). */
+.mh { display: grid; grid-template-columns: minmax(0, 1fr) 300px; height: 100%; min-height: 0; color: var(--text, #c4cbd5); font-family: var(--body, system-ui, sans-serif); }
+.mh-stage { position: relative; min-height: 0; background: radial-gradient(120% 90% at 50% 40%, rgba(236, 154, 90, .08), transparent 60%); }
+.mh-gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.mh-cam { position: absolute; right: 14px; bottom: 14px; width: min(34%, 240px); aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; border: 1px solid var(--line-2, rgba(255, 255, 255, .16)); background: #000; }
+.mh-cam[hidden] { display: none; }
+.mh-cam video, .mh-cam canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+.mh-start { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); width: min(92%, 380px); text-align: center; padding: 16px 18px 14px; border-radius: 18px; border: 1px solid var(--line, rgba(255, 255, 255, .08)); background: rgba(11, 14, 19, .84); backdrop-filter: blur(8px); }
+.mh-start[hidden] { display: none; }
+.mh-start p { margin: 10px 0 0; font-size: 12.5px; line-height: 1.55; color: var(--muted, #808a99); }
+.mh-btn { font: 600 14px/1 var(--mono, ui-monospace, monospace); padding: 13px 20px; border-radius: 999px; cursor: pointer; border: 1px solid var(--copper, #ec9a5a); background: var(--copper, #ec9a5a); color: var(--copper-ink, #1b1009); }
+.mh-btn:hover { background: var(--copper-hi, #ffb47c); }
+.mh-btn:focus-visible { outline: 2px solid var(--copper-hi, #ffb47c); outline-offset: 3px; }
+.mh-btn:disabled { opacity: .55; cursor: progress; }
+.mh-btn[hidden] { display: none; }
+.mh-off { background: transparent; color: var(--copper, #ec9a5a); justify-self: start; }
+.mh-off:hover { background: var(--copper-soft, rgba(236, 154, 90, .12)); }
+
+.mh-side { display: grid; align-content: start; gap: 16px; padding: 26px 24px; border-left: 1px solid var(--line, rgba(255, 255, 255, .08)); overflow-y: auto; }
+.mh-side h3 { margin: 0; font: 600 19px/1.3 var(--display, system-ui, sans-serif); color: var(--ink, #f2f4f7); }
+.mh-status { margin: 0; min-height: 3.1em; font-size: 14px; line-height: 1.55; color: var(--copper-hi, #ffb47c); }
+.mh-meters { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.mh-meters li { display: grid; grid-template-columns: 74px 1fr 40px; align-items: center; gap: 10px; font: 12.5px/1 var(--mono, ui-monospace, monospace); }
+.mh-name { color: var(--text, #c4cbd5); }
+.mh-bar { height: 6px; border-radius: 3px; background: var(--line, rgba(255, 255, 255, .08)); overflow: hidden; }
+.mh-bar i { display: block; height: 100%; background: var(--copper, #ec9a5a); transform-origin: left; transform: scaleX(0); }
+.mh-pct { text-align: right; color: var(--muted, #808a99); font-variant-numeric: tabular-nums; }
+.mh-note { margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--muted, #808a99); }
+
+.mh-dlg { padding: 0; width: min(1100px, calc(100vw - 32px)); height: min(700px, calc(100dvh - 32px)); max-width: none; max-height: none; border: 1px solid var(--line-2, rgba(255, 255, 255, .16)); border-radius: var(--r-lg, 28px); background: var(--panel, #10141a); color: inherit; overflow: hidden; }
+.mh-dlg::backdrop { background: rgba(4, 6, 9, .88); backdrop-filter: blur(6px); }
+.mh-dlg form { position: absolute; top: 12px; left: 12px; z-index: 2; }
+.mh-x { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-2, rgba(255, 255, 255, .16)); background: var(--panel-2, #161b23); color: var(--ink, #f2f4f7); font-size: 20px; cursor: pointer; }
+.mh-x:focus-visible { outline: 2px solid var(--copper, #ec9a5a); outline-offset: 2px; }
+
+.mh-compact { grid-template-columns: minmax(0, 1fr) 260px; }
+.mh-compact .mh-side { padding: 18px; gap: 12px; }
+
+@media (max-width: 760px) {
+  .mh, .mh-compact { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; }
+  .mh-side { border-left: 0; border-top: 1px solid var(--line, rgba(255, 255, 255, .08)); padding: 16px; gap: 10px; max-height: 44dvh; }
+  .mh-note { display: none; }
+  .mh-meters { gap: 7px; }
+  .mh-cam { width: 38%; right: 10px; bottom: 10px; }
+  .mh-start { bottom: 14px; }
+}

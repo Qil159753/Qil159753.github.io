@@ -14,6 +14,7 @@ const ICON = {
   robot3d: '<path d="M3 13l5-6h16l5 6v8l-5 5H8l-5-5z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="16" r="2.2" fill="currentColor"/><circle cx="22" cy="16" r="2.2" fill="currentColor"/><path d="M14 11h4v4h-4z" fill="none" stroke="currentColor" stroke-width="1.4"/>',
   drive: '<circle cx="16" cy="18" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="18" r="2.6" fill="currentColor"/><path d="M16 18L27 8M16 18l-9-9" stroke="currentColor" stroke-width="1.2" opacity=".7"/><path d="M5 5h3v3H5zM25 26h3v3h-3zM24 4h3v3h-3z" fill="currentColor" opacity=".55"/>',
   lab: '<rect x="3" y="6" width="26" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 18c2 0 2-8 4-8s2 8 4 8 2-8 4-8 2 8 4 8 2-4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 27h16" stroke="currentColor" stroke-width="1.6"/>',
+  hand: '<path d="M10 29v-6l-4-6a2 2 0 013-2.5l2 2.5V6a2 2 0 014 0v8V4a2 2 0 014 0v10V5.5a2 2 0 014 0V15V9a2 2 0 014 0v11a9 9 0 01-9 9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
   doc: '<path d="M8 3h11l6 6v20H8z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M19 3v6h6M12 15h9M12 19h9M12 23h6" fill="none" stroke="currentColor" stroke-width="1.4"/>',
   music: '<path d="M12 23V7l14-3v16" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="23" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="23" cy="20" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/>',
   pad: '<path d="M6 11h20a4 4 0 014 4l-1 7a3 3 0 01-5 2l-3-3H11l-3 3a3 3 0 01-5-2l-1-7a4 4 0 014-4z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 14v5M6.5 16.5h5" stroke="currentColor" stroke-width="1.6"/><circle cx="22" cy="15" r="1.3" fill="currentColor"/><circle cx="25" cy="18" r="1.3" fill="currentColor"/>',
@@ -32,6 +33,7 @@ const APPS = {
   robot3d: { title: 'robot3d', sub: 'controller_v7 · pcb', w: 1060, h: 680 },
   drive: { title: 'drive', sub: 'batly_r1 · slam', w: 1100, h: 700 },
   lab: { title: 'lab', sub: 'bench', w: 1020, h: 660 },
+  hand: { title: 'hand', sub: 'mionex · webcam', w: 980, h: 620 },
 };
 
 export function boot() {
@@ -154,6 +156,7 @@ export function boot() {
     shortcut('robot3d', 'robot3d', () => openApp('robot3d'));
     shortcut('drive', 'drive', () => openApp('drive'));
     shortcut('lab', 'lab', () => openApp('lab'));
+    shortcut('hand', 'hand', () => openApp('hand'));
     shortcut('doc', 'about.md', () => termRun('about'));
     shortcut('music', 'music.md', () => termRun('music'));
     shortcut('pad', 'games.md', () => termRun('games'));

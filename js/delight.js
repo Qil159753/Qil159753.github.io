@@ -9,15 +9,16 @@
   var crcCell = frame && frame.querySelector('.crc');
   if (frame && msg && crcCell) {
     var busy = 0;
-    var label = function (li) {
-      li.setAttribute('aria-label', (en() ? 'Corrupt byte ' : 'ทำให้ไบต์เสีย ') + li.dataset.name);
-    };
+    /* a real <button> inside each <li>: the list keeps list semantics, and the accessible name is the
+       visible text plus a hidden hint in the current language */
     frame.querySelectorAll('li:not(.crc)').forEach(function (li) {
-      var b = li.querySelector('b');
+      var b = li.querySelector('b'), btn = document.createElement('button');
       li.dataset.name = b.textContent;
-      li.tabIndex = 0;
-      li.setAttribute('role', 'button');
-      label(li);
+      btn.type = 'button';
+      while (li.firstChild) btn.appendChild(li.firstChild);
+      btn.insertAdjacentHTML('beforeend', '<span class="sr-only"><span class="th">: ทำให้ไบต์นี้เสีย</span><span class="en" lang="en">: corrupt this byte</span></span>');
+      li.appendChild(btn);
+      li.classList.add('tap');
       function hit() {
         if (li.dataset.bad) return;
         var junk = (Math.random() * 256) | 0;
@@ -39,14 +40,8 @@
           }
         }, 1600);
       }
-      li.addEventListener('click', hit);
-      li.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hit(); }
-      });
+      btn.addEventListener('click', hit);
     });
-    new MutationObserver(function () {
-      frame.querySelectorAll('li[role=button]').forEach(label);
-    }).observe(root, { attributes: true, attributeFilter: ['data-lang'] });
   }
 
   /* ---------- 2. A serial monitor in DevTools ---------- */
