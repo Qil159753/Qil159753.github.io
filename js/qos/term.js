@@ -285,7 +285,7 @@ note        : simulated. The real CPU is yours: ${n} hardware threads.`;
         line(['rm: removing everything…', 'c-bad']);
         line(['*** watchdog: main loop starved for 1500 ms → reset ***', 'c-bad']);
         ctx.sfx.err();
-        setTimeout(() => ctx.reboot(), 900);
+        stream = setTimeout(() => { stream = null; ctx.reboot(); }, 900);   // cancelled if the terminal closes first
         return;
       }
       line(['rm: read-only file system (this is ROM, nice try)', 'c-bad']);

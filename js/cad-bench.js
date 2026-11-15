@@ -79,7 +79,10 @@ export async function mountCadBench(root) {
   const rim = new THREE.DirectionalLight(0xec9a5a, 1.2); rim.position.set(3, 1, -3); scene.add(rim);
   const camera = new THREE.PerspectiveCamera(32, 1, 1, 5000);
   const controls = new OrbitControls(camera, canvas);
-  controls.enablePan = false;
+  // the bench sits in the middle of a long page: the wheel and vertical swipes keep scrolling it
+  // (OrbitControls would claim both), a horizontal drag orbits
+  controls.enablePan = false; controls.enableZoom = false;
+  canvas.style.touchAction = 'pan-y';
 
   let frame = 0;
   const render = () => { if (!frame) frame = requestAnimationFrame(() => { frame = 0; renderer.render(scene, camera); }); };
@@ -181,7 +184,7 @@ export async function mountCadBench(root) {
   }
 
   async function buildPcb() {
-    const [{ loadPCB, boardOutline }, { PARTS, LIFT }] = await Promise.all([import('./qos/pcb.js'), import('./qos/robot3d.js')]);
+    const [{ loadPCB, boardOutline }, { PARTS, LIFT }] = await Promise.all([import('./qos/pcb.js'), import('./qos/pcb-parts.js')]);
     const pcb = await loadPCB(THREE, new URL('qos/pcb.bin', ROOT).href);
     const holder = new THREE.Group(), up = new THREE.Vector3(0, 1, 0);
     const items = pcb.parts.map((p) => {
@@ -215,13 +218,20 @@ export async function mountCadBench(root) {
   async function show(name) {
     want = name;
     tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
+    tint(sel, false); tint(hover, false);
     if (cur) scene.remove(cur.obj);
     cur = null; sel = null; hover = null;
     status.hidden = false; status.innerHTML = tx('กำลังโหลด…', 'Loading…');
     let tab;
-    try { tab = cache[name] ||= await BUILD[name](); }
-    catch (e) { console.warn('cad bench', e); if (want === name) status.innerHTML = tx('โหลดโมเดลไม่สำเร็จ', "Couldn't load this model."); return; }
-    if (want !== name) return;                 // another tab was picked while this one loaded
+    // the promise is cached, so clicking a tab again while it loads never builds a second copy
+    try { tab = await (cache[name] ||= BUILD[name]()); }
+    catch (e) {
+      delete cache[name];                      // a later click retries
+      console.warn('cad bench', e);
+      if (want === name) status.innerHTML = tx('โหลดโมเดลไม่สำเร็จ', "Couldn't load this model.");
+      return;
+    }
+    if (want !== name || cur === tab) return;  // another tab was picked while this one loaded
     cur = tab; status.hidden = true;
     scene.add(cur.obj);
     root.querySelector('.cad-explode').hidden = !cur.explode;
@@ -259,6 +269,10 @@ export async function mountCadBench(root) {
     hover = it;
     if (hover && hover !== sel) tint(hover, true, 0x4a5a6a);
     canvas.style.cursor = hover ? 'pointer' : 'grab'; render();
+  });
+  canvas.addEventListener('pointerleave', () => {
+    if (hover && hover !== sel) { tint(hover, false); render(); }
+    hover = null;
   });
   canvas.addEventListener('pointerdown', (e) => { down = [e.clientX, e.clientY]; });
   canvas.addEventListener('pointerup', (e) => {

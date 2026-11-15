@@ -27,7 +27,13 @@ export async function mount(body, ctx, arg) {
     cur?.dispose(); cur = null; stage.replaceChildren();
     curName = id;
     for (const [k, b] of Object.entries(btns)) b.setAttribute('aria-selected', String(k === id));
-    const tab = await ({ scope, logic, pcb }[id])(stage, ctx);
+    let tab;
+    try { tab = await ({ scope, logic, pcb }[id])(stage, ctx); }
+    catch (e) {
+      console.error(e);
+      if (my === token) { curName = null; stage.textContent = `failed to load ${id}: ${e.message}`; }   // a click on the tab retries
+      return;
+    }
     if (my !== token) { tab.dispose(); return; }      // switched again while this one was loading
     cur = tab;
   }
