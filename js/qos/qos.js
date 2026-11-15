@@ -49,8 +49,11 @@ export function boot() {
   const prevOverflow = root.style.overflow;
   root.style.overflow = 'hidden';
   new Promise(r => { link.onload = r; link.onerror = r; setTimeout(r, 1500); }).then(() => { dlg.showModal(); start(); });
-  // Esc belongs to the apps and the shell; leaving is `exit` or the power button
+  // Esc belongs to the apps and the shell; leaving is `exit` or the power button. Browsers may still
+  // close a modal on a repeated Esc (close-watcher rules), so a close we didn't ask for exits cleanly.
   dlg.addEventListener('cancel', e => e.preventDefault());
+  const own = dlg;
+  dlg.addEventListener('close', () => { if (dlg === own) exit(); });
 
   const lang = () => (root.dataset.lang === 'en' ? 'en' : 'th');
   const wins = new Map();
@@ -246,7 +249,7 @@ export function boot() {
     w.progress = p => load.style.setProperty('--p', Math.round(p * 100) + '%');
     import(`./${name}.js`).then(m => m.mount(body, { ...ctx, progress: w.progress }, arg)).then(app => {
       load.remove();
-      if (!wins.has(name)) { app?.dispose?.(); return; }
+      if (wins.get(name) !== w) { app?.dispose?.(); return; }   // closed (or closed and reopened) while loading
       w.app = app;
       if (w.el.classList.contains('focus')) app?.focus?.();
     }).catch(err => {
@@ -299,11 +302,14 @@ export function boot() {
     term = null; layer = null;
   }
   function exit() {
+    if (!dlg) return;
     teardown();
-    dlg.close(); dlg.remove(); dlg = null; link.remove();
+    const d = dlg; dlg = null;
+    d.close(); d.remove(); link.remove();
     root.style.overflow = prevOverflow;
   }
   function reboot() {
+    if (!dlg) return;
     teardown();
     dlg.replaceChildren();
     start();

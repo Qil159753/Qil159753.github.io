@@ -169,15 +169,23 @@ export async function mountHand(host, { compact = false } = {}) {
   const video = $('video'), bones = $('.mh-bones'), bctx = bones.getContext('2d');
   let stream = null, landmarker = null, tracking = false, lastVideoTime = -1, lms = null;
 
-  async function getLandmarker() {
-    if (landmarker) return landmarker;
-    const { FilesetResolver, HandLandmarker } = await import('@mediapipe/tasks-vision');
-    const files = await FilesetResolver.forVisionTasks(WASM);
-    const opts = (delegate) => ({ baseOptions: { modelAssetPath: MODEL, delegate }, runningMode: 'VIDEO', numHands: 1,
-      minHandDetectionConfidence: 0.6, minHandPresenceConfidence: 0.5, minTrackingConfidence: 0.5 });
-    try { landmarker = await HandLandmarker.createFromOptions(files, opts('GPU')); }
-    catch (e) { landmarker = await HandLandmarker.createFromOptions(files, opts('CPU')); }
-    return landmarker;
+  // one load at a time: turning the camera off and on mid-load reuses the same promise, so a
+  // second landmarker (its WASM heap and GL context) is never created and leaked
+  let landmarkerP = null;
+  function getLandmarker() {
+    landmarkerP ||= (async () => {
+      const { FilesetResolver, HandLandmarker } = await import('@mediapipe/tasks-vision');
+      const files = await FilesetResolver.forVisionTasks(WASM);
+      const opts = (delegate) => ({ baseOptions: { modelAssetPath: MODEL, delegate }, runningMode: 'VIDEO', numHands: 1,
+        minHandDetectionConfidence: 0.6, minHandPresenceConfidence: 0.5, minTrackingConfidence: 0.5 });
+      let lm;
+      try { lm = await HandLandmarker.createFromOptions(files, opts('GPU')); }
+      catch (e) { lm = await HandLandmarker.createFromOptions(files, opts('CPU')); }
+      if (disposed) { lm.close(); throw new Error('disposed'); }
+      return (landmarker = lm);
+    })();
+    landmarkerP.catch(() => { landmarkerP = null; });   // a failed load can be retried
+    return landmarkerP;
   }
 
   async function start() {
