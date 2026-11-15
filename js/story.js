@@ -108,7 +108,7 @@ export function initStory(mq) {
       .from($$('.node', intro), { scale: 0, transformOrigin: '50% 50%', autoAlpha: 0, duration: 0.3, stagger: 0.25, ease: 'back.out(2)' }, 0.2);
 
     // 1-4 · the photo reels
-    reel(1, 2, 6.4, [[4.0, 1], [5.6, 2]]);              // digger · truck · Nano
+    reel(1, 2, 6.4, []);                                // my Nano board
     reel(2, 8.4, 6.2, [[10.4, 1], [12.4, 2]]);          // STL, 3rd · Pitch Your IP, 1st · ELP4
     reel(3, 14.6, 5.4, [[17.1, 1]]);                    // Robotrace · ABU
     reel(4, 20, 6.2, [[21.4, 1]]);                      // MARA ROS courses · BATLY footage, then the SLAM map and its loop
