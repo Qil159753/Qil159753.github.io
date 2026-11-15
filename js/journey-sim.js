@@ -15,7 +15,7 @@ function fit(canvas) {
   return { ctx, w, h };
 }
 
-/* Same contract as journey-3d's loop: only runs while on screen and the tab is visible. */
+/* The loop only runs while the panel is on screen and the tab is visible. */
 function loop(el, step) {
   let seen = false, raf = 0, last = 0, dead = false;
   function frame(now) {

@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'sha256-zXRYQ4sGshWOaiXS8yPP1eLk9IgSmEpBQokLWyLYqPU=' 'sha256-yxIA5/sNvuFhlGEgVxOb4BNfNNZ4GvIXYBMDAJU+dm0=' 'sha256-lFjYwJl8lDCGTWEKrY5SOBP/u4e+EmdThnpNbjNp2+k=' 'sha256-R7+TVmKZkA36xfkqQmKE7bYZktICV8jf4WDqqeWoUQI='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'sha256-zXRYQ4sGshWOaiXS8yPP1eLk9IgSmEpBQokLWyLYqPU=' 'sha256-yxIA5/sNvuFhlGEgVxOb4BNfNNZ4GvIXYBMDAJU+dm0=' 'sha256-lFjYwJl8lDCGTWEKrY5SOBP/u4e+EmdThnpNbjNp2+k=' 'sha256-Zb9FsZsFBMdHkLISNVB7PnSwqyYdxG0ivRc7FsRbDG8='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="อภิภัทร สันทัสนะโชค (คิว) นักศึกษาวิศวกรรมระบบสมองกลฝังตัว ม.บูรพา ทำเฟิร์มแวร์ หุ่นยนต์แข่ง แขนเทียม MIONEX และระบบเว็บสำหรับร้านค้า">
@@ -528,12 +528,10 @@ h1 em { font-style: normal; color: var(--copper); }
 .j3d canvas { display: block; width: 100%; height: clamp(240px, 62vw, 500px); touch-action: pan-y; cursor: grab; }
 .j3d canvas:active { cursor: grabbing; }
 .j3d-hint { position: absolute; top: 12px; left: 12px; right: 12px; width: fit-content; font: 400 12px/1.4 var(--mono); color: var(--text); pointer-events: none; padding: 5px 9px; border-radius: 6px; background: rgba(10, 13, 18, .72); }
-.j3d-tip { position: absolute; transform: translate(14px, -130%); pointer-events: none; padding: 6px 12px; border-radius: 999px; background: rgba(16, 20, 26, .92); border: 1px solid rgba(236, 154, 90, .5); color: var(--ink); font: 500 12.5px/1.2 var(--mono); white-space: nowrap; }
 .j3d-ui { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; padding: 14px 16px 16px; border-top: 1px solid var(--line); background: rgba(10, 13, 18, .7); }
 .j3d-ui label { display: flex; align-items: center; gap: 12px; flex: 1 1 220px; font: 500 13px/1.3 var(--body); color: var(--ink); }
 .j3d-ui input[type=range] { flex: 1; accent-color: var(--copper); min-width: 120px; height: 32px; }
 .j3d-ui label > span { white-space: nowrap; }
-[data-j3d="backhoe"] .j3d-ui label > span { flex: 0 0 4.5em; }
 .j3d-ui .chip-btn { font: 500 13px/1 var(--body); min-height: 40px; padding: 0 18px; border-radius: 999px; cursor: pointer; color: var(--ink); background: rgba(255, 255, 255, .05); border: 1px solid var(--line-2); transition: background .4s var(--ease), border-color .4s var(--ease); }
 .j3d-ui .chip-btn:hover, .j3d-ui .chip-btn[aria-pressed="true"] { border-color: var(--copper); background: var(--copper-soft); }
 .j3d-note { margin-top: 10px; font: 400 12.5px/1.6 var(--mono); color: var(--muted); max-width: 70ch; }
@@ -720,6 +718,45 @@ h1 em { font-style: normal; color: var(--copper); }
 .story.on .st-vis.reel .st-map { height: 100%; max-width: none; will-change: transform, clip-path; }
 @media (max-width: 960px) {
   .st-ch { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------- CAD bench (js/cad-bench.js) ---------- */
+.cad-bench { margin-top: 28px; border: 1px solid var(--line-2); border-radius: var(--r-lg); background: var(--panel); overflow: hidden; }
+.cad-tabs { display: flex; gap: 4px; padding: 10px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.cad-tab { display: flex; align-items: baseline; gap: 8px; padding: 10px 14px; border-radius: 10px; border: 1px solid transparent; background: none; color: var(--muted); font: 500 14px/1.2 var(--body); cursor: pointer; white-space: nowrap; }
+.cad-tab small { font: 400 11px/1 var(--mono); color: var(--muted); }
+.cad-tab:hover { color: var(--ink); }
+.cad-tab[aria-selected="true"] { color: var(--ink); border-color: var(--copper); background: var(--copper-soft); }
+.cad-tab:focus-visible, .cad-list button:focus-visible { outline: 2px solid var(--copper); outline-offset: 2px; }
+.cad-body { display: grid; grid-template-columns: minmax(0, 1fr) 320px; min-height: 520px; }
+.cad-stage { position: relative; min-height: 420px; background: radial-gradient(120% 90% at 50% 40%, rgba(236, 154, 90, .07), transparent 60%); }
+.cad-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; touch-action: pan-y; }
+.cad-status { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; font: 500 13px/1.4 var(--mono); color: var(--muted); pointer-events: none; }
+.cad-status[hidden] { display: none; }
+.cad-explode { position: absolute; left: 16px; bottom: 14px; display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line-2); background: rgba(11, 14, 19, .78); font: 500 12px/1 var(--mono); color: var(--text); }
+.cad-explode[hidden] { display: none; }
+.cad-explode input { width: clamp(90px, 14vw, 180px); accent-color: var(--copper); }
+.cad-hint { position: absolute; right: 16px; top: 12px; margin: 0; font: 400 11.5px/1 var(--mono); color: var(--muted); pointer-events: none; }
+.cad-side { display: flex; flex-direction: column; gap: 14px; padding: 20px; border-left: 1px solid var(--line); max-height: 560px; overflow-y: auto; }
+.cad-info h4 { margin: 0; font: 600 17px/1.3 var(--display); color: var(--ink); }
+.cad-info h4 small { font: 500 12px var(--mono); color: var(--copper); }
+.cad-info p { margin: 8px 0 0; font-size: 13.5px; line-height: 1.6; color: var(--text); }
+.cad-info .cad-mat { font: 500 12px/1.4 var(--mono); color: var(--copper); }
+.cad-info .cad-honest { font-size: 12.5px; color: var(--muted); }
+.cad-list, .cad-list ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.cad-list .cad-g { flex-basis: 100%; }
+.cad-list .cad-g b { display: block; margin: 4px 0 6px; font: 500 11.5px/1 var(--mono); color: var(--muted); }
+.cad-list button { padding: 6px 10px; border-radius: 6px; border: 1px solid var(--line-2); background: rgba(255, 255, 255, .025); color: var(--text); font: 400 12px/1.2 var(--mono); cursor: pointer; text-align: left; }
+.cad-list button:hover { border-color: var(--copper); color: var(--ink); }
+.cad-list button[aria-pressed="true"] { border-color: var(--copper); background: var(--copper-soft); color: var(--copper-hi); }
+.cad-off { display: none; margin: 0; padding: 24px; color: var(--muted); }
+.cad-bench.off .cad-body { display: none; }
+.cad-bench.off .cad-off { display: block; }
+@media (max-width: 860px) {
+  .cad-body { grid-template-columns: 1fr; }
+  .cad-stage { min-height: 0; aspect-ratio: 4 / 3.2; }
+  .cad-side { border-left: 0; border-top: 1px solid var(--line); max-height: none; }
+  .cad-hint { display: none; }
 }
 
 /* ---------- layout switches ---------- */
@@ -987,6 +1024,7 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
     <div class="nav-links">
       <a href="#work"><span class="th">ผลงาน</span><span class="en" lang="en">Work</span></a>
       <a href="#code"><span class="th">โค้ด</span><span class="en" lang="en">Code</span></a>
+      <a href="#cad"><span class="th">CAD</span><span class="en" lang="en">CAD</span></a>
       <a href="#services"><span class="th">บริการ</span><span class="en" lang="en">Services</span></a>
       <a href="#about"><span class="th">เกี่ยวกับ</span><span class="en" lang="en">About</span></a>
       <a href="#journey"><span class="th">เส้นทาง</span><span class="en" lang="en">Journey</span></a>
@@ -1265,6 +1303,31 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
       </ul>
     </section>
 
+    <section id="cad" class="sec">
+      <div class="code-head rise">
+        <h2 class="h2"><span class="th">งาน CAD ที่ผมออกแบบ</span><span class="en" lang="en">CAD I designed</span></h2>
+        <p><span class="th">โมเดลจริงจากไฟล์ของผมเอง กลไกมือเทียมที่เขียนด้วย CadQuery ชิ้นงานที่ออกแบบแล้วพิมพ์ 3 มิติ และบอร์ดรีโมตที่วางลายใน EasyEDA ลากเพื่อหมุน เลื่อนเพื่อแยกชิ้น คลิกชิ้นส่วนเพื่อดูว่ามันคืออะไร</span><span class="en" lang="en">Real models from my own files: a prosthetic hand mechanism I wrote in CadQuery, things I designed and 3D-printed, and the controller board I laid out in EasyEDA. Drag to orbit, slide to explode, click a part to see what it is.</span></p>
+      </div>
+      <div class="cad-bench rise" data-cad>
+        <div class="cad-tabs" role="tablist" aria-label="โมเดล CAD" data-label-en="CAD models">
+          <button class="cad-tab" type="button" role="tab" data-tab="hand" aria-selected="true"><span class="th">กลไกมือเทียม</span><span class="en" lang="en">Prosthetic mechanism</span><small>CadQuery</small></button><button class="cad-tab" type="button" role="tab" data-tab="prints" aria-selected="false"><span class="th">ชิ้นงานพิมพ์ 3 มิติ</span><span class="en" lang="en">3D prints</span><small>3MF</small></button><button class="cad-tab" type="button" role="tab" data-tab="pcb" aria-selected="false"><span class="th">บอร์ดรีโมต</span><span class="en" lang="en">Controller PCB</span><small>EasyEDA</small></button>
+        </div>
+        <div class="cad-body" role="tabpanel">
+          <div class="cad-stage">
+            <canvas role="img" aria-label="โมเดล CAD 3 มิติแบบโต้ตอบ" data-label-en="Interactive 3D CAD model"></canvas>
+            <p class="cad-status"><span class="th">โมเดลจะโหลดเมื่อเลื่อนมาถึง</span><span class="en" lang="en">The models load as you scroll here</span></p>
+            <label class="cad-explode"><span class="sr-only"><span class="th">แยกชิ้นส่วน:</span><span class="en" lang="en">Exploded view:</span></span><span aria-hidden="true"><span class="th">ประกอบ</span><span class="en" lang="en">Assembled</span></span><input type="range" min="0" max="100" value="0"><span aria-hidden="true"><span class="th">แยกชิ้น</span><span class="en" lang="en">Exploded</span></span></label>
+            <p class="cad-hint"><span class="th">ลากเพื่อหมุน · คลิกชิ้นส่วน</span><span class="en" lang="en">Drag to orbit · click a part</span></p>
+          </div>
+          <aside class="cad-side">
+            <div class="cad-info" aria-live="polite"></div>
+            <ul class="cad-list"></ul>
+          </aside>
+        </div>
+        <p class="cad-off"><span class="th">เบราว์เซอร์นี้แสดงโมเดล 3 มิติไม่ได้</span><span class="en" lang="en">This browser can&#39;t show the 3D models.</span></p>
+      </div>
+    </section>
+
     <section id="services" class="sec">
       <div class="svc-head rise">
         <h2 class="h2"><span class="th">รับงานอะไรได้บ้าง</span><span class="en" lang="en">What I build for clients</span></h2>
@@ -1367,7 +1430,7 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
                 </ol>
               </div>
               <div class="st-vis reel">
-                <figure data-b="0"><img src="img/story/digger.webp" width="1200" height="672" loading="lazy" decoding="async" alt="โมเดล 3 มิติของแขนขุดดินที่ขยับด้วยไซริงค์และน้ำ" data-alt-en="3D model of the digger arm driven by syringes and water"><figcaption><span class="th">โมเดล 3 มิติ · หมุนดูได้ใน Journey ด้านล่าง</span><span class="en" lang="en">3D model · spin it in the journey below</span></figcaption></figure>
+                <figure data-b="0"><img src="img/story/digger.webp" width="1200" height="672" loading="lazy" decoding="async" alt="โมเดล 3 มิติของแขนขุดดินที่ขยับด้วยไซริงค์และน้ำ" data-alt-en="3D model of the digger arm driven by syringes and water"><figcaption><span class="th">โมเดล 3 มิติที่สร้างใหม่ด้วยโค้ด ไม่ได้สแกนจากชิ้นงานจริง</span><span class="en" lang="en">3D model rebuilt in code, not a scan of the original</span></figcaption></figure>
                 <figure data-b="1"><img src="img/j/car-front.webp" width="856" height="1000" loading="lazy" decoding="async" alt="ด้านหน้ารถ เห็นกันชนสีเทาและน็อตรูปกากบาท" data-alt-en="The front, with the grey bumper and cross-head screw"><figcaption><span class="th">ภาพจริง · รถของเล่นที่เราวัด</span><span class="en" lang="en">Real photo · the toy truck we measured</span></figcaption></figure>
                 <figure data-b="1"><img src="img/j/car-parts.webp" width="1200" height="863" loading="lazy" decoding="async" alt="ชิ้นส่วนรถของเล่นทั้ง 11 ชิ้น วางเรียงพร้อมหมายเลข" data-alt-en="All 11 parts of the toy truck laid out and numbered"><figcaption><span class="th">ภาพจริง · 11 ชิ้นที่วัดและขึ้นโมเดล</span><span class="en" lang="en">Real photo · the 11 parts we measured</span></figcaption></figure>
                 <figure data-b="2" class="fit"><img src="img/j/nano-3d.webp" width="750" height="1000" loading="lazy" decoding="async" alt="มุมมอง 3 มิติของบอร์ด Nano clone สีน้ำเงิน" data-alt-en="3D view of the blue Nano clone board"><figcaption><span class="th">บอร์ด Nano ของผม · มุมมอง 3 มิติใน EasyEDA</span><span class="en" lang="en">My Nano board · 3D view in EasyEDA</span></figcaption></figure>
@@ -1480,24 +1543,8 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
       <div class="j-year">
         <div class="j-yl" role="heading" aria-level="3"><span class="kicker"><span class="th">ปี 1</span><span class="en" lang="en">Year 1</span></span><b>2024–25</b><small><span class="th">ปีการศึกษา 2567 (2024)</span><span class="en" lang="en">Academic year 2024</span></small></div>
         <ol class="j-list">
-          <li class="j-item rise" id="j-digger"><time><span class="th">ปี 1</span><span class="en" lang="en">Year 1</span></time><h4><span class="th">แขนขุดดินไฮดรอลิกจากไซริงค์</span><span class="en" lang="en">A syringe-powered hydraulic digger</span></h4><ul class="j-tags"><li><span class="th">โปรเจกต์ไฮดรอลิก</span><span class="en" lang="en">Hydraulics project</span></li></ul><p><span class="th">โมเดลรถขุดดินที่ขยับด้วยระบบไฮดรอลิกจากไซริงค์ ไซริงค์แต่ละคู่ต่อท่อน้ำถึงกัน กดไซริงค์ตัวคุมบนฐาน น้ำจะไปดันไซริงค์อีกตัวที่ติดอยู่บนแขน ทำให้บูม แขนตัก และบุ้งกี๋ขยับทีละข้อ ลองคุมเองด้วยแถบเลื่อน หรือกด "ตักดินให้ดู"</span><span class="en" lang="en">A model digger moved by syringe hydraulics. Each pair of syringes is joined by a water line: push the control syringe on the base and water drives the one mounted on the arm, moving the boom, stick and bucket one joint at a time. Work it with the sliders or press "Dig a scoop".</span></p><div class="j3d" data-j3d="backhoe">
-<canvas role="img" aria-label="โมเดล 3 มิติแบบโต้ตอบ: แขนขุดดินที่ขยับด้วยไซริงค์และน้ำ" data-label-en="Interactive 3D model: a digger arm driven by syringes and water"></canvas>
-<span class="j3d-hint"><span class="th">ลากเพื่อหมุนดูรอบ ๆ</span><span class="en" lang="en">Drag to look around</span></span>
-<div class="j3d-ui"><label><i class="dot" style="background:#c89a62"></i><span class="th">หมุนฐาน</span><span class="en" lang="en">Swing</span><input type="range" min="0" max="100" value="50"></label><label><i class="dot" style="background:#3aa0ff"></i><span class="th">บูม</span><span class="en" lang="en">Boom</span><input type="range" min="0" max="100" value="50"></label><label><i class="dot" style="background:#ff5a4e"></i><span class="th">แขนตัก</span><span class="en" lang="en">Stick</span><input type="range" min="0" max="100" value="40"></label><label><i class="dot" style="background:#4fd18b"></i><span class="th">บุ้งกี๋</span><span class="en" lang="en">Bucket</span><input type="range" min="0" max="100" value="40"></label><button class="chip-btn" type="button" data-dig><span class="th">ตักดินให้ดู</span><span class="en" lang="en">Dig a scoop</span></button></div>
-<p class="j3d-fallback"><span class="th">เบราว์เซอร์นี้แสดงโมเดล 3 มิติไม่ได้</span><span class="en" lang="en">This browser can&#39;t show the 3D model.</span></p>
-</div>
-<p class="j3d-note"><span class="th">โมเดลนี้สร้างใหม่ด้วยโค้ดให้ลองเล่นบนเว็บ ไม่ได้สแกนจากชิ้นงานจริง</span><span class="en" lang="en">Rebuilt in code so you can play with it here; not a scan of the original model.</span></p></li>
-          <li class="j-item rise" id="j-truck"><time><span class="th">ก.พ.–มี.ค. 2025</span><span class="en" lang="en">Feb–Mar 2025</span></time><h4><span class="th">รถดัมพ์ของเล่น TRUCK SERIES D917 ใน SolidWorks</span><span class="en" lang="en">TRUCK SERIES D917, a toy truck in SolidWorks</span></h4><ul class="j-tags"><li><span class="th">วิชาเขียนแบบวิศวกรรม</span><span class="en" lang="en">Engineering Drawing</span></li><li><span class="th">งานกลุ่ม 3 คน</span><span class="en" lang="en">Group of 3</span></li><li><span class="th">11 ชิ้นส่วน</span><span class="en" lang="en">11 parts</span></li></ul><p><span class="th">กลุ่มเราถอดรถของเล่นออกทีละชิ้น วัดขนาดด้วยเวอร์เนียร์ แล้วขึ้นโมเดลใน SolidWorks ครบทั้ง 11 ชิ้น ตั้งแต่ล้อ กระทะล้อ น็อต ไปจนถึงกระบะ แล้วประกอบเป็น assembly ทำ exploded view และเขียนแบบพร้อม BOM</span><span class="en" lang="en">We took a toy truck apart, measured every piece with calipers and modelled all 11 parts in SolidWorks, from tyres, rims and bolts to the dump bed. Then we built the assembly, an exploded view and drawings with a BOM.</span></p><div class="j3d" data-j3d="truck">
-<canvas role="img" aria-label="โมเดล 3 มิติแบบโต้ตอบของรถดัมพ์ของเล่น แยกเป็น 11 ชิ้น" data-label-en="Interactive 3D model of the toy dump truck, in 11 parts" aria-describedby="truck-parts"></canvas>
-<span class="j3d-hint"><span class="th">ลากเพื่อหมุน · <span class="h-mouse">ชี้</span><span class="h-touch">แตะ</span>ที่ชิ้นส่วนเพื่อดูชื่อ</span><span class="en" lang="en">Drag to rotate · <span class="h-mouse">point at</span><span class="h-touch">tap</span> a part to see its name</span></span>
-<span class="j3d-tip" data-tip hidden></span>
-<div class="j3d-ui"><label><span class="sr-only"><span class="th">แยกชิ้นส่วน:</span><span class="en" lang="en">Exploded view:</span></span><span class="th">ประกอบ</span><span class="en" lang="en">Assembled</span><input type="range" min="0" max="100" value="0"><span class="th">แยกชิ้น</span><span class="en" lang="en">Exploded</span></label>
-<button class="chip-btn" type="button" data-dump aria-pressed="false"><span class="th">ยกกระบะ</span><span class="en" lang="en">Tip the bed</span></button>
-<button class="chip-btn" type="button" data-spin aria-pressed="true"><span class="th">หมุนอัตโนมัติ</span><span class="en" lang="en">Auto-rotate</span></button></div>
-<ol id="truck-parts" class="sr-only"><li>1 <span class="th">หลังคา</span><span class="en" lang="en">Roof</span></li><li>2 <span class="th">ล้อยาง</span><span class="en" lang="en">Tyre</span></li><li>3 <span class="th">น็อตล้อ</span><span class="en" lang="en">Wheel bolt</span></li><li>4 <span class="th">กันชนหน้า</span><span class="en" lang="en">Front bumper</span></li><li>5 <span class="th">กระทะล้อ</span><span class="en" lang="en">Rim</span></li><li>6 <span class="th">ฝาท้าย</span><span class="en" lang="en">Tailgate</span></li><li>7 <span class="th">โครงห้องคนขับ</span><span class="en" lang="en">Cab frame</span></li><li>8 <span class="th">แชสซี</span><span class="en" lang="en">Chassis</span></li><li>9 <span class="th">กระบะดัมพ์</span><span class="en" lang="en">Dump bed</span></li><li>10 <span class="th">เบาะและคอนโซล</span><span class="en" lang="en">Seat and console</span></li><li>11 <span class="th">ตัวถังล่าง</span><span class="en" lang="en">Lower body</span></li></ol>
-<p class="j3d-fallback"><span class="th">เบราว์เซอร์นี้แสดงโมเดล 3 มิติไม่ได้</span><span class="en" lang="en">This browser can't show the 3D model.</span></p>
-</div>
-<p class="j3d-note"><span class="th">ไฟล์ต้นฉบับเป็น SolidWorks ที่เปิดบนเว็บไม่ได้ ชิ้นงานด้านบนจึงสร้างขึ้นใหม่ด้วยโค้ดจากรูปถ่ายและตารางชิ้นส่วนของกลุ่ม สัดส่วนใกล้เคียงแต่ไม่ใช่ขนาดจริง</span><span class="en" lang="en">The originals are SolidWorks files a browser can't open, so this is rebuilt in code from the photos and the group's parts sheet. Proportions are close but not to scale.</span></p><div class="j-strip"><button type="button" data-full="img/j/car-parts.webp"><img src="img/j/t/car-parts.webp" width="1200" height="863" loading="lazy" decoding="async" alt="ชิ้นส่วนรถของเล่นทั้ง 11 ชิ้น วางเรียงพร้อมหมายเลข" data-alt-en="All 11 parts of the toy truck laid out and numbered"></button><button type="button" data-full="img/j/car-side.webp"><img src="img/j/t/car-side.webp" width="750" height="1000" loading="lazy" decoding="async" alt="รถดัมพ์ของเล่นที่ประกอบเสร็จ มองจากด้านข้าง" data-alt-en="The assembled toy truck from the side"></button><button type="button" data-full="img/j/car-front.webp"><img src="img/j/t/car-front.webp" width="856" height="1000" loading="lazy" decoding="async" alt="ด้านหน้ารถ เห็นกันชนสีเทาและน็อตรูปกากบาท" data-alt-en="The front, with the grey bumper and cross-head screw"></button></div></li>
+          <li class="j-item rise" id="j-digger"><time><span class="th">ปี 1</span><span class="en" lang="en">Year 1</span></time><h4><span class="th">แขนขุดดินไฮดรอลิกจากไซริงค์</span><span class="en" lang="en">A syringe-powered hydraulic digger</span></h4><ul class="j-tags"><li><span class="th">โปรเจกต์ไฮดรอลิก</span><span class="en" lang="en">Hydraulics project</span></li></ul><p><span class="th">โมเดลรถขุดดินที่ขยับด้วยระบบไฮดรอลิกจากไซริงค์ ไซริงค์แต่ละคู่ต่อท่อน้ำถึงกัน กดไซริงค์ตัวคุมบนฐาน น้ำจะไปดันไซริงค์อีกตัวที่ติดอยู่บนแขน ทำให้บูม แขนตัก และบุ้งกี๋ขยับทีละข้อ ลองคุมเองด้วยแถบเลื่อน หรือกด "ตักดินให้ดู"</span><span class="en" lang="en">A model digger moved by syringe hydraulics. Each pair of syringes is joined by a water line: push the control syringe on the base and water drives the one mounted on the arm, moving the boom, stick and bucket one joint at a time. Work it with the sliders or press "Dig a scoop".</span></p></li>
+          <li class="j-item rise" id="j-truck"><time><span class="th">ก.พ.–มี.ค. 2025</span><span class="en" lang="en">Feb–Mar 2025</span></time><h4><span class="th">รถดัมพ์ของเล่น TRUCK SERIES D917 ใน SolidWorks</span><span class="en" lang="en">TRUCK SERIES D917, a toy truck in SolidWorks</span></h4><ul class="j-tags"><li><span class="th">วิชาเขียนแบบวิศวกรรม</span><span class="en" lang="en">Engineering Drawing</span></li><li><span class="th">งานกลุ่ม 3 คน</span><span class="en" lang="en">Group of 3</span></li><li><span class="th">11 ชิ้นส่วน</span><span class="en" lang="en">11 parts</span></li></ul><p><span class="th">กลุ่มเราถอดรถของเล่นออกทีละชิ้น วัดขนาดด้วยเวอร์เนียร์ แล้วขึ้นโมเดลใน SolidWorks ครบทั้ง 11 ชิ้น ตั้งแต่ล้อ กระทะล้อ น็อต ไปจนถึงกระบะ แล้วประกอบเป็น assembly ทำ exploded view และเขียนแบบพร้อม BOM</span><span class="en" lang="en">We took a toy truck apart, measured every piece with calipers and modelled all 11 parts in SolidWorks, from tyres, rims and bolts to the dump bed. Then we built the assembly, an exploded view and drawings with a BOM.</span></p><div class="j-strip"><button type="button" data-full="img/j/car-parts.webp"><img src="img/j/t/car-parts.webp" width="1200" height="863" loading="lazy" decoding="async" alt="ชิ้นส่วนรถของเล่นทั้ง 11 ชิ้น วางเรียงพร้อมหมายเลข" data-alt-en="All 11 parts of the toy truck laid out and numbered"></button><button type="button" data-full="img/j/car-side.webp"><img src="img/j/t/car-side.webp" width="750" height="1000" loading="lazy" decoding="async" alt="รถดัมพ์ของเล่นที่ประกอบเสร็จ มองจากด้านข้าง" data-alt-en="The assembled toy truck from the side"></button><button type="button" data-full="img/j/car-front.webp"><img src="img/j/t/car-front.webp" width="856" height="1000" loading="lazy" decoding="async" alt="ด้านหน้ารถ เห็นกันชนสีเทาและน็อตรูปกากบาท" data-alt-en="The front, with the grey bumper and cross-head screw"></button></div></li>
           <li class="j-item rise"><time><span class="th">เม.ย. 2025</span><span class="en" lang="en">Apr 2025</span></time><h4><span class="th">ไปดูสนาม ABU Robocon 2025</span><span class="en" lang="en">Watching ABU Robocon 2025 at the venue</span></h4><ul class="j-tags"><li><span class="th">ผู้สังเกตการณ์</span><span class="en" lang="en">Observer</span></li></ul><p><span class="th">ปีนั้นผมยังไม่ได้อยู่ในทีม ABU แต่ก็ไปที่สนามเพื่อดูบรรยากาศจริง ดูว่าทีมชั่งน้ำหนักหุ่นกันอย่างไร และเซตอัปหุ่นก่อนลงแข่งอย่างไร สิ่งที่เห็นวันนั้นได้ใช้จริงตอนสร้างหุ่นของตัวเองในปีถัดมา</span><span class="en" lang="en">I wasn't on an ABU team yet, so I went to the venue to see the real thing: how teams weigh in their robots and set them up before a match. I put what I saw to use when I built my own robot the next year.</span></p><div class="j-strip tall"><button type="button" data-full="img/j/abu25-a.webp"><img src="img/j/t/abu25-a.webp" width="750" height="1000" loading="lazy" decoding="async" alt="หุ่นยิงลูกบาสสองตัวของทีมหนึ่ง จอดอยู่ข้างสนาม ABU Robocon 2025" data-alt-en="Two basketball robots parked beside the ABU Robocon 2025 field"></button><button type="button" data-full="img/j/abu25-b.webp"><img src="img/j/t/abu25-b.webp" width="750" height="1000" loading="lazy" decoding="async" alt="ทีมกำลังเซตอัปหุ่นในพื้นที่เตรียมหุ่น" data-alt-en="A team setting up its robot in the pit"></button><button type="button" data-full="img/j/abu25-c.webp"><img src="img/j/t/abu25-c.webp" width="750" height="1000" loading="lazy" decoding="async" alt="หุ่นยืนรอบนสนามแข่ง มีลูกบาสวางอยู่รอบ ๆ" data-alt-en="A robot on the field with basketballs around it"></button></div></li>
         </ol>
       </div>
@@ -1952,8 +1999,8 @@ h3:target, .j-item:target { scroll-margin-top: 100px; }
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js","three/examples/jsm/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/","@mediapipe/tasks-vision":"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.1.1/vision_bundle.mjs"},"integrity":{"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.1.1/vision_bundle.mjs":"sha384-YN1WLhNpIcHS4MxTu2oyTBQ8z8VQ1hRWCjNtxtbIsyaMxAuPG4sATYsdYCCb5gIe","https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js":"sha384-IDC7sAMAIMB/TZ6dgKKPPAKZ2bXXXP8+FBMBC8cU319eBhKITx+PaalhfDkDNH28","https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/controls/OrbitControls.js":"sha384-aJoe4qqS/DgF2jh9njAuvA6QIveJYoCuYOfYjdFY8P3eawzmc9bEQ40jq2TvOyuP","https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/environments/RoomEnvironment.js":"sha384-9ItPPH2vgKbkvgrqTKq7ptGYe+WuAnqlZtlqleJW4/CJjnM5R7C+efD6iS7ADPJ9","https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/geometries/RoundedBoxGeometry.js":"sha384-S52/WAm3DaIIFna675h5dmavqea/akLlPFtPdnzgWWhnz+/nMqR6PPsSXPOd8Gpw"}}</script>
 
 <script type="module">
-/* Journey: lightbox for the photo strips, and the two 3D models (js/journey-3d.js), started only
-   when they scroll near the viewport. If WebGL or the module fails, the viewer shows a note. */
+/* Journey: lightbox for the photo strips, and the live panels (LiDAR, the two simulators), started
+   only when they scroll near the viewport. If WebGL or the module fails, the panel shows a note. */
 const box = document.getElementById('lightbox');
 const en = () => document.documentElement.dataset.lang === 'en';
 document.querySelectorAll('.j-strip button').forEach(b => b.addEventListener('click', () => {
@@ -1980,9 +2027,6 @@ const io = new IntersectionObserver(async (entries) => {
       } else if (kind === 'ros' || kind === 'abu') {
         const m = await import('./js/journey-sim.js');
         await (kind === 'ros' ? m.initRos : m.initAbu)(e.target);
-      } else {
-        const m = await import('./js/journey-3d.js');
-        await (kind === 'truck' ? m.initTruck : m.initBackhoe)(e.target);
       }
     } catch (err) {
       console.warn('journey 3d', err);
@@ -1991,6 +2035,14 @@ const io = new IntersectionObserver(async (entries) => {
   }
 }, { rootMargin: '900px 0px' });
 document.querySelectorAll('[data-j3d]').forEach(el => io.observe(el));
+
+// CAD bench (js/cad-bench.js): loads as it scrolls near; renders only on interaction.
+const cad = document.querySelector('[data-cad]');
+if (cad) new IntersectionObserver((es, o) => {
+  if (!es.some(e => e.isIntersecting)) return;
+  o.disconnect();
+  import('./js/cad-bench.js').then(m => m.mountCadBench(cad)).catch(err => { console.warn('cad bench', err); cad.classList.add('off'); });
+}, { rootMargin: '600px 0px' }).observe(cad);
 </script>
 <script type="module" src="js/story.js"></script>
 <script type="module" src="js/hand-demo.js"></script>
