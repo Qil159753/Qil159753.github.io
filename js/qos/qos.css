@@ -90,7 +90,9 @@
 .q-icon span { max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ---------------------------------------------------------------- windows */
-.q-wins { position: relative; z-index: 10; }
+/* the layer only holds windows: taps between them (and on an empty desktop) reach the icons */
+.q-wins { position: relative; z-index: 10; pointer-events: none; }
+.q-wins > * { pointer-events: auto; }
 .q-win {
   position: absolute; display: grid; grid-template-rows: 32px 1fr; min-width: 300px; min-height: 200px;
   background: var(--q-panel); border: 1px solid rgba(255, 255, 255, .1); border-radius: 12px; overflow: hidden;
@@ -119,6 +121,9 @@
 /* ---------------------------------------------------------------- terminal */
 .q-term { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 10px 14px 12px; overflow-y: auto; cursor: text; font-size: 13.5px; }
 .q-out { white-space: pre-wrap; word-break: break-word; }
+.q-quick { position: sticky; bottom: -12px; margin: auto -14px -12px; flex: none; padding: 8px 14px 10px; display: flex; gap: 6px; overflow-x: auto; background: var(--q-panel); border-top: 1px solid rgba(255, 255, 255, .08); }
+.q-quick button { flex: none; padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(236, 154, 90, .45); color: var(--q-cu-hi); font: inherit; font-size: 12.5px; }
+.q-quick button:active { background: rgba(236, 154, 90, .16); }
 .q-out .l { min-height: 1.5em; }
 .q-out .p { color: var(--q-cu); }
 .q-out .c-ink { color: var(--q-ink); }

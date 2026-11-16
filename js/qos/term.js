@@ -18,10 +18,21 @@ export function mountTerm(body, ctx) {
   const inRow = el('label', 'q-in');
   const ps = el('span', 'p');
   const input = el('input');
-  Object.assign(input, { type: 'text', autocomplete: 'off', spellcheck: false, autocapitalize: 'off' });
+  Object.assign(input, { type: 'text', autocomplete: 'off', spellcheck: false, autocapitalize: 'off', enterKeyHint: 'go' });
   input.setAttribute('aria-label', 'qsh');
   inRow.append(ps, input);
   root.append(out, inRow);
+  // touch screens: the common commands one tap away, without bringing up the keyboard
+  const coarse = matchMedia('(pointer: coarse)').matches;
+  if (coarse) {
+    const quick = el('nav', 'q-quick'); quick.setAttribute('aria-label', 'commands');
+    for (const c of ['help', 'about', 'projects', 'music', 'games', 'neofetch', 'robot3d', 'drive', 'lab', 'hand', 'clear']) {
+      const b = el('button'); b.type = 'button'; b.textContent = c;
+      b.addEventListener('click', e => { e.stopPropagation(); exec(c); });
+      quick.append(b);
+    }
+    root.append(quick);
+  }
   body.append(root);
 
   let cwd = HOME, hist = [], hi = 0, stream = null;
@@ -407,7 +418,8 @@ note        : simulated. The real CPU is yours: ${n} hardware threads.`;
   root.addEventListener('click', () => { if (!getSelection().toString()) input.focus({ preventScroll: true }); });
 
   return {
-    el: root, exec, line, run, focus: () => input.focus({ preventScroll: true }),
+    // on touch screens focus only follows a tap on the terminal, so opening it doesn't pop the keyboard up
+    el: root, exec, line, run, focus: () => { if (!coarse) input.focus({ preventScroll: true }); },
     dispose() { stopStream(); },
   };
 }
