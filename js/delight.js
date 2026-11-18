@@ -129,11 +129,11 @@
 
   /* ---------- 5. qOS: type `sudo` anywhere, or tap the Q mark five times. Loaded only then. ---------- */
   var typed = '', taps = [], booting = false;
-  function qos() {
+  function qos(app) {
     if (booting) return;
     booting = true;
     import(new URL('js/qos/qos.js', document.baseURI).href)
-      .then(function (m) { m.boot(); })
+      .then(function (m) { m.boot(app); })
       .catch(function (e) { console.error('qOS failed to load', e); })
       .finally(function () { booting = false; });
   }
@@ -144,6 +144,13 @@
     if (document.getElementById('qos')) return;
     typed = (typed + e.key.toLowerCase()).slice(-4);
     if (typed === 'sudo') { typed = ''; qos(); }
+  });
+  // buttons on the page that open one qOS app directly, e.g. data-qos="fw"
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-qos]');
+    if (!b || document.getElementById('qos')) return;
+    e.preventDefault();
+    qos(b.getAttribute('data-qos'));
   });
   var mark = document.querySelector('.nav .mark');
   if (mark) mark.addEventListener('click', function () {

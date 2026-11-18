@@ -14,6 +14,8 @@ const ICON = {
   robot3d: '<path d="M3 13l5-6h16l5 6v8l-5 5H8l-5-5z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="16" r="2.2" fill="currentColor"/><circle cx="22" cy="16" r="2.2" fill="currentColor"/><path d="M14 11h4v4h-4z" fill="none" stroke="currentColor" stroke-width="1.4"/>',
   drive: '<circle cx="16" cy="18" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="18" r="2.6" fill="currentColor"/><path d="M16 18L27 8M16 18l-9-9" stroke="currentColor" stroke-width="1.2" opacity=".7"/><path d="M5 5h3v3H5zM25 26h3v3h-3zM24 4h3v3h-3z" fill="currentColor" opacity=".55"/>',
   lab: '<rect x="3" y="6" width="26" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 18c2 0 2-8 4-8s2 8 4 8 2-8 4-8 2 8 4 8 2-4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 27h16" stroke="currentColor" stroke-width="1.6"/>',
+  fw: '<rect x="8" y="8" width="16" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 4v4M16 4v4M20 4v4M12 24v4M16 24v4M20 24v4M4 12h4M4 16h4M4 20h4M24 12h4M24 16h4M24 20h4" stroke="currentColor" stroke-width="1.4"/><path d="M12.5 18.5l2-5 2 3 2-4" fill="none" stroke="currentColor" stroke-width="1.3"/>',
+  vision: '<path d="M3 16s5-8 13-8 13 8 13 8-5 8-13 8S3 16 3 16z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 4h5M4 4v5M28 4h-5M28 4v5M4 28h5M4 28v-5M28 28h-5M28 28v-5" stroke="currentColor" stroke-width="1.4"/>',
   hand: '<path d="M10 29v-6l-4-6a2 2 0 013-2.5l2 2.5V6a2 2 0 014 0v8V4a2 2 0 014 0v10V5.5a2 2 0 014 0V15V9a2 2 0 014 0v11a9 9 0 01-9 9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
   doc: '<path d="M8 3h11l6 6v20H8z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M19 3v6h6M12 15h9M12 19h9M12 23h6" fill="none" stroke="currentColor" stroke-width="1.4"/>',
   music: '<path d="M12 23V7l14-3v16" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="23" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="23" cy="20" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/>',
@@ -34,9 +36,11 @@ const APPS = {
   drive: { title: 'drive', sub: 'batly_r1 · slam', w: 1100, h: 700 },
   lab: { title: 'lab', sub: 'bench', w: 1020, h: 660 },
   hand: { title: 'hand', sub: 'mionex · webcam', w: 980, h: 620 },
+  fw: { title: 'fw', sub: 'abu firmware · wasm', w: 1180, h: 720 },
+  vision: { title: 'vision', sub: 'yolov8n · webcam', w: 980, h: 620 },
 };
 
-export function boot() {
+export function boot(launch) {
   if (dlg) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet'; link.href = new URL('./qos.css', import.meta.url).href;
@@ -160,6 +164,8 @@ export function boot() {
     shortcut('drive', 'drive', () => openApp('drive'));
     shortcut('lab', 'lab', () => openApp('lab'));
     shortcut('hand', 'hand', () => openApp('hand'));
+    shortcut('fw', 'firmware', () => openApp('fw'));
+    shortcut('vision', 'vision', () => openApp('vision'));
     shortcut('doc', 'about.md', () => termRun('about'));
     shortcut('music', 'music.md', () => termRun('music'));
     shortcut('pad', 'games.md', () => termRun('games'));
@@ -187,7 +193,8 @@ export function boot() {
     const th = lang() === 'th';
     term.line(['[sudo] password for guest: ••••••••', 'c-mut']);
     term.line(['permission granted. ', 'c-ok'], th ? 'ยินดีต้อนรับสู่ qOS ห้องเล่นลับของคิว' : "welcome to qOS, Q's hidden playground.");
-    term.line(th ? 'ลองพิมพ์ ' : 'try ', term.run('help'), ', ', term.run('neofetch'), th ? ' หรือเปิดแอป ' : ' or open an app: ', term.run('robot3d'), '  ', term.run('drive'), '  ', term.run('lab'));
+    if (launch && launch in APPS) openApp(launch);
+    term.line(th ? 'ลองพิมพ์ ' : 'try ', term.run('help'), ', ', term.run('neofetch'), th ? ' หรือเปิดแอป ' : ' or open an app: ', term.run('fw'), '  ', term.run('robot3d'), '  ', term.run('drive'), '  ', term.run('lab'));
     term.line();
   }
 

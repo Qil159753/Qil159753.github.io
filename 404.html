@@ -3,48 +3,70 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'sha256-UYa7dV3BYzJ2pyJd2ctjBC1mUysuYapVm0MubMOro/Q='; img-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="robots" content="noindex">
 <title>ไม่พบหน้านี้ · Page not found | Apipath Santasnachok</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
-  :root { color-scheme: dark; --bg: #07090c; --ink: #f2f4f7; --muted: #808a99; --copper: #ec9a5a; --copper-ink: #1b1009; }
+  :root { color-scheme: dark; --bg: #07090c; --ink: #f2f4f7; --text: #c4cbd5; --muted: #808a99; --cu: #ec9a5a; --cu-ink: #1b1009; --bad: #ff6b5b; --ok: #7ee2a8;
+          --mono: ui-monospace, "JetBrains Mono", Menlo, monospace; --sans: "IBM Plex Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif; }
   * { box-sizing: border-box; }
-  body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px;
-         background: var(--bg); color: var(--ink);
-         font-family: "IBM Plex Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif; }
-  main { max-width: 34rem; text-align: center; }
-  .code { font: 600 clamp(4rem, 18vw, 8rem)/1 ui-monospace, Menlo, monospace; color: var(--copper); margin: 0; }
-  h1 { font-size: 1.4rem; margin: .6em 0 .2em; }
-  p { color: var(--muted); margin: .3em 0; }
-  nav { margin-top: 1.6rem; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  a { color: var(--copper-ink); background: var(--copper); text-decoration: none; padding: .7em 1.3em; border-radius: 999px; font-weight: 600; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; background: var(--bg); color: var(--text); font: 14px/1.6 var(--mono); }
+  body::before { content: ''; position: fixed; inset: 0; pointer-events: none; background: repeating-linear-gradient(transparent 0 2px, rgba(255, 255, 255, .025) 2px 3px); }
+  main { width: min(46rem, 100%); }
+  .bar { display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; border: 1px solid rgba(255, 107, 91, .45); border-bottom: 0;
+         border-radius: 10px 10px 0 0; background: rgba(255, 107, 91, .1); color: var(--bad); font-size: 12px; letter-spacing: .06em; }
+  .log { margin: 0; padding: 14px 12px 16px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 0 0 10px 10px; background: #05070a; font: 13px/1.7 var(--mono); }
+  .log > span { display: block; white-space: pre-wrap; word-break: break-word; opacity: 0; animation: on 0s linear forwards; animation-delay: calc(var(--i) * 110ms + 200ms); }
+  @keyframes on { to { opacity: 1; } }
+  .b { color: var(--bad); } .c { color: var(--cu); } .m { color: var(--muted); } .o { color: var(--ok); }
+  #path { color: var(--ink); font-weight: 400; }
+  .log i { font-style: normal; }
+  h1 { margin: 1.4rem 0 .2rem; font: 600 1.25rem/1.3 var(--sans); color: var(--ink); }
+  p { margin: .2rem 0; color: var(--muted); font-family: var(--sans); }
+  nav { margin-top: 1.2rem; display: flex; gap: 10px; flex-wrap: wrap; }
+  a { color: var(--cu-ink); background: var(--cu); text-decoration: none; padding: .7em 1.2em; border-radius: 999px; font: 600 14px/1 var(--sans); }
   a.ghost { background: transparent; color: var(--ink); border: 1px solid rgba(255, 255, 255, .25); }
   a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-  .scope { display: block; margin: 1.4rem auto .4rem; max-width: 100%; }
-  .scope .grid { stroke: rgba(255, 255, 255, .07); }
-  .tr { stroke-dasharray: .25 1; animation: sweep 2.4s linear infinite; }
-  @keyframes sweep { to { stroke-dashoffset: -1.25; } }
-  @media (prefers-reduced-motion: reduce) { .tr { animation: none; stroke-dasharray: none; } }
-  .log { font: 400 12.5px/1.7 ui-monospace, Menlo, monospace; color: var(--muted); }
+  .cur { display: inline-block; width: .6em; height: 1.1em; vertical-align: -.2em; background: var(--cu); animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .tap { display: none; }
+  @media (hover: none) and (pointer: coarse) { .key { display: none; } .tap { display: inline; } }
+  @media (max-width: 480px) { .log { font-size: 12px; } }
+  @media (prefers-reduced-motion: reduce) { .log > span { opacity: 1; animation: none; } .cur { animation: none; } }
 </style>
 </head>
 <body>
 <main>
-  <p class="code" aria-hidden="true">404</p>
-  <h1>ไม่พบหน้านี้ · NO CARRIER</h1>
+  <div class="bar" aria-hidden="true"><span>qOS · KERNEL PANIC</span><span>ERR 404</span></div>
+  <div class="log" role="log" lang="en">
+    <span style="--i:0" class="b">Kernel panic - not syncing: page fault in route_lookup()</span>
+    <span style="--i:1">[  0.000] no page mapped at <b id="path">this address</b></span>
+    <span style="--i:2" class="m">[  0.001] PC 0x00000404  LR route_lookup+0x1c  CPU0 i.MX RT1062 @ 600 MHz</span>
+    <span style="--i:3">[  0.002] radio: no valid frame for &gt; 1.5 s  <i class="c">[FAIL-SAFE]</i></span>
+    <span style="--i:4">[  0.003] steppers cut · wheels ramped to 0 · pneumatics held</span>
+    <span style="--i:5" class="m">[  0.004] hopping back to the handshake channel (CH 26, 2480 MHz)…</span>
+    <span style="--i:6" class="o">[  0.005] safe state reached. nothing was harmed.</span>
+    <span style="--i:7">&#8203;</span>
+    <span style="--i:8"><i class="key">press any key to reboot into <i class="c">/</i></i><i class="tap">tap Home below to reboot</i> <i class="cur" aria-hidden="true"></i></span>
+  </div>
+  <h1>ไม่พบหน้านี้ · <span lang="en">Page not found</span></h1>
   <p>ไม่มีหน้านี้ หรืออาจถูกย้ายไปแล้ว</p>
-  <p lang="en">Nothing lives at this address. Try the home page or jump to the work.</p>
-  <svg class="scope" viewBox="0 0 300 48" width="300" height="48" aria-hidden="true">
-    <path class="grid" d="M0 12H300M0 24H300M0 36H300M60 0V48M120 0V48M180 0V48M240 0V48" fill="none"/>
-    <path class="tr" d="M0 24H130l6-16 6 32 6-16H300" fill="none" stroke="#ec9a5a" stroke-width="2" pathLength="1"/>
-  </svg>
-  <p class="log" lang="en">[FAIL-SAFE] link lost &gt; 1.5 s · motors safed · re-pairing…</p>
+  <p lang="en">Nothing lives at this address. Reboot to the home page or jump to the work.</p>
   <nav>
-    <a href="/">กลับหน้าแรก · <span lang="en">Home</span></a>
+    <a href="/">รีบูตกลับหน้าแรก · <span lang="en">Home</span></a>
     <a class="ghost" href="/#work">ผลงาน · <span lang="en">Work</span></a>
     <a class="ghost" href="/mionex/">MIONEX</a>
   </nav>
 </main>
+<script>
+var path = location.pathname;
+try { path = decodeURI(path); } catch (_) {}
+document.getElementById('path').textContent = path.slice(0, 80);
+addEventListener('keydown', function (e) {
+  if (e.metaKey || e.ctrlKey || e.altKey || /^(Tab|Shift|Enter| )$/.test(e.key) || document.activeElement.tagName === 'A') return;
+  location.href = '/';
+});
+</script>
 </body>
 </html>

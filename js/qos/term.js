@@ -9,6 +9,8 @@ const APPS = {
   drive: { th: 'ขับ BATLY ทำ SLAM เอง', en: 'drive BATLY and build the SLAM map' },
   lab: { th: 'โต๊ะแล็บ: สโคป ลอจิก PCB', en: 'lab bench: scope, logic analyzer, PCB' },
   hand: { th: 'ขยับมือ MIONEX ด้วยกล้องของคุณ', en: 'move the MIONEX hand with your webcam' },
+  fw: { th: 'เฟิร์มแวร์ ABU ตัวจริง คอมไพล์เป็น WebAssembly', en: 'the real ABU firmware, compiled to WebAssembly' },
+  vision: { th: 'YOLOv8 ตรวจจับวัตถุจากกล้องของคุณ', en: 'YOLOv8 object detection on your webcam' },
 };
 
 export function mountTerm(body, ctx) {
@@ -26,7 +28,7 @@ export function mountTerm(body, ctx) {
   const coarse = matchMedia('(pointer: coarse)').matches;
   if (coarse) {
     const quick = el('nav', 'q-quick'); quick.setAttribute('aria-label', 'commands');
-    for (const c of ['help', 'about', 'projects', 'music', 'games', 'neofetch', 'robot3d', 'drive', 'lab', 'hand', 'clear']) {
+    for (const c of ['help', 'about', 'projects', 'music', 'games', 'neofetch', 'fw', 'vision', 'robot3d', 'drive', 'lab', 'hand', 'clear']) {
       const b = el('button'); b.type = 'button'; b.textContent = c;
       b.addEventListener('click', e => { e.stopPropagation(); exec(c); });
       quick.append(b);
@@ -138,7 +140,7 @@ note        : simulated. The real CPU is yours: ${n} hardware threads.`;
     ['projects', { th: 'งานที่ทำ', en: 'what Q built' }],
     ['music', { th: 'เพลงที่ฟัง', en: 'what Q listens to' }],
     ['games', { th: 'เกมและงานอดิเรก', en: 'games and hobbies' }],
-    ['robot3d', APPS.robot3d], ['drive', APPS.drive], ['lab', APPS.lab], ['hand', APPS.hand],
+    ['fw', APPS.fw], ['vision', APPS.vision], ['robot3d', APPS.robot3d], ['drive', APPS.drive], ['lab', APPS.lab], ['hand', APPS.hand],
     ['neofetch', { th: 'ข้อมูลระบบ', en: 'system info' }],
     ['ls, cd, cat, tree', { th: 'เดินดูไฟล์', en: 'look around the files' }],
     ['cat /dev/xbee', { th: 'ดูเฟรมวิทยุจริงของรีโมต', en: "watch the controller's real radio frames" }],
@@ -233,6 +235,9 @@ note        : simulated. The real CPU is yours: ${n} hardware threads.`;
     drive() { line(['launching drive…', 'c-mut']); ctx.openApp('drive'); },
     lab(a) { line(['launching lab…', 'c-mut']); ctx.openApp('lab', a[0]); },
     hand() { line(['launching hand…', 'c-mut']); ctx.openApp('hand'); },
+    fw() { line(['flashing controller.wasm + robot.wasm…', 'c-mut']); ctx.openApp('fw'); },
+    vision() { line(['launching vision…', 'c-mut']); ctx.openApp('vision'); },
+    yolo() { CMDS.vision(); },
     neofetch() {
       const logo = [
         '   ▄▄████████▄▄   ',
@@ -345,7 +350,7 @@ note        : simulated. The real CPU is yours: ${n} hardware threads.`;
     man(a) { if (a[0]) line(`No manual entry for ${a[0]}. Try `, run('help')); else CMDS.help(); },
     vim() { line(['you are now trapped in vim. (kidding: type exit to leave qOS)', 'c-mut']); },
   };
-  CMDS['./robot3d'] = CMDS.robot3d; CMDS['./drive'] = CMDS.drive; CMDS['./lab'] = CMDS.lab; CMDS['./hand'] = CMDS.hand;
+  CMDS['./robot3d'] = CMDS.robot3d; CMDS['./drive'] = CMDS.drive; CMDS['./lab'] = CMDS.lab; CMDS['./hand'] = CMDS.hand; CMDS['./fw'] = CMDS.fw; CMDS['./vision'] = CMDS.vision;
   CMDS.ll = a => CMDS.ls(a);
 
   // cat /dev/xbee: drive frames wrapped in the XBee API frame, five a second, with a stick wiggling

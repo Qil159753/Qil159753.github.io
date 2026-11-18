@@ -1,0 +1,40 @@
+# Refreshes now.json (the "Now" section) from Q's GitHub activity. Uses only this workflow's own
+# token: public repos by name, private work as a count (GitHub shares that count only when
+# "Include private contributions on my profile" is on in the profile settings).
+name: now
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['tools/now/**', '.github/workflows/now.yml']
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: now
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build now.json
+        run: python3 tools/now/build_now.py now.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NOW_USER: ${{ github.repository_owner }}
+      - name: Commit if it changed
+        run: |
+          git add now.json
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'now: refresh activity'
+          git push
+          # pushes made with this token may not start a Pages build on their own
+          curl -fsS -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -H 'Accept: application/vnd.github+json' \
+            "https://api.github.com/repos/${{ github.repository }}/pages/builds" || echo "pages build request failed"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
