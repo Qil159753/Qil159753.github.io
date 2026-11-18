@@ -795,6 +795,8 @@ h1 em { font-style: normal; color: var(--copper); }
 @media (max-width: 400px) { .stat-l .nw { white-space: normal; } }
 @media (max-width: 420px) { .j3d-ui label { gap: 8px; min-width: 0; } .j3d-ui input[type=range] { min-width: 0; width: 0; } }
 @media (min-width: 961px) and (min-height: 760px) {
+  /* room to read a pinned card, links and all, before the next one slides over it */
+  .stack { gap: 40vh; }
   .card { position: sticky; top: calc(96px + var(--i) * 14px); }
   .card-in { height: min(660px, calc(100svh - 180px)); min-height: 0; }
   .card:focus-within { z-index: 5; }
